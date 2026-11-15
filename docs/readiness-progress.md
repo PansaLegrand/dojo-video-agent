@@ -17,7 +17,7 @@ The commercial host separately records worker PR 12 (`583d060`) deployed before
 web PR 79 (`37710636`) and a passing signed-in edit/Undo/export/publication
 canary. On November 15, the user separately approved the commercial Suno V6 full
 track against its saved file hash; the commercial host records that acceptance.
-Two new commercial Kie Claude tool probes returned HTTP 500, so Claude remains
+Three distinct commercial Kie Claude tool probes returned HTTP 500, so Claude remains
 unqualified. None of those receipts establish general local BYOK generation
 parity. Local image/video jobs remain the optional LH-R15 extension; earlier
 dated public-CI-pending notes below are historical.
