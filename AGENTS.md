@@ -26,11 +26,14 @@ Start with:
 Plans are not completed evidence. Verify source and reports before claiming a
 capability is accepted; mark plan items complete only with the required evidence.
 
-The local application starts new runs with `local-editor-v14`, development agent kit **0.2.9**
+The local application starts new runs with `local-editor-v14`, agent kit **0.2.9**
 and loop **0.2.0**, consuming published engine **1.2.3**. Earlier runs use their
 retained profile/coordinator archives. The commercial counterpart is
 `commercial-editing-v15`. Check [the agent map](docs/agent-system.md) and
 [execution ledger](docs/readiness-progress.md) before describing acceptance.
+Harness PR 14 merged as `d779b13` with all eight public CI checks passed; the
+0.2.9 package source remains `0872090`. Commercial worker/web deployment and its
+production canary are separate host evidence, recorded in the commercial ledger.
 The original public 0.2.8 source remains retained. New runs persist their kit
 build separately from the profile. Old local-v14 runs without that field select
 original 0.2.8. Never replace a saved run with the current build during recovery.

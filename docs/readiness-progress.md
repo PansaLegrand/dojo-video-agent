@@ -1,6 +1,26 @@
 # Readiness execution ledger
 
-Started on 2026-11-01. Last updated on 2026-11-14. The harness plan remains the acceptance contract.
+Started on 2026-11-01. Last updated on 2026-11-15. The harness plan remains the acceptance contract.
+
+## November 15 release closeout
+
+Harness [PR 14](https://github.com/PansaLegrand/dojo-video-harness/pull/14) merged
+as `d779b13bba5b8126b074af0255bd6194af6c2fa6`; all eight public CI checks passed,
+including Linux/macOS/Windows startup and actual browser jobs. Package source
+remains `08720904cabce071a460f0f4480ece8edc517273`, with current local v14/0.2.9
+and unchanged loop 0.2.0/engine 1.2.3. Documentation commits do not change those
+package bytes. The 1,028-test local gate, 66 browser checks and 32/32 repeated
+live-model workflows below are distinct verification layers, now accompanied
+by the public CI result. This is not a claim of a new npm registry publication.
+
+The commercial host separately records worker PR 12 (`583d060`) deployed before
+web PR 79 (`37710636`) and a passing signed-in edit/Undo/export/publication
+canary. On November 15, the user separately approved the commercial Suno V6 full
+track against its saved file hash; the commercial host records that acceptance.
+Two new commercial Kie Claude tool probes returned HTTP 500, so Claude remains
+unqualified. None of those receipts establish general local BYOK generation
+parity. Local image/video jobs remain the optional LH-R15 extension; earlier
+dated public-CI-pending notes below are historical.
 
 ## November 14 candidate stabilization and repeated live evaluation, 0.2.9
 
@@ -67,8 +87,8 @@ Local release verification passed **1,028 tests**, full TypeScript, integrity
 checks and the production build, plus **66 actual browser checks** with scripted
 provider HTTP. Browser checks exercise real React, local persistence, preview,
 export, decoded media, dependent speech, Apply and Undo; they are separate from
-the actual-model semantic evaluation. Public CI and package publication remain
-separate release facts until their receipts are recorded.
+the actual-model semantic evaluation. The subsequent public CI receipt is
+recorded above; npm registry publication remains a separate fact.
 
 This bounded two-repeat suite supports the demonstrated editing and recovery
 scope. It does not establish broad creative quality, physical-device breadth,

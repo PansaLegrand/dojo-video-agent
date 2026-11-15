@@ -5,13 +5,20 @@ are `packages/agent-kit` **0.2.9**, with tool metadata and schemas, trusted Mark
 requirements, a tool factory with native host ports, and explicit prompt sections.
 There are no engine, database, provider SDK or credit dependencies in either kit.
 
-## Current runtime, 2026-11-14
+## Current runtime, 2026-11-15
 
 The local API starts new runs with `local-editor-v14`. Its commercial counterpart
-is `commercial-editing-v15`. The engine dependency is **1.2.3**. The development candidate is 0.2.9 under the existing profiles, with one central
-capability table. New runs persist `agentKitVersion`; old local-v14 records
+is `commercial-editing-v15`. The engine dependency is **1.2.3**. The current build
+is 0.2.9 under the existing profiles, with one central capability table.
+New runs persist `agentKitVersion`; old local-v14 records
 without it resolve to original public 0.2.8. Original archives and completed
 qualification evidence remain intact.
+
+Harness [PR 14](https://github.com/PansaLegrand/dojo-video-harness/pull/14) merged
+as `d779b13`; package source remains `0872090`. All eight public CI checks passed.
+The local gate passed 1,028 tests/build and 66 browser checks with scripted HTTP;
+the separate repeated Kie evaluation passed 32/32 complete workflows. Exact
+before/after outcomes and limits are in the [readiness ledger](readiness-progress.md).
 
 Local v6, v7, v8, v9, v10, v11, v12 and v13 runs dispatch through retained kit 0.2.0,
 0.2.1, 0.2.2, 0.2.3, 0.2.4, 0.2.5, 0.2.6 and 0.2.7 coordinators respectively. Each saved run keeps its model,
@@ -140,7 +147,8 @@ two-source/six-batch plan with nine additional checks, saved-candidate replay,
 invalid declarations rejected before persistence and exact archived 0.2.7 bytes.
 All 66 actual browser checks passed against the built application, with report
 `test-results/browser-028-63af724/report.json`. Fifteen commercial session tests
-passed against the installed 0.2.8 kit. Public CI for this candidate is pending.
+passed against the installed 0.2.8 kit. These are historical build-specific
+results; current 0.2.9 CI and evaluation evidence is recorded above.
 Live language and creative quality retain their separate acceptance records.
 
 ## Host ports and retained compatibility
