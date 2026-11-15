@@ -2,6 +2,13 @@
 
 ## Current addendum, 2026-11-15
 
+The [source audit and scope policy](open-source-scope.md) confirms 110 managed UI
+files with no pending changes against web `80676e41`, matching engine 1.2.3 pins,
+and kit 0.2.9 / loop 0.2.0 source and archive provenance. Fresh semantic reports
+match all 17 kernel cases across both hosts, alongside 19 numeric vectors. The
+local host intentionally excludes commercial database, billing, queue, storage,
+and deployment configuration.
+
 New local runs use `local-editor-v14`, kit 0.2.9, loop 0.2.0 and engine 1.2.3.
 The current kit source is `0872090`; original public 0.2.8 source `63af724` remains
 retained. The current gate passed 1,028 tests/build and 66 scripted-provider
@@ -33,10 +40,11 @@ are preserved.
 These are explicit ownership boundaries, not a claim that all repositories run
 the same server or expose every commercial capability.
 
-## Current synchronized behavior
+## Historical synchronized behavior — 2026-11-08
 
-The managed UI inventory has 81 files. The synchronization tool reports no pending
-changes or conflicts against the reviewed web checkout. Timeline rows distinguish
+The managed UI inventory at this earlier checkpoint had 81 files. The
+synchronization tool reported no pending changes or conflicts against that reviewed
+web checkout. The current inventory and audit are recorded above. Timeline rows distinguish
 media, text, subtitles, translations, SVG and Three.js. Visual overlays appear
 above footage; range selection and group movement use that displayed order while
 the document retains rendering order.
