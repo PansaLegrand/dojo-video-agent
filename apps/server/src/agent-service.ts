@@ -218,6 +218,7 @@ export class AgentService {
         updatedAt: now,
         scope,
         reviewBasisRequired: true,
+        captionTranslationRebase: true,
         agentProfile: this.agentProfile,
         agentKitVersion: profileKitVersion(this.agentProfile),
         ...(this.stagedOptions.browser &&
@@ -777,6 +778,7 @@ export class AgentService {
       baseHash: r.baseHash,
       proposal: r.proposal,
       current,
+      captionTranslations: r.captionTranslationRebase === true && !r.undoOfRunId,
       organizeTracks: !r.undoOfRunId,
       preserveAuthoredPaintOrder: ["local-editor-v12", "local-editor-v13", "local-editor-v14"].includes(r.agentProfile ?? ""),
     });
@@ -853,6 +855,7 @@ export class AgentService {
         baseHash: r.baseHash,
         proposal: r.proposal,
         current: snapshot(p),
+        captionTranslations: r.captionTranslationRebase === true && !r.undoOfRunId,
         organizeTracks: !r.undoOfRunId,
       preserveAuthoredPaintOrder: ["local-editor-v12", "local-editor-v13", "local-editor-v14"].includes(r.agentProfile ?? ""),
       });

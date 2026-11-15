@@ -41,6 +41,13 @@ Maintain one development candidate with a central capability table. Record exact
 source commits and content-addressed candidate archives instead of adding a new
 permanent behavior profile for each trial. Published archives remain immutable.
 
+New host runs also persist `captionTranslationRebase: true`. Review and Apply
+use this frozen host policy to preserve supported completed translations across
+source appearance changes while rejecting source text/timing drift. Saved runs
+without the flag retain historical behavior. Undo skips this normalization, and
+the flag stays out of public run responses. This is consumer host behavior; it
+does not modify the retained agent-kit/compiler archives.
+
 ## Architecture and where to work
 
 ```text

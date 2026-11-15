@@ -145,6 +145,7 @@ export async function prepareNativeAgentReview(input: {
   baseHash: string;
   proposal: VideoProjectAgentProposal;
   current: VideoProjectSnapshot;
+  captionTranslations?: boolean;
   organizeTracks?: boolean;
   preserveAuthoredPaintOrder?: boolean;
 }): Promise<{
@@ -165,6 +166,7 @@ export async function prepareNativeAgentReview(input: {
     base,
     current,
     input.proposal.commands,
+    { captionTranslations: input.captionTranslations },
   );
   if (!rebased.ok) throw new NativeReviewConflict(rebased.reason);
   const placement =

@@ -1,3 +1,4 @@
+import { captionTranslationRebaseCommands } from "./caption-translation-rebase";
 import {
   compositionCommandSchemas,
   isVideoCompositionCommand,
@@ -1601,9 +1602,22 @@ export function rebaseVideoProjectCommands(
   base: VideoProjectDocument,
   current: VideoProjectDocument,
   commands: readonly VideoProjectCommand[],
+  options: { captionTranslations?: boolean } = {},
 ) {
   try {
-    const result = executeVideoProjectCommands(base, commands);
+    const initial = executeVideoProjectCommands(base, commands);
+    const resolved = options.captionTranslations
+      ? (captionTranslationRebaseCommands(
+          base,
+          current,
+          commands,
+          initial.document,
+        ) ?? commands)
+      : commands;
+    const result =
+      resolved === commands
+        ? initial
+        : executeVideoProjectCommands(base, resolved);
     const conflicts = [
       ...new Set([...result.footprint.reads, ...result.footprint.dependencies]),
     ].filter(
@@ -1622,8 +1636,8 @@ export function rebaseVideoProjectCommands(
       };
     return {
       ok: true as const,
-      commands: [...commands],
-      ...executeVideoProjectCommands(current, commands),
+      commands: [...resolved],
+      ...executeVideoProjectCommands(current, resolved),
     };
   } catch (error) {
     return {
