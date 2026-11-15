@@ -5,9 +5,10 @@ sync includes scoped media/progress, paired-caption merge/split with provenance,
 source audition, generated-media cards and browser output-request components.
 The managed files are copied mechanically; local HTTP authority stays in this host.
 
-New local runs use `local-editor-v14`, kit **0.2.8**, loop **0.2.0** and engine
+New local runs use `local-editor-v14`, kit **0.2.9**, loop **0.2.0** and engine
 **1.2.3**. LH-R07 and LH-R20 were introduced with local v10 and remain registered
-in the new profile. The frozen kit source is `63af724`.
+in the new profile. The current kit source is `0872090`. Original public 0.2.8
+source `63af724` remains retained for older local-v14 runs without a build field.
 
 The local editor supports media import, manual editing, preview, captions from
 local files, Undo and browser export without provider credentials. Model-assisted
@@ -78,8 +79,18 @@ regressions remain part of the full harness gate. Browser reports record the
 sampled frames, model request counts, encoding/upload counts and restart results
 under ignored `test-results/local-*-browser-*` directories.
 
-The coordinated 0.2.8 source gate passed 968 tests/build and 66 browser checks.
+The current 0.2.9 gate passed 1,028 tests, full TypeScript, integrity checks and
+the build, plus 66 actual browser checks with scripted provider HTTP. Harness
+[PR 14](https://github.com/PansaLegrand/dojo-video-harness/pull/14) merged as
+`d779b13bba5b8126b074af0255bd6194af6c2fa6` with all eight public CI checks passed,
+including Windows/macOS/Linux startup and actual browser jobs. The separate
+32/32 repeated live-model workflow results are recorded in the
+[readiness ledger](readiness-progress.md); these do not qualify general local
+image/video generation or replace human creative acceptance.
+
+The historical 0.2.8 source gate passed 968 tests/build and 66 browser checks.
 The derived-caption/compatibility/preview subset passed 61 focused tests and
 full TypeScript. The retained browser report is
-`test-results/browser-028-63af724/report.json`. These are local and scripted-provider results. Public CI is pending
-for the pushed candidate, with live-provider and human acceptance tracked separately.
+`test-results/browser-028-63af724/report.json`. These remain local and
+scripted-provider results for that older build, separate from the current CI and
+live evaluation above.

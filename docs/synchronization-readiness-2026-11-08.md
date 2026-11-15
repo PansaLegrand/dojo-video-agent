@@ -1,13 +1,16 @@
 # Synchronization and agent readiness — 2026-11-08
 
-## Current addendum, 2026-11-12
+## Current addendum, 2026-11-15
 
-New local runs use `local-editor-v14`, development kit 0.2.9, loop 0.2.0 and engine 1.2.3.
-The original public 0.2.8 kit source is `63af724` and remains retained. The coordinated 0.2.8 local gate passed 968
-tests/build and 66 scripted-provider browser checks. LH-R07 source inspection and
+New local runs use `local-editor-v14`, kit 0.2.9, loop 0.2.0 and engine 1.2.3.
+The current kit source is `0872090`; original public 0.2.8 source `63af724` remains
+retained. The current gate passed 1,028 tests/build and 66 scripted-provider
+browser checks. Harness [PR 14](https://github.com/PansaLegrand/dojo-video-harness/pull/14)
+merged as `d779b13` with all eight public CI checks passed. The separate
+current-build live-model evaluation completed 32/32 workflows. LH-R07 source inspection and
 LH-R20 receipt-bound preview/correction/export adapters are implemented. General
-local image/video generation remains the optional LH-R15 integration. Public CI
-for the pushed candidate is pending. See [the current agent map](agent-system.md)
+local image/video generation remains the optional LH-R15 integration. See
+[the current agent map](agent-system.md)
 and [execution ledger](readiness-progress.md). Earlier dated results below retain
 their original package and provider identities.
 
