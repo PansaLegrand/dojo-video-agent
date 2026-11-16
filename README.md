@@ -7,9 +7,13 @@
 
 **Want to try the hosted product? [Open DojoClip Video Edit AI](https://dojoclip.com/en/applications/video-edit-ai).** DojoClip adds managed accounts, projects, provider jobs, storage, and payments. This repository is the smaller local editor and developer foundation; it does not install the commercial SaaS.
 
-![The local editor with a structured pending question](docs/assets/editor-question.png)
+## Make it your own
 
-_Browser-test screenshot with synthetic model responses._
+https://github.com/user-attachments/assets/99fa44aa-1e46-4594-9938-7b8cfe312223
+
+A 12-second showcase of illustrated stories, data animation, kinetic typography
+and editable 3D. **[Explore the examples and make them yours →](examples/creative-showcase/README.md)**
+The original scenes stay editable; no API keys are needed to render them.
 
 ## Choose the right project
 
@@ -45,6 +49,22 @@ npm run dev -- --no-open    # Start without opening the browser
 ```
 
 The launcher supports PowerShell, macOS, and Linux. Keep the same local address: browser media belongs to its origin. An occupied port produces guidance rather than silently switching addresses. To run a production build locally, use `npm run build` then `npm start`.
+
+## Open the showcase projects
+
+With the local editor running, use another terminal at the repository root:
+
+```sh
+node examples/creative-showcase/import.mjs journey
+node examples/creative-showcase/import.mjs data-story
+node examples/creative-showcase/import.mjs kinetic
+node examples/creative-showcase/import.mjs cinema
+```
+
+Each command creates a fresh project and prints its editor link. Play it, select
+a graphic, make it yours and export. [Source, customization and rendering details](examples/creative-showcase/README.md).
+
+![After Hours open in the local editor with editable 3D controls and timeline layers](docs/assets/showcase/editor-festival.png)
 
 ## Try these workflows
 
