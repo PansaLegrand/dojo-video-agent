@@ -118,7 +118,7 @@ Native compilation checks compared all 360 frames of all nine imported projects 
 the original Scene, including node order, animation clocks, layout and 3D
 parameters under the host's existing numeric normalization. Source JSON copies
 match the engine versions used for the README renders. The
-[engine render reports](https://github.com/PansaLegrand/dojo-video-engine/tree/main/examples/creative-showcase)
+[engine render reports](https://github.com/PansaLegrand/dojo-video-engine/tree/main/docs/reports/showcase)
 record the exact source hashes and browser/export evidence.
 
 [![Actual editable festival project](../../docs/assets/showcase/editor-festival.png)](../../docs/assets/showcase/editor-festival.png)
