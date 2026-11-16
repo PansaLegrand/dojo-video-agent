@@ -9,10 +9,25 @@
 
 ## Make it your own
 
+### Creative directions
+
 https://github.com/user-attachments/assets/99fa44aa-1e46-4594-9938-7b8cfe312223
 
-A 12-second showcase of illustrated stories, data animation, kinetic typography
-and editable 3D. **[Explore the examples and make them yours →](examples/creative-showcase/README.md)**
+Illustrated stories, animated data, portrait typography, cinematic titles and 3D branding.
+
+### 3D and vector detail
+
+https://github.com/user-attachments/assets/59f7b7d2-bb9c-442a-808c-8935aeec4de0
+
+A miniature city, an exploded mechanical timepiece and layered kinetic vector art.
+
+### Real-world scenarios
+
+https://github.com/user-attachments/assets/088f91fb-d8a0-47d6-85c9-9e7665a116e9
+
+Sports broadcast graphics, a software workflow and a colorful drink campaign.
+
+**[Explore the editable examples and make them yours →](examples/creative-showcase/README.md)**
 The original scenes stay editable; no API keys are needed to render them.
 
 Formerly **Dojo Video Harness** (`dojo-video-harness`). The repository name changed; package names, saved projects, and runtime profiles remain compatible. See [the rename record](docs/project-rename-2026-11-17.md).
