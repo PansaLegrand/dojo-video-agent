@@ -15,6 +15,9 @@ const examples = {
   city: "LITTLE WORLDS — miniature city",
   precision: "PRECISION — engineered motion",
   bloom: "CHROMA BLOOM — kinetic vector art",
+  sports: "NIGHT LEAGUE — sports opener",
+  software: "FLOW — software concept",
+  citrus: "SQUEEZE — food and drink ad",
 };
 const args = process.argv.slice(2);
 const checkOnly = args.includes("--check");
@@ -204,7 +207,28 @@ const layers =
                     ["Kinetic vector sculpture", "bloom-vector-sculpture"],
                     ["Bloom lettering", "bloom-editorial-marks"],
                   ],
-                }[example].map(([name, id]) => ({ name, nodes: take([id]) }));
+                  sports: [
+                    [
+                      "Sports broadcast",
+                      ["sports-stadium", "sports-matchup", "sports-score"],
+                    ],
+                  ],
+                  software: [
+                    [
+                      "Software workflow",
+                      ["flow-collect", "flow-collaborate", "flow-ship"],
+                    ],
+                  ],
+                  citrus: [
+                    [
+                      "Food and drink",
+                      ["citrus-burst", "citrus-pour", "citrus-hero"],
+                    ],
+                  ],
+                }[example].map(([name, id]) => ({
+                  name,
+                  nodes: take(Array.isArray(id) ? id : [id]),
+                }));
 if (cursor !== scene.nodes.length)
   throw new Error(
     "Update the showcase layer map to include every source node.",
