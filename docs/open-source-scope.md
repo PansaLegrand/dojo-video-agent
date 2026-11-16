@@ -1,6 +1,6 @@
 # Open-source scope and synchronization
 
-Dojo Video Engine and Dojo Video Harness are useful developer foundations for
+Dojo Video Engine and Dojo Video Agent are useful developer foundations for
 [DojoClip](https://dojoclip.com/en/applications/video-edit-ai). They intentionally
 cover less than the hosted commercial product. Shared editing improvements belong
 upstream when they fit these foundations; commercial infrastructure stays with
@@ -8,7 +8,7 @@ its host.
 
 ## Capability boundary
 
-| Concern                                               | Open-source engine                | Open-source harness                                                            | Commercial DojoClip host                             |
+| Concern                                               | Open-source engine                | Open-source agent                                                            | Commercial DojoClip host                             |
 | ----------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------- |
 | Scene validation, rendering, playback, browser export | Owns reusable packages            | Consumes exact published versions                                              | Consumes exact published versions                    |
 | Timeline and chat UI                                  | No complete editor app            | Selected shared components, English UI                                         | Reference UI and product localization                |
@@ -32,13 +32,13 @@ checkout, DojoClip account, database, Redis service, or commercial `.env`.
 
 ## What to synchronize
 
-1. **Shared UI: web to harness.** Review the managed sync plan, then apply only
+1. **Shared UI: web to agent.** Review the managed sync plan, then apply only
    selected editor components. Keep user, provider, persistence, and product-copy
    behavior behind local adapters. Review new imports as well as file hashes.
 2. **Rendering: engine to both consumers.** Fix renderer/media primitives upstream;
    release immutable engine packages and update both consumers' exact versions,
    lockfiles, and provenance. A README example must use a tested published version.
-3. **Portable agent behavior: harness to commercial host.** Develop neutral loop,
+3. **Portable agent behavior: agent to commercial host.** Develop neutral loop,
    tool, and skill changes in the harness. Commercial code supplies its own
    authentication, funding, persistence, queue, and provider ports.
 4. **Editing semantics: verify both kernels.** Some helpers are shared; remaining

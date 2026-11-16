@@ -48,7 +48,7 @@ Regression tests hold a write open while polling, prove other projects remain
 accessible, and exercise sustained read/write pressure. The final local check
 passed **220 tests**, typecheck and build; the expanded focused suite passed
 **89 tests**, and all **25 browser checks** passed. The
-[CI run for b1071fa](https://github.com/PansaLegrand/dojo-video-harness/actions/runs/41329186756)
+[CI run for b1071fa](https://github.com/PansaLegrand/dojo-video-agent/actions/runs/41329186756)
 passed the editor job and Windows/macOS/Linux startup jobs, including actual
 process-restart coverage in the expanded cross-platform suite.
 

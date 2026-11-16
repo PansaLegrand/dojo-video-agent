@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
 export const metadata: Metadata = {
-  title: "Dojo Video Harness",
+  title: "Dojo Video Agent",
   description: "Local video editing with your own model providers",
   robots: { index: false, follow: false },
 };

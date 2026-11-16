@@ -12,7 +12,7 @@ and deployment configuration.
 New local runs use `local-editor-v14`, kit 0.2.9, loop 0.2.0 and engine 1.2.3.
 The current kit source is `0872090`; original public 0.2.8 source `63af724` remains
 retained. The current gate passed 1,028 tests/build and 66 scripted-provider
-browser checks. Harness [PR 14](https://github.com/PansaLegrand/dojo-video-harness/pull/14)
+browser checks. Harness [PR 14](https://github.com/PansaLegrand/dojo-video-agent/pull/14)
 merged as `d779b13` with all eight public CI checks passed. The separate
 current-build live-model evaluation completed 32/32 workflows. LH-R07 source inspection and
 LH-R20 receipt-bound preview/correction/export adapters are implemented. General

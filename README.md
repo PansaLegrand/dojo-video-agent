@@ -1,9 +1,9 @@
-# Dojo Video Harness
+# Dojo Video Agent
 
-[![CI](https://github.com/PansaLegrand/dojo-video-harness/actions/workflows/check.yml/badge.svg)](https://github.com/PansaLegrand/dojo-video-harness/actions/workflows/check.yml)
+[![CI](https://github.com/PansaLegrand/dojo-video-agent/actions/workflows/check.yml/badge.svg)](https://github.com/PansaLegrand/dojo-video-agent/actions/workflows/check.yml)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-**An open-source video editor you run locally, with a TypeScript agent you can understand and extend.** Import your footage, edit the same timeline by hand or through chat, and export an MP4 in your browser. Ordinary validated chat edits apply directly; Compare and Undo let you inspect or reverse them.
+**An open-source video editor where you and an AI agent work on the same timeline.** Run locally, bring your own model keys, and extend the TypeScript agent. Import footage, edit by hand or through chat, and export an MP4 in your browser. Ordinary validated chat edits apply directly; Compare and Undo let you inspect or reverse them.
 
 **Want to try the hosted product? [Open DojoClip Video Edit AI](https://dojoclip.com/en/applications/video-edit-ai).** DojoClip adds managed accounts, projects, provider jobs, storage, and payments. This repository is the smaller local editor and developer foundation; it does not install the commercial SaaS.
 
@@ -15,15 +15,17 @@ A 12-second showcase of illustrated stories, data animation, kinetic typography
 and editable 3D. **[Explore the examples and make them yours →](examples/creative-showcase/README.md)**
 The original scenes stay editable; no API keys are needed to render them.
 
+Formerly **Dojo Video Harness** (`dojo-video-harness`). The repository name changed; package names, saved projects, and runtime profiles remain compatible. See [the rename record](docs/project-rename-2026-11-17.md).
+
 ## Choose the right project
 
 | Project                                                                | Use it for                                                                        | What you operate                                             |
 | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| **This harness**                                                       | Edit local footage, study the agent, add tools or skills                          | A single-user localhost app; your own optional provider keys |
+| **Dojo Video Agent**                                                   | Edit local footage, study the agent, add tools or skills                          | A single-user localhost app; your own optional provider keys |
 | [Dojo Video Engine](https://github.com/PansaLegrand/dojo-video-engine) | Build scene rendering, playback, inspection, and export into your own application | TypeScript packages and browser media APIs                   |
 | [DojoClip](https://dojoclip.com/en/applications/video-edit-ai)         | Use the hosted editor and managed AI services                                     | An account in the commercial product; no local server setup  |
 
-The harness includes the shared editor UI, command validation, timeline history, captions, editable graphics, browser preview/export, and a bounded model/tool loop. It deliberately excludes commercial authentication, billing, Postgres/Prisma, Redis queues, cloud-storage configuration, production workers, and deployment credentials. Local image/video-generation adapters are not shipped; the optional BYOK music adapter is available.
+Dojo Video Agent includes the shared editor UI, command validation, timeline history, captions, editable graphics, browser preview/export, and a bounded model/tool loop. It deliberately excludes commercial authentication, billing, Postgres/Prisma, Redis queues, cloud-storage configuration, production workers, and deployment credentials. Local image/video-generation adapters are not shipped; the optional BYOK music adapter is available.
 
 No DojoClip database or commercial environment file is needed. Projects and receipts use local files; imported originals use browser IndexedDB. The UI is English-only, while media text and provider-supported captions can use other languages. See [the scope and synchronization policy](docs/open-source-scope.md).
 
@@ -32,8 +34,8 @@ No DojoClip database or commercial environment file is needed. Projects and rece
 Requirements: Git, Node **20.19+** (Node **22** recommended), npm, and a desktop browser with WebCodecs support. Chromium is the tested path. FFmpeg is only needed for acceptance tests.
 
 ```sh
-git clone https://github.com/PansaLegrand/dojo-video-harness.git
-cd dojo-video-harness
+git clone https://github.com/PansaLegrand/dojo-video-agent.git
+cd dojo-video-agent
 npm run launch
 ```
 
@@ -162,9 +164,9 @@ Both editing paths share the document and history. The host validates scope, sou
 
 The current local profile is **local-editor-v14**, using **agent kit 0.2.9**, **loop 0.2.0**, and published **engine 1.2.3**. Older saved runs retain their original behavior and budgets. The latest shared editing behavior is reused by the commercial host through its own adapters; commercial services are not copied into this app.
 
-- **Web → harness:** selected editor components, managed and checked by file hashes.
+- **Web → agent:** selected editor components, managed and checked by file hashes.
 - **Engine → both apps:** published rendering/playback/export packages at exact versions.
-- **Harness → commercial host:** portable agent loop, tool contracts, and skills.
+- **Agent → commercial host:** portable agent loop, tool contracts, and skills.
 - **Editing semantics:** some shared helpers plus separate kernels checked against the same conformance cases; there is no automatic whole-product sync. [Remaining differences](docs/open-source-scope.md#remaining-source-differences) include a bounded capability-target schema description gap.
 
 See [the scope policy](docs/open-source-scope.md), [synchronization evidence](docs/synchronization-readiness-2026-11-08.md), and [UI sync instructions](docs/syncing-product-ui.md).
@@ -185,7 +187,7 @@ Start with [the guided walkthrough](docs/learn-the-harness.md) and [architecture
 
 A useful first extension is a read-only tool that counts clips on a track. Or add a trusted lowercase `skills/name.md` file and restart the host. Markdown guides registered tools; it cannot install executable code or authorize spending. Follow [the extension guide](docs/extending.md).
 
-Harness packages are source workspaces here, not a published embeddable SDK. Engine packages are published separately. Durable recovery retains completed replies and receipts; uncertain paid submissions need reconciliation. See [the current agent map](docs/agent-system.md) and [edge cases](docs/edge-cases.md) for exact limits.
+Agent packages are source workspaces here, not a published embeddable SDK. Engine packages are published separately. Durable recovery retains completed replies and receipts; uncertain paid submissions need reconciliation. See [the current agent map](docs/agent-system.md) and [edge cases](docs/edge-cases.md) for exact limits.
 
 ## Verification
 
@@ -203,4 +205,4 @@ Live provider probes are opt-in and incur your provider's charges; see [mileston
 
 ## License
 
-MIT for the harness and extracted editor code. Engine and third-party assets retain their notices. See [THIRD_PARTY.md](THIRD_PARTY.md).
+MIT for the agent and extracted editor code. Engine and third-party assets retain their notices. See [THIRD_PARTY.md](THIRD_PARTY.md).

@@ -14,7 +14,7 @@ New runs persist `agentKitVersion`; old local-v14 records
 without it resolve to original public 0.2.8. Original archives and completed
 qualification evidence remain intact.
 
-Harness [PR 14](https://github.com/PansaLegrand/dojo-video-harness/pull/14) merged
+Harness [PR 14](https://github.com/PansaLegrand/dojo-video-agent/pull/14) merged
 as `d779b13`; package source remains `0872090`. All eight public CI checks passed.
 The local gate passed 1,028 tests/build and 66 browser checks with scripted HTTP;
 the separate repeated Kie evaluation passed 32/32 complete workflows. Exact

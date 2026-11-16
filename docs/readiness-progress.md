@@ -4,7 +4,7 @@ Started on 2026-11-01. Last updated on 2026-11-15. The harness plan remains the 
 
 ## November 15 release closeout
 
-Harness [PR 14](https://github.com/PansaLegrand/dojo-video-harness/pull/14) merged
+Harness [PR 14](https://github.com/PansaLegrand/dojo-video-agent/pull/14) merged
 as `d779b13bba5b8126b074af0255bd6194af6c2fa6`; all eight public CI checks passed,
 including Linux/macOS/Windows startup and actual browser jobs. Package source
 remains `08720904cabce071a460f0f4480ece8edc517273`, with current local v14/0.2.9
@@ -168,7 +168,7 @@ checks, including Linux, Windows and macOS clean startup, then merged to main
 as `04f232a7845a02d48c18c2908c593112e2638066`.
 Live per-cue fidelity and long-form creative output use their
 own acceptance cases, retained failures and authorized provider usage.
-[PR #12](https://github.com/PansaLegrand/dojo-video-harness/pull/12).
+[PR #12](https://github.com/PansaLegrand/dojo-video-agent/pull/12).
 
 ## November 12 append repair, 0.2.6 baseline
 
@@ -204,8 +204,8 @@ TypeScript and actual startup/editor/private-settings checks. Local proof is
 retained under `test-results/clean-import-026`. Earlier failed CI runs remain
 visible. Corrected PRs #10 and #11 each passed all eight public checks, including
 Linux, Windows and macOS startup, then merged to main as `b9fd293` and `3dd7c75`.
-[PR #10](https://github.com/PansaLegrand/dojo-video-harness/pull/10),
-[PR #11](https://github.com/PansaLegrand/dojo-video-harness/pull/11).
+[PR #10](https://github.com/PansaLegrand/dojo-video-agent/pull/10),
+[PR #11](https://github.com/PansaLegrand/dojo-video-agent/pull/11).
 
 ## November 12 local runtime and browser adapters, 0.2.5 baseline
 

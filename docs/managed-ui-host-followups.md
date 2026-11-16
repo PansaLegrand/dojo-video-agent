@@ -81,7 +81,7 @@ under ignored `test-results/local-*-browser-*` directories.
 
 The current 0.2.9 gate passed 1,028 tests, full TypeScript, integrity checks and
 the build, plus 66 actual browser checks with scripted provider HTTP. Harness
-[PR 14](https://github.com/PansaLegrand/dojo-video-harness/pull/14) merged as
+[PR 14](https://github.com/PansaLegrand/dojo-video-agent/pull/14) merged as
 `d779b13bba5b8126b074af0255bd6194af6c2fa6` with all eight public CI checks passed,
 including Windows/macOS/Linux startup and actual browser jobs. The separate
 32/32 repeated live-model workflow results are recorded in the

@@ -1,4 +1,4 @@
-# Coding agent guide — Dojo Video Harness
+# Coding agent guide — Dojo Video Agent
 
 ## Orientation
 

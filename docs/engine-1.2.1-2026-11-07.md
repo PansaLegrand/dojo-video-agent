@@ -32,7 +32,7 @@ The final bytes were qualified again rather than assuming identical archives.
 The unpublished 1.2.0 tag is preserved; 1.2.1 fixes npm's missing-identity lookup.
 
 - [Engine publication workflow and cleanup status](https://github.com/PansaLegrand/dojo-video-engine/actions/runs/42269005914)
-- [Consumer pull request](https://github.com/PansaLegrand/dojo-video-harness/pull/1)
+- [Consumer pull request](https://github.com/PansaLegrand/dojo-video-agent/pull/1)
 - [Graphics contract and scope](vector-and-three-layers-2026-11-06.md)
 
 Publication, local qualification, commercial deployment, broader real-footage

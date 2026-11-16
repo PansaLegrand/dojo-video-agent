@@ -38,7 +38,7 @@ proposals and unsupported partial work. No trials were replaced with retries.
 The milestone wrapper reported `automated-pass-manual-review-required`.
 Local verification passed **228 tests**, typecheck, managed UI hashes, production
 build and **25 browser checks**. The
-[CI run](https://github.com/PansaLegrand/dojo-video-harness/actions/runs/41330893940)
+[CI run](https://github.com/PansaLegrand/dojo-video-agent/actions/runs/41330893940)
 passed the editor job and Windows/macOS/Linux startup jobs.
 
 [Machine-readable evidence](reports/gateway-readiness-evidence.json) records exact
