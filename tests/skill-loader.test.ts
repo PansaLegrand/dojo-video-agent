@@ -3,6 +3,22 @@ import { mkdtemp, mkdir, writeFile, symlink, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { loadLocalSkills } from "../apps/server/src/skill-loader";
+it("preserves legacy custom Markdown bytes and discovery text across upgrade", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "dojo-skill-crlf-"));
+  try {
+    const instructions = "# Legacy\r\nKeep original guidance.\r\n";
+    await writeFile(path.join(root, "legacy.md"), instructions);
+    expect(await loadLocalSkills(root)).toEqual([
+      {
+        name: "legacy",
+        description: "Keep original guidance.\r",
+        instructions,
+      },
+    ]);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
 it("loads a SKILL.md pack for discovery without executing its sibling scripts", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dojo-skill-pack-"));
   try {

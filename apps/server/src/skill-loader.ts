@@ -52,8 +52,21 @@ export async function localSkillFiles(
 
 export async function loadLocalSkills(directory: string): Promise<Skill[]> {
   return Promise.all(
-    (await localSkillFiles(directory)).map(async ({ name, file, pack }) =>
-      parseSkillMarkdown(name, await readFile(file, "utf8"), pack),
-    ),
+    (await localSkillFiles(directory)).map(async ({ name, file, pack }) => {
+      const instructions = await readFile(file, "utf8");
+      // Keep legacy local-file bytes/description exactly as before: older paid
+      // checkpoints bind that description, including CRLF in custom guides.
+      return pack
+        ? parseSkillMarkdown(name, instructions, true)
+        : {
+            name,
+            description: (
+              instructions
+                .split("\n")
+                .find((line) => line.trim() && !line.startsWith("#")) ?? name
+            ).slice(0, 500),
+            instructions,
+          };
+    }),
   );
 }
