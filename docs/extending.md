@@ -92,6 +92,14 @@ requires its catalog/tool eligibility and behavior checks. The commercial host
 consumes the packaged kit rather than a user's local `SKILLS_DIR`. The 0.2.10 web
 candidate is opt-in; see [qualification and limitations](creative-skill-packs-2026-11-17.md).
 
+The visual examples are inspectable before using them:
+
+| Skill              | Reference board                                                  | Motion notes                                                                           |
+| ------------------ | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Festival motion    | [Nine frames](../skills/festival-motion/references/atlas.jpg)    | [Concepts and choreography](../skills/festival-motion/references/atlas.md)             |
+| Branded ending     | [Nine frames](../skills/branded-ending/references/atlas.jpg)     | [Reveal and lockup](../skills/branded-ending/references/atlas.md)                      |
+| Chart storytelling | [Nine frames](../skills/chart-storytelling/references/atlas.jpg) | [Editorial motion and data fidelity](../skills/chart-storytelling/references/atlas.md) |
+
 Skills should explain a method and its domain constraints, not contain hidden
 permissions, credentials, arbitrary executable snippets, or duplicated tool schemas.
 

@@ -1,14 +1,18 @@
 # Creative skill packs — R27 development candidate
 
 Current continuation: [visual art direction and reference delivery](creative-skill-visual-direction-2026-11-18.md)
-adds richer motion concepts and actual selected-skill image inputs. Source,
-package, local verification and actual-model acceptance remain separate below.
+adds richer motion concepts and actual selected-skill image inputs. Twelve core
+trials produced edits and exported successfully; the extra 3D probe retains a
+background-preservation failure and a web cost-guard stop. Current cumulative
+task accounting is 307 requests / USD 18.68188825, within the extended 320 / US$20
+ceiling. Source, package, local verification and acceptance remain separate; the
+earlier evidence below stays historical.
 
 Follow-up: [GPT-6 Astra comparison](creative-skill-astra-comparison-2026-11-17.md)
 tests the same birthday/ending prompts in both hosts on the compatibility-fixed
 candidate. Four trials and exports passed; independent sampled review preferred
-Astra in four pairs while retaining concrete quality limitations. Cumulative
-task usage is 248 requests and USD 6.58101625 conservatively accounted. The older
+Astra in four pairs while retaining concrete quality limitations. At that stage,
+task usage was 248 requests and USD 6.58101625 conservatively accounted. The older
 campaign totals and evidence below remain historical records.
 
 This requested extension follows the completed R00–R26 scope. It does not reopen
