@@ -9,6 +9,7 @@ import { providerUrl } from "../packages/adapters/src/provider-http";
 import { parseVideoProjectDocument } from "../packages/core/src/lib/video-project/document";
 import {
   creativeScenarios,
+  creativeScenarioVariants,
   gradeCreativeOutcome,
 } from "../evals/agent/creative-scenarios";
 import { assertKieEvaluationEndpoint } from "../evals/agent/reliability";
@@ -78,7 +79,11 @@ export function parseCreativeOptions(args: readonly string[]) {
       throw new Error(
         "--scenarios must contain unique, nonempty scenario IDs.",
       );
-    const known = new Set(creativeScenarios.map((scenario) => scenario.id));
+    const known = new Set(
+      [...creativeScenarios, ...creativeScenarioVariants].map(
+        (scenario) => scenario.id,
+      ),
+    );
     if (scenarioIds.some((id) => !known.has(id)))
       throw new Error(
         `Unknown scenario ID. Choose from: ${[...known].join(", ")}.`,
@@ -140,9 +145,13 @@ export async function evaluateCreativeMain(args = process.argv.slice(2)) {
   const availableScenarios = [...creativeScenarios].sort(
     (a, b) => order.indexOf(a.id) - order.indexOf(b.id),
   );
+  const selectableScenarios = [
+    ...availableScenarios,
+    ...creativeScenarioVariants,
+  ];
   const orderedScenarios = options.scenarioIds
     ? options.scenarioIds.map(
-        (id) => availableScenarios.find((scenario) => scenario.id === id)!,
+        (id) => selectableScenarios.find((scenario) => scenario.id === id)!,
       )
     : availableScenarios;
   const plan = {
@@ -152,9 +161,14 @@ export async function evaluateCreativeMain(args = process.argv.slice(2)) {
     repeats: options.repeat,
     scenarioSelection: {
       mode: options.scenarioIds ? "explicit" : "all",
-      availableIds: availableScenarios.map((scenario) => scenario.id),
+      availableIds: selectableScenarios.map((scenario) => scenario.id),
+      defaultIds: availableScenarios.map((scenario) => scenario.id),
       selectedIds: orderedScenarios.map((scenario) => scenario.id),
-      fullSuiteSelected: orderedScenarios.length === availableScenarios.length,
+      fullSuiteSelected:
+        orderedScenarios.length === availableScenarios.length &&
+        availableScenarios.every((scenario) =>
+          orderedScenarios.some((selected) => selected.id === scenario.id),
+        ),
     },
     scenarios: orderedScenarios.map((scenario) => ({
       id: scenario.id,

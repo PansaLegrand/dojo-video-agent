@@ -379,6 +379,11 @@ describe("shared creative-evaluation admission and evidence", () => {
         fullSuiteSelected: true,
       });
       expect(JSON.stringify(creativeScenarios)).toBe(original);
+      await evaluateCreativeMain(["--scenarios", "creative-festival-birthday-3d"]);
+      const probe = JSON.parse(String(log.mock.calls.at(-1)![0]));
+      expect(probe.totalTrials).toBe(2);
+      expect(probe.scenarioSelection.fullSuiteSelected).toBe(false);
+      expect(probe.scenarios[0].turns[0].prompt).toContain("Noor, turning 21");
     } finally {
       log.mockRestore();
     }

@@ -29,6 +29,7 @@ export type CreativeContract =
       kind: "festival";
       requiredText: readonly string[];
       occasion: "birthday" | "company-anniversary";
+      requireThreeMotion?: true;
     }
   | { kind: "missing-data" };
 export type CreativeTurn = {
@@ -282,6 +283,31 @@ export const creativeScenarios: readonly CreativeScenario[] = [
     visualReview: [
       ...endingReview,
       "Compare the two actual outputs: the follow-up should feel calmer while preserving ending wording, placement, duration and existing content. Geometry/style differences alone cannot prove calmer motion.",
+    ],
+  },
+];
+
+/** Optional probes are explicitly selected; they do not change the original eight-case suite. */
+export const creativeScenarioVariants: readonly CreativeScenario[] = [
+  {
+    id: "creative-festival-birthday-3d",
+    skill: "festival-motion",
+    document: creativeFixture(),
+    turns: [
+      {
+        prompt: "Make a playful 3D birthday animation for Noor, turning 21.",
+        expected: "edit",
+        contract: {
+          kind: "festival",
+          requiredText: ["Noor", "21"],
+          occasion: "birthday",
+          requireThreeMotion: true,
+        },
+      },
+    ],
+    visualReview: [
+      ...commonVisualReview,
+      "Verify visible dimensional geometry and actual object/camera motion in the export, with exact readable Noor/21 text. A flat imitation or only animated overlays is not this 3D probe.",
     ],
   },
 ];
@@ -683,6 +709,22 @@ export function gradeCreativeOutcome(
   const knownMotion = content.some(
     (node) => animated(node) || threeMotion(node),
   );
+  if (contract.kind === "festival" && contract.requireThreeMotion)
+    check(
+      "declared-3d-motion",
+      content.some(
+        (node) =>
+          threeMotion(node) &&
+          Object.values(
+            (
+              node.extension?.params as {
+                objects?: Record<string, { kind?: string }>;
+              }
+            )?.objects ?? {},
+          ).some((object) => object.kind === "mesh"),
+      ),
+      "The installed 3D extension declares a mesh plus object/camera motion; rendered visibility still requires review.",
+    );
   if (!knownMotion && content.some((node) => node.type === "lottie"))
     checks.push({
       id: "animated-content",

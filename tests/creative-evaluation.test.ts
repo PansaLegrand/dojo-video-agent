@@ -6,6 +6,7 @@ import {
 } from "@dojo-video-engine/schema";
 import {
   creativeScenarios,
+  creativeScenarioVariants,
   gradeCreativeOutcome,
   measureCreativeChart,
   type CreativeContract,
@@ -315,6 +316,58 @@ describe("creative short-prompt fixtures and independent grading", () => {
     expect(
       gradeCreativeOutcome(scenario, scenario.document, after).automatedStatus,
     ).toBe("passed");
+  });
+  it("requires actual declared 3D mesh motion for the opt-in 3D brief", () => {
+    const scenario = creativeScenarioVariants[0],
+      after = structuredClone(scenario.document);
+    after.items.push({
+      id: "greeting",
+      name: "Greeting",
+      trackId: "visual",
+      node: {
+        ...text("greeting", "Noor 21", 500, 200),
+        from: 0,
+        duration: 180,
+        animations: motion(),
+      },
+    });
+    const grade = () =>
+      gradeCreativeOutcome(scenario, scenario.document, after).checks.find(
+        (check) => check.id === "declared-3d-motion",
+      )?.status;
+    expect(grade()).toBe("failed");
+    const params = {
+      camera: {
+        kind: "perspective",
+        position: { x: 0, y: 1, z: 5 },
+        target: { x: 0, y: 0, z: 0 },
+        orbit: { degreesPerSecond: 0 },
+      },
+      materials: { blue: { color: "#2563eb" } },
+      objects: {
+        ball: {
+          kind: "mesh",
+          geometry: { kind: "sphere", radius: 1 },
+          materialId: "blue",
+        },
+      },
+    };
+    after.items.push({
+      id: "sculpture",
+      name: "Sculpture",
+      trackId: "visual",
+      node: {
+        id: "sculpture",
+        type: "extension",
+        from: 0,
+        duration: 180,
+        extension: { name: "dojo.three-scene", version: "1.0.0", params },
+        style: { width: 300, height: 300 },
+      },
+    });
+    expect(grade()).toBe("failed");
+    params.camera.orbit.degreesPerSecond = 10;
+    expect(grade()).toBe("passed");
   });
   it("measures bars independently of their labels and catches distorted heights", () => {
     const { scenario, contract, after } = chart(),
