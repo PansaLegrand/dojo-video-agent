@@ -55,6 +55,8 @@ Legacy `skills/my-motion.md` files remain supported; their first nonempty,
 non-heading line supplies the index description. Folder and flat-file names share one
 namespace. The loader admits at most 32 entries, 64 KiB per entry, and rejects
 symlinks and duplicate names. It does not recursively load supporting files.
+Directories without `SKILL.md`, such as existing `references/` folders, are
+ignored and do not count toward the skill limit.
 
 The server reads that directory at startup and advertises a compact index. The
 model requests the chosen body through `read_skill`; it does not receive every
@@ -62,7 +64,8 @@ pack's instructions in every turn. `SKILLS_DIR` optionally selects a different
 local directory. Restart after changing files. New candidate local-v14 runs
 freeze the loaded instructions privately so resuming an existing run cannot
 silently pick up a later edit. Retained builds use their original skill/build
-selection; old runs do not acquire the three new creative pack names.
+selection; old runs do not acquire newly loaded folder packs. Existing flat
+custom guides retain their bytes even when a name matches a new built-in pack.
 
 The built-in examples are [branded ending](../skills/branded-ending/SKILL.md),
 [chart storytelling](../skills/chart-storytelling/SKILL.md), and

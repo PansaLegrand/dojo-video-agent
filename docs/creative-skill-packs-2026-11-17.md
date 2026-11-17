@@ -99,6 +99,46 @@ records. It verifies review/apply, duplicate operations and saved-state reload.
 It does not exercise production authentication, Postgres, credit charging,
 worker HTTP delivery or canonical cloud publication.
 
+## Post-evaluation compatibility fixes
+
+Read-only review found two custom-skill regressions: unrelated directories were
+mistaken for packs, and older runs could lose a preexisting flat custom guide
+whose name matched a new creative built-in. Agent commit
+`ec25f6355d495ee64add005a2fc3cf2f83140f7d` fixes both. Folder origin is tracked
+privately without adding serialized Skill fields. Legacy profiles retain their
+custom prompts; new creative built-ins keep their capability and executor gates.
+A saved 0.2.9 response replay test confirms no second model dispatch.
+
+The final source candidate is web `1261bdfa` (SDK source `534c142c`) and worker
+`ec89fd3`, with these new content-addressed archives:
+
+- Kit `dojo-video-agent-kit-0.2.10-candidate-ec25f635.tgz`, SHA-256
+  `6eab09d1088283cc6c06e5f5dad0ac8bffdacd355856c45048c5cd381bcd83ed`.
+- SDK `dojoclip-video-project-runtime-0.2.10-candidate-d57cc80d.tgz`, SHA-256
+  `d57cc80d19ca23c4b4654dbb7da68e00345dd82ffa20671f03b96bb0420a084e`.
+
+After this fix, the complete agent check passed **1,105 tests**, TypeScript and
+build. Web full TypeScript, 20 focused tests, 16 provenance tests, worker
+TypeScript and 27 tests, 65 SDK source hashes, seven cross-consumer checks and
+eight retained development archive audits passed. Synthetic adapter checks
+covered direct/staged edits and a question.
+
+A deterministic comparison of **48 current-profile configurations** found exact
+equality with the model-tested 038 kit across tool definitions, inventory,
+selected skills, read_skill payloads, composed prompts and generated skill bytes.
+It covers both current profiles, three phases, capability combinations and
+custom same-name inputs. This verifies unchanged current-profile guidance, not
+new actual-model acceptance of different package bytes.
+
+All 680 original campaign JSON/adapter/archive hashes remain unchanged. Actual
+model evidence stays bound to 038/4387; no further provider calls were made.
+The old adapter file imports ephemeral SDK dist, so reproducing its earlier
+runtime requires the retained archives rather than current dist. Separate
+evidence is in web
+`test-results/creative-skills/compatibility-post-eval/verification.json` and
+`current-contract-comparison.json`. Default selectors, production deployment,
+engine and loop versions remain unchanged.
+
 ## Actual-model results
 
 Eight short-prompt scenarios were run twice in each host: exact-domain endings,
@@ -181,10 +221,11 @@ Local, ignored evidence locations (not committed provider payloads):
 
 ## Separate rendered review
 
-An independent saved-output review sampled **20 of the 30 exported records**,
-including all six charts marked needs-review and one before/after calmer pair in
-each host. It inspected decoded frames, exact final-frame holds, and chart
-geometry. This is separate evidence; original automated grades were not rewritten.
+Two independent saved-output review revisions sampled **all 30 exported records**,
+including all six charts marked needs-review and both before/after calmer pairs in
+each host. They inspected decoded frames, exact final-frame holds, and chart
+geometry. This is sampled visual review, not continuous human playback of every
+frame. Original automated grades were not rewritten.
 
 - All four percentage line charts map 25/50/75% correctly onto their stated
   0–100 scale. The first commercial monthly chart has proportional bar heights
@@ -202,12 +243,16 @@ geometry. This is separate evidence; original automated grades were not rewritte
 - The inspected calmer edits preserve identity and timing while visibly slowing
   the reveal, at the cost of a shorter fully readable hold.
 
-Ten exported records remain outside this independent sampled review. The
-reviewed work is useful simple motion graphics, with the concrete shortcomings
-above; neither technical export success nor automatic checks establish broad
-creative acceptance. See web
+Revision 2 reviewed the final ten records without finding an additional text or
+clipping defect. Both second-repeat portrait URLs were larger than the weak first
+OSS result. Exact final-frame samples cover all 30 exports. The reviewed work is
+useful simple motion graphics, with the concrete shortcomings above; neither
+technical export success nor automatic checks establish broad creative acceptance.
+See web
 `test-results/creative-skills/live04-independent-review-content-01/review.md`
-and `review.json` for exact reviewed/unreviewed IDs, source hashes and measurements.
+and `review.json` for the first 20 IDs, source hashes and measurements; the
+`live04-independent-review-content-02` sibling contains the remaining ten and
+verifies revision 1 remained unchanged.
 Separate rejected-draft diagnosis lives in
 `test-results/creative-skills/diagnostic-formal-20261117/diagnosis.md`.
 
