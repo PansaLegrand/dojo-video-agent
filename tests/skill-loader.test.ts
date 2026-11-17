@@ -3,18 +3,49 @@ import { mkdtemp, mkdir, writeFile, symlink, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { loadLocalSkills } from "../apps/server/src/skill-loader";
+import { isLocalSkillPack } from "../packages/agent/src/local-skill-origin";
+it("ignores unrelated helper directories and counts only actual skill entries", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "dojo-skill-entry-count-"));
+  try {
+    await Promise.all(
+      Array.from({ length: 32 }, (_, index) =>
+        writeFile(
+          path.join(root, `guide-${index}.md`),
+          `# Guide\nMethod ${index}.`,
+        ),
+      ),
+    );
+    for (const directory of ["references", "assets", "Helper Files"])
+      await mkdir(path.join(root, directory));
+    await writeFile(
+      path.join(root, "references/guide.md"),
+      "Not a root skill.",
+    );
+    expect(await loadLocalSkills(root)).toHaveLength(32);
+    await mkdir(path.join(root, "extra"));
+    await writeFile(
+      path.join(root, "extra/SKILL.md"),
+      "---\nname: extra\ndescription: An extra skill.\n---\nA method.",
+    );
+    await expect(loadLocalSkills(root)).rejects.toThrow(/At most 32/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
 it("preserves legacy custom Markdown bytes and discovery text across upgrade", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dojo-skill-crlf-"));
   try {
     const instructions = "# Legacy\r\nKeep original guidance.\r\n";
     await writeFile(path.join(root, "legacy.md"), instructions);
-    expect(await loadLocalSkills(root)).toEqual([
+    const loaded = await loadLocalSkills(root);
+    expect(loaded).toEqual([
       {
         name: "legacy",
         description: "Keep original guidance.\r",
         instructions,
       },
     ]);
+    expect(isLocalSkillPack(loaded[0])).toBe(false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -31,13 +62,21 @@ it("loads a SKILL.md pack for discovery without executing its sibling scripts", 
       path.join(root, "brand-ending/script.js"),
       "throw Error('must never execute')",
     );
-    expect(await loadLocalSkills(root)).toEqual([
+    const loaded = await loadLocalSkills(root);
+    expect(loaded).toEqual([
       {
         name: "brand-ending",
         description: "Compose a branded ending.",
         instructions: "# Ending\nKeep the supplied URL exact.",
       },
     ]);
+    expect(isLocalSkillPack(loaded[0])).toBe(true);
+    expect(Object.keys(loaded[0])).toEqual([
+      "name",
+      "description",
+      "instructions",
+    ]);
+    expect(JSON.parse(JSON.stringify(loaded))).toEqual(loaded);
     await writeFile(
       path.join(root, "brand-ending.md"),
       "# Duplicate\nAnother guide.",
@@ -53,6 +92,34 @@ it("loads a SKILL.md pack for discovery without executing its sibling scripts", 
     await rm(root, { recursive: true, force: true });
   }
 });
+it.skipIf(process.platform === "win32")(
+  "keeps a configured symlink root usable but rejects symlink pack directories",
+  async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "dojo-skill-root-link-"));
+    try {
+      const actual = path.join(root, "actual");
+      await mkdir(actual);
+      await writeFile(
+        path.join(actual, "guide.md"),
+        "# Guide\nA legacy method.",
+      );
+      await symlink(actual, path.join(root, "configured"), "dir");
+      expect(await loadLocalSkills(path.join(root, "configured"))).toHaveLength(
+        1,
+      );
+      const pack = path.join(root, "outside-pack");
+      await mkdir(pack);
+      await writeFile(
+        path.join(pack, "SKILL.md"),
+        "---\nname: linked\ndescription: Linked guide.\n---\nA method.",
+      );
+      await symlink(pack, path.join(actual, "linked"), "dir");
+      await expect(loadLocalSkills(actual)).rejects.toThrow(/regular Markdown/);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  },
+);
 it.skipIf(process.platform === "win32")(
   "rejects symlink pack entry points",
   async () => {

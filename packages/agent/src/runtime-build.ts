@@ -2,6 +2,7 @@ import * as currentKit from "../../agent-kit/src/index";
 import * as retainedDerivedKit from "@dojo-video/agent-kit-v28";
 import * as retainedV29Kit from "@dojo-video/agent-kit-v29";
 import type { AgentProfile } from "../../agent-kit/src/index";
+import { isLocalSkillPack } from "./local-skill-origin";
 
 /** A persisted run freezes its kit build as well as its behavior profile. Old
  * local v14 records predate this field and belong to the public 0.2.8 build. */
@@ -44,12 +45,7 @@ export function skillsForSavedRun(
   const version = savedAgentKitVersion(run);
   return version === "0.2.10"
     ? loaded
-    : loaded.filter(
-        (skill) =>
-          !(currentKit.CREATIVE_SKILL_NAMES as readonly string[]).includes(
-            skill.name,
-          ),
-      );
+    : loaded.filter((skill) => !isLocalSkillPack(skill));
 }
 export function sourceRequirementValidation(
   profile: AgentProfile = "local-editor-v1",

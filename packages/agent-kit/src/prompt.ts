@@ -1,6 +1,7 @@
 import { skillIndex } from "./skills.js";
 import {
   CREATIVE_SKILL_NAMES,
+  usesCreativeSkills,
   usesEfficientReaders,
   usesResolvedEditSchema,
   usesStagedEditing,
@@ -49,6 +50,12 @@ export function composeToolAgentPrompt(input: {
     throw new Error("The host supplied an unknown editing phase.");
   const staged =
     input.profile !== undefined && usesStagedEditing(input.profile);
+  const creative =
+    input.profile !== undefined &&
+    usesCreativeSkills(input.profile) &&
+    input.skills.some((skill) =>
+      (CREATIVE_SKILL_NAMES as readonly string[]).includes(skill.name),
+    );
   return [
     input.editingGuide,
     compactPlanning
@@ -65,13 +72,21 @@ export function composeToolAgentPrompt(input: {
                 ? EFFICIENT_TOOL_GUIDE
                 : TOOL_GUIDE,
     ...(input.toolNames.includes("prepare_text_overlay")
-      ? [input.skills.some(skill => (CREATIVE_SKILL_NAMES as readonly string[]).includes(skill.name))
-          ? OVERLAY_GUIDE.replace("For creation of ordinary titles, lower-thirds and supplied-text captions, use prepare_text_overlay before propose_edit.", "For ordinary titles, lower-thirds and supplied-text captions that overlay existing timeline content, use prepare_text_overlay before propose_edit. Appended branded endings are an explicit exception: use insertGraphic with a format-duration extension in the complete reviewed batch; prepare_text_overlay cannot append beyond the existing timeline.")
-          : OVERLAY_GUIDE]
+      ? [
+          creative
+            ? OVERLAY_GUIDE.replace(
+                "For creation of ordinary titles, lower-thirds and supplied-text captions, use prepare_text_overlay before propose_edit.",
+                "For ordinary titles, lower-thirds and supplied-text captions that overlay existing timeline content, use prepare_text_overlay before propose_edit. Appended branded endings are an explicit exception: use insertGraphic with a format-duration extension in the complete reviewed batch; prepare_text_overlay cannot append beyond the existing timeline.",
+              )
+            : OVERLAY_GUIDE,
+        ]
       : []),
     CORRECTION_GUIDE,
-    ...(input.skills.some(skill => (CREATIVE_SKILL_NAMES as readonly string[]).includes(skill.name))
-      ? ["Creative authoring: for a branded ending, animated chart or festive composition, read the matching creative skill from the available index before designing the candidate. Select one primary task skill; load further guidance only for a concrete missing operation. A short request is enough to choose sensible style and motion defaults from project context. Keep supplied identity and data exact; ask for essential missing data, not routine design choices. Skills guide original composition, not mandatory template copying; use the registered native tools and existing review flow. Native easing names include linear, easeIn, easeOut and easeInOut; use the installed schema syntax for cubic-bezier() or spring(), never imported spellings such as easeOutCubic. Native line/polyline/polygon points use normalized node-box coordinates (0 to1 spans the box); node position/size use pixels. SVG paths use their explicit viewBox coordinates. For insertGraphic, set the root node.id to the itemId: the host assigns that final root identity. Root-node completion requirements must target that itemId, while child requirements use stable child IDs."] : []),
+    ...(creative
+      ? [
+          "Creative authoring: for a branded ending, animated chart or festive composition, read the matching creative skill from the available index before designing the candidate. Select one primary task skill; load further guidance only for a concrete missing operation. A short request is enough to choose sensible style and motion defaults from project context. Keep supplied identity and data exact; ask for essential missing data, not routine design choices. Skills guide original composition, not mandatory template copying; use the registered native tools and existing review flow. Native easing names include linear, easeIn, easeOut and easeInOut; use the installed schema syntax for cubic-bezier() or spring(), never imported spellings such as easeOutCubic. Native line/polyline/polygon points use normalized node-box coordinates (0 to1 spans the box); node position/size use pixels. SVG paths use their explicit viewBox coordinates. For insertGraphic, set the root node.id to the itemId: the host assigns that final root identity. Root-node completion requirements must target that itemId, while child requirements use stable child IDs.",
+        ]
+      : []),
     ...(input.profile &&
     usesPreviewRepair(input.profile) &&
     (!compactPlanning || input.toolNames.includes("request_project_preview"))
