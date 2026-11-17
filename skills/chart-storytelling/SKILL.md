@@ -53,6 +53,11 @@ actual native shape/text grammar with `inspect_graphics_schema`; do not invent a
 `barChart` or `lineChart` tool. Build marks, labels and axes as editable nodes, or
 use `prepare_svg_graphic` for suitable vector paths while keeping readable labels
 as text. Give data marks and labels stable IDs so follow-up edits can target them.
+Native `line`, `polyline` and `polygon` points are normalized against their node
+box: x/y 0..1 spans that box. Put the plot’s pixel position and size in node
+style, then use normalized data coordinates (including inverted y for a
+bottom-origin axis). Do not put canvas pixel coordinates in `shape.points`.
+An SVG path instead uses its explicit viewBox coordinate system.
 
 ## Choreograph the explanation
 
