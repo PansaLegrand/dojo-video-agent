@@ -103,12 +103,27 @@ export async function evaluateCreativeMain(args = process.argv.slice(2)) {
   const options = parseCreativeOptions(args);
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
   const hosts: CreativeHost[] = ["open-source", "commercial-web"];
+  // Cover each skill family before variants; all cases and grading remain fixed.
+  // A provider-uncertainty stop must not always leave the third family unseen.
+  const order = [
+    "creative-ending-domain",
+    "creative-chart-monthly",
+    "creative-festival-birthday",
+    "creative-festival-company",
+    "creative-chart-missing-data",
+    "creative-ending-portrait",
+    "creative-chart-percent-portrait",
+    "creative-ending-calmer-followup",
+  ];
+  const orderedScenarios = [...creativeScenarios].sort(
+    (a, b) => order.indexOf(a.id) - order.indexOf(b.id),
+  );
   const plan = {
     version: 1,
     mode: options.live ? "live" : "plan-only",
     hosts,
     repeats: options.repeat,
-    scenarios: creativeScenarios.map((scenario) => ({
+    scenarios: orderedScenarios.map((scenario) => ({
       id: scenario.id,
       turns: scenario.turns.map((turn) => ({
         prompt: turn.prompt,
@@ -287,7 +302,7 @@ export async function evaluateCreativeMain(args = process.argv.slice(2)) {
       repetition <= options.repeat;
       repetition++
     ) {
-      for (const scenario of creativeScenarios)
+      for (const scenario of orderedScenarios)
         for (const host of hosts) {
           if (controller.signal.aborted || campaign.stoppedReason) break outer;
           context = { host, scenario: scenario.id, repetition, turn: 0 };
