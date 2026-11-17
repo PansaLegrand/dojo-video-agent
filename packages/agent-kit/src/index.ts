@@ -1,5 +1,6 @@
 export * from "./catalog.js";
 export * from "./skills.js";
+export * from "./skill-markdown.js";
 export * from "./tools.js";
 export * from "./inventory.js";
 export * from "./prompt.js";

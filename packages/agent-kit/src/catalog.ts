@@ -1,4 +1,5 @@
-export const AGENT_KIT_VERSION = "0.2.9" as const;
+export const AGENT_KIT_VERSION = "0.2.10" as const;
+export const CREATIVE_SKILL_NAMES = ["branded-ending", "chart-storytelling", "festival-motion"] as const;
 export type ToolEffect = "read" | "propose" | "ask";
 export type ToolSpec = {
   name: string;
@@ -148,6 +149,9 @@ export function toolMetadata(name: CatalogToolName) {
   return { name, description, effect };
 }
 export const skillRequirements = {
+  "branded-ending": ["inspect_project", "inspect_graphics_schema", "review_edit", "propose_edit"],
+  "chart-storytelling": ["inspect_project", "inspect_graphics_schema", "review_edit", "propose_edit"],
+  "festival-motion": ["inspect_project", "inspect_graphics_schema", "review_edit", "propose_edit"],
   "generated-media": ["prepare_generated_media"],
   "visual-inspection": ["inspect_image", "sample_video_frames"],
   "staged-editing": [
@@ -222,7 +226,8 @@ export type ProfileCapability =
   | "appendPreviewRepair"
   | "semanticEditingGuidance"
   | "derivedCaptionPlan"
-  | "compactReviewedProposals";
+  | "compactReviewedProposals"
+  | "creativeSkills";
 type ProfileDefinition = Readonly<{
   kitVersion: string;
   capabilities: readonly ProfileCapability[];
@@ -306,6 +311,7 @@ const compactReviewedProposals = extendProfile(
   AGENT_KIT_VERSION,
   "compactReviewedProposals",
 );
+const creativeSkills = extendProfile(compactReviewedProposals, AGENT_KIT_VERSION, "creativeSkills");
 export const profileCapabilities = Object.freeze({
   "local-editor-v1": legacy,
   "commercial-editing-v2": legacy,
@@ -333,8 +339,8 @@ export const profileCapabilities = Object.freeze({
   "commercial-editing-v13": appendPreviewRepair,
   "local-editor-v13": semanticEditingGuidance,
   "commercial-editing-v14": semanticEditingGuidance,
-  "local-editor-v14": compactReviewedProposals,
-  "commercial-editing-v15": compactReviewedProposals,
+  "local-editor-v14": creativeSkills,
+  "commercial-editing-v15": creativeSkills,
 } satisfies Record<AgentProfile, ProfileDefinition>);
 const hasCapability = (
   profile: AgentProfile,
@@ -371,6 +377,7 @@ export const usesDerivedCaptionPlan = (profile: AgentProfile) =>
   hasCapability(profile, "derivedCaptionPlan");
 export const usesCompactReviewedProposals = (profile: AgentProfile) =>
   hasCapability(profile, "compactReviewedProposals");
+export const usesCreativeSkills = (profile: AgentProfile) => hasCapability(profile, "creativeSkills");
 export const profileKitVersion = (profile: AgentProfile) =>
   profileCapabilities[profile]?.kitVersion ?? "0.1.1";
 export const profileSkills: Record<
@@ -393,6 +400,9 @@ export const profileSkills: Record<
   "local-editor-v13": null,
   "local-editor-v14": null,
   "commercial-editing-v15": [
+    "branded-ending",
+    "chart-storytelling",
+    "festival-motion",
     "precise-editing",
     "motion-design",
     "speech-editing",

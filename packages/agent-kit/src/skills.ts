@@ -1,5 +1,7 @@
 import {
   skillRequirements,
+  CREATIVE_SKILL_NAMES,
+  usesCreativeSkills,
   profileSkills,
   usesAuthoringContracts,
   usesPreviewRepair,
@@ -50,6 +52,7 @@ export function selectSkills(
     allowed = profileSkills[profile];
   if (allowed === undefined) throw new Error("Unknown agent profile.");
   return skills.flatMap((inputSkill) => {
+    if ((CREATIVE_SKILL_NAMES as readonly string[]).includes(inputSkill.name) && !usesCreativeSkills(profile)) return [];
     const currentBuiltin = generatedSkills.find(
       (skill) => skill.name === inputSkill.name,
     );

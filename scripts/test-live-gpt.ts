@@ -1,3 +1,4 @@
+import { loadLocalSkills } from "../apps/server/src/skill-loader";
 /** Explicitly opt-in paid acceptance test. Synthetic project, no user media. */
 import assert from "node:assert/strict";
 import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
@@ -45,19 +46,7 @@ const model: LanguageModel = {
 };
 const root = await mkdtemp(path.join(os.tmpdir(), "harness-live-gpt-"));
 const store = new ProjectStore(root);
-const skills = await Promise.all(
-  (await readdir("skills"))
-    .filter((n) => n.endsWith(".md"))
-    .map(async (name) => {
-      const instructions = await readFile(path.join("skills", name), "utf8");
-      return {
-        name: name.slice(0, -3),
-        description:
-          instructions.split("\n").find((l) => l && !l.startsWith("#")) ?? name,
-        instructions,
-      };
-    }),
-);
+const skills = await loadLocalSkills("skills");
 const agent = new AgentService(store, model, skills);
 async function settle(id: string) {
   const deadline = Date.now() + 190_000;

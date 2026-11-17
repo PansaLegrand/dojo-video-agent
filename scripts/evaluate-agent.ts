@@ -1,3 +1,4 @@
+import { localSkillFiles } from "../apps/server/src/skill-loader";
 import { evaluationGraderIdentity } from "../evals/agent/grader-identity";
 /** Local, provider-independent evaluation runner. --live explicitly permits paid GPT calls. */
 import { createHash } from "node:crypto";
@@ -129,7 +130,7 @@ const files = [...new Set([
   "packages/agent/src/tools.ts",
   "packages/adapters/src/gpt-responses.ts",
   "packages/adapters/src/gpt-model.ts",
-  ...(await readdir("skills")).sort().map((n) => `skills/${n}`),
+  ...(await localSkillFiles("skills")).map(({file}) => file),
 ])].sort();
 async function fingerprint() {
   const hash = createHash("sha256");

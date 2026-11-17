@@ -1,5 +1,6 @@
 import { skillIndex } from "./skills.js";
 import {
+  CREATIVE_SKILL_NAMES,
   usesEfficientReaders,
   usesResolvedEditSchema,
   usesStagedEditing,
@@ -67,6 +68,8 @@ export function composeToolAgentPrompt(input: {
       ? [OVERLAY_GUIDE]
       : []),
     CORRECTION_GUIDE,
+    ...(input.skills.some(skill => (CREATIVE_SKILL_NAMES as readonly string[]).includes(skill.name))
+      ? ["Creative authoring: for a branded ending, animated chart or festive composition, read the matching creative skill from the available index before designing the candidate. Select one primary task skill; load further guidance only for a concrete missing operation. A short request is enough to choose sensible style and motion defaults from project context. Keep supplied identity and data exact; ask for essential missing data, not routine design choices. Skills guide original composition, not mandatory template copying; use the registered native tools and existing review flow."] : []),
     ...(input.profile &&
     usesPreviewRepair(input.profile) &&
     (!compactPlanning || input.toolNames.includes("request_project_preview"))

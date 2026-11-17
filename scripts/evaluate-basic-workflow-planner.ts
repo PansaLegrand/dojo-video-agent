@@ -7,7 +7,7 @@ import path from "node:path";
 import { AgentService } from "../apps/server/src/agent-service";
 import { EditingWorkflowService } from "../apps/server/src/editing-workflow";
 import { ProjectStore, commitDocument } from "../apps/server/src/store";
-import { loadLocalSkills } from "../apps/server/src/skill-loader";
+import { loadLocalSkills, localSkillFiles } from "../apps/server/src/skill-loader";
 import { createVideoProjectDocument } from "../packages/core/src/lib/video-project/document";
 import { GptResponsesModel } from "../packages/adapters/src/gpt-responses";
 const args = process.argv.slice(2);
@@ -43,7 +43,7 @@ const implementationFiles = [
   "apps/server/src/skill-loader.ts",
   "packages/adapters/src/gpt-responses.ts",
   "package-lock.json",
-  ...skills.map((skill) => `skills/${skill.name}.md`),
+  ...(await localSkillFiles("skills")).map(({file}) => file),
 ];
 const implementationHashes = async () =>
   Object.fromEntries(

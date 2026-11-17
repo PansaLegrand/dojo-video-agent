@@ -1028,7 +1028,7 @@ it("records an oversize opaque provider reply as a breach without automatically 
   expect(fetch).toHaveBeenCalledTimes(1);
 });
 
-it.each([undefined, "0.2.8", "0.2.9"])("restarts a local v14 paid checkpoint with its saved kit build %s", async storedVersion => {
+it.each([undefined, "0.2.8", "0.2.9", "0.2.10"])("restarts a local v14 paid checkpoint with its saved kit build %s", async storedVersion => {
   const { savedAgentKitVersion } = await import("../packages/agent/src/runtime-build");
   const f = await seed();
   await f.store.transaction(f.projectId, p => {

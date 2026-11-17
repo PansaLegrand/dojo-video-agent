@@ -1,4 +1,5 @@
-import { savedAgentKitVersion, sourceRequirementValidation } from "../../../packages/agent/src/runtime-build";
+import { savedAgentKitVersion, sourceRequirementValidation, skillsForSavedRun } from "../../../packages/agent/src/runtime-build";
+import { EditStageError as RetainedV29EditStageError } from "@dojo-video/agent-kit-v29";
 import { EditStageError as RetainedV28EditStageError } from "@dojo-video/agent-kit-v28";
 import { EditStageError as RetainedV24EditStageError } from "@dojo-video/agent-kit-v24";
 import { EditStageError as RetainedV23EditStageError } from "@dojo-video/agent-kit-v23";
@@ -94,14 +95,16 @@ const isStageError = (
   | RetainedV22EditStageError
   | RetainedV23EditStageError
   | RetainedV24EditStageError
-  | RetainedV28EditStageError =>
+  | RetainedV28EditStageError
+  | RetainedV29EditStageError =>
   cause instanceof EditStageError ||
   cause instanceof RetainedEditStageError ||
   cause instanceof RetainedV21EditStageError ||
   cause instanceof RetainedV22EditStageError ||
   cause instanceof RetainedV23EditStageError ||
   cause instanceof RetainedV24EditStageError ||
-  cause instanceof RetainedV28EditStageError;
+  cause instanceof RetainedV28EditStageError ||
+  cause instanceof RetainedV29EditStageError;
 export class AgentService {
   private active = new Map<string, AbortController>();
   private deadlines = new Map<string, ReturnType<typeof setTimeout>>();
@@ -221,6 +224,7 @@ export class AgentService {
         captionTranslationRebase: true,
         agentProfile: this.agentProfile,
         agentKitVersion: profileKitVersion(this.agentProfile),
+        ...(this.agentProfile === "local-editor-v14" ? { skillSnapshot: this.skills.map(skill => ({ ...skill })) } : {}),
         ...(this.stagedOptions.browser &&
         ["local-editor-v10", "local-editor-v11", "local-editor-v12", "local-editor-v13", "local-editor-v14"].includes(this.agentProfile)
           ? { browserToolsEnabled: true as const }
@@ -438,7 +442,7 @@ export class AgentService {
         profile: run.agentProfile ?? "local-editor-v1",
         agentKitVersion: savedAgentKitVersion(run),
         model,
-        skills: this.skills,
+        skills: skillsForSavedRun(run, this.skills),
         extraTools: [
           ...(this.extraTools?.(projectId, id, request) ?? []),
           ...browserTools,

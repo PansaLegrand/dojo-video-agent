@@ -89,6 +89,7 @@ export type StoredRun = VideoProjectAgentRun & {
   stageProgress?: import("../../../packages/agent-kit/src/stage-progress").EditStageProgress;
   stageRecovery?: { canResume: boolean; canReuseSavedResult: boolean };
   agentKitVersion?: string;
+  skillSnapshot?: import("../../../packages/agent-kit/src/index").Skill[];
   agentProfile?:
     | "local-editor-v1"
     | "local-editor-v2"
@@ -475,6 +476,7 @@ export const runOf = (p: Project, id: string) => {
   return run;
 };
 export function publicRun({
+  skillSnapshot: _skillSnapshot,
   captionTranslationRebase: _captionTranslationRebase,
   browserToolsEnabled: _browserTools,
   appliedReceipt: _application,

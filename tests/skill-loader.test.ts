@@ -1,8 +1,59 @@
 import { it, expect } from "vitest";
-import { mkdtemp, writeFile, symlink, rm } from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile, symlink, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { loadLocalSkills } from "../apps/server/src/skill-loader";
+it("loads a SKILL.md pack for discovery without executing its sibling scripts", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "dojo-skill-pack-"));
+  try {
+    await mkdir(path.join(root, "brand-ending"));
+    await writeFile(
+      path.join(root, "brand-ending/SKILL.md"),
+      '---\nname: brand-ending\ndescription: "Compose a branded ending."\n---\n# Ending\nKeep the supplied URL exact.',
+    );
+    await writeFile(
+      path.join(root, "brand-ending/script.js"),
+      "throw Error('must never execute')",
+    );
+    expect(await loadLocalSkills(root)).toEqual([
+      {
+        name: "brand-ending",
+        description: "Compose a branded ending.",
+        instructions: "# Ending\nKeep the supplied URL exact.",
+      },
+    ]);
+    await writeFile(
+      path.join(root, "brand-ending.md"),
+      "# Duplicate\nAnother guide.",
+    );
+    await expect(loadLocalSkills(root)).rejects.toThrow(/unique/);
+    await rm(path.join(root, "brand-ending.md"));
+    await writeFile(
+      path.join(root, "brand-ending/SKILL.md"),
+      "---\nname: another-skill\ndescription: A mismatched pack.\n---\nText.",
+    );
+    await expect(loadLocalSkills(root)).rejects.toThrow(/match its folder/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+it.skipIf(process.platform === "win32")(
+  "rejects symlink pack entry points",
+  async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "dojo-pack-link-"));
+    try {
+      await mkdir(path.join(root, "brand-ending"));
+      await writeFile(path.join(root, "guide.txt"), "# Outside");
+      await symlink(
+        path.join(root, "guide.txt"),
+        path.join(root, "brand-ending/SKILL.md"),
+      );
+      await expect(loadLocalSkills(root)).rejects.toThrow(/regular file/);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  },
+);
 it("loads bounded Markdown as instructions, never executable modules", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dojo-skills-"));
   try {
