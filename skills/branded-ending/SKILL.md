@@ -51,12 +51,21 @@ text and shapes allow a more specific composition. Use `prepare_svg_graphic` or
 `prepare_three_scene` when that chosen visual idea benefits from them. Keep text
 editable and use only owned or registered assets.
 
+Use `insertGraphic` for an appended ending and include the composition's
+`format.durationInFrames` extension to the ending's end in the same complete
+command batch. Do not use `prepare_text_overlay` for this append operation: that
+helper fits an overlay inside the existing timeline and cannot extend it.
+
 Place the ending in a stable grouped graphic item with its own identity. Its
 child animation clocks start locally; do not repeat the absolute project start
 inside every child. Choreograph arrival, readable hold and a resolved final pose.
-Let the identity settle into a readable hold. If using an exit, make it deliberate
-and short enough to preserve that hold. Make the final composition duration agree with the ending's end;
-do not leave unrelated blank padding afterward.
+Keep the exact identity fully visible and inside the canvas through the final
+frame, including the opacity and transforms of its ancestor groups. Do not fade
+it to zero or move it offscreen at the ending's end. For `titleCard` or
+`kineticText`, explicitly use `exit: "none"` rather than accepting their default
+exit. Decorative motion may resolve around the held identity. Make the final
+composition duration agree with the ending's end; do not leave unrelated blank
+padding afterward.
 
 Review the complete command batch through `review_edit`, including the exact
 identity text, appended placement and final duration in the supported completion
