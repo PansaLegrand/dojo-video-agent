@@ -239,6 +239,7 @@ export function createCreativeCampaignModel(options: {
             "Could not retain the paid model response; usage is retained and campaign stopped.",
           );
         }
+        let retainKnownReply = false;
         if (admitted.status !== "completed")
           stoppedReason =
             "Provider returned unknown usage; campaign stopped without retry.";
@@ -251,8 +252,19 @@ export function createCreativeCampaignModel(options: {
         else if (!(await sourceIsUnchanged()))
           stoppedReason =
             "Candidate source changed during the request; reply retained and campaign stopped.";
+        else if (
+          admitted.actualUsd !== null &&
+          admitted.actualUsd > admitted.reservedUsd
+        ) {
+          stoppedReason =
+            "Reported provider usage exceeded its pre-dispatch reservation; reply retained and no further requests admitted.";
+          // Let the normal loop persist/consume this already-paid known reply.
+          // Any subsequent model call fails before admission, including another host.
+          retainKnownReply = true;
+        }
         await options.persist();
-        if (stoppedReason) throw new EvaluationAdmissionError(stoppedReason);
+        if (stoppedReason && !retainKnownReply)
+          throw new EvaluationAdmissionError(stoppedReason);
         return reply;
       } finally {
         busy = false;

@@ -118,6 +118,56 @@ describe("shared creative-evaluation admission and evidence", () => {
         await readFile(path.join(directory, requests[0].responseFile!), "utf8"),
       ).toContain("Saved result without usage");
     }));
+  it("retains a known paid reply but blocks further dispatch when its reservation is exceeded", async () =>
+    workspace(async (directory) => {
+      const budget = new EvaluationBudget(10, 1, rates),
+        requests: CreativeRequestRecord[] = [];
+      let calls = 0;
+      const campaign = createCreativeCampaignModel({
+        transport: {
+          async complete() {
+            calls++;
+            return {
+              text: "Keep this paid reply.",
+              calls: [],
+              providerOutput: [{ encrypted_content: "opaque-test-reply" }],
+              usage: { inputTokens: 20000, outputTokens: 5 },
+            };
+          },
+        },
+        budget,
+        requests,
+        directory,
+        context: () => context,
+        sourceUnchanged: async () => true,
+        persist: async () => {},
+      });
+      const reply = await campaign.model.complete(
+        [],
+        [],
+        new AbortController().signal,
+        { maxOutputTokens: 2000 },
+      );
+      expect(reply.text).toBe("Keep this paid reply.");
+      expect(reply.providerOutput).toEqual([
+        { encrypted_content: "opaque-test-reply" },
+      ]);
+      expect(budget.requests[0].status).toBe("completed");
+      expect(budget.accountedUsd).toBeGreaterThan(
+        budget.requests[0].reservedUsd,
+      );
+      expect(budget.accountedUsd).toBeLessThan(budget.maximumUsd);
+      await expect(
+        campaign.model.complete([], [], new AbortController().signal),
+      ).rejects.toThrow(/pre-dispatch reservation/);
+      expect(calls).toBe(1);
+      const saved = await readFile(
+        path.join(directory, requests[0].responseFile!),
+        "utf8",
+      );
+      expect(saved).toContain("Keep this paid reply.");
+      expect(saved).not.toContain("opaque-test-reply");
+    }));
   it("keeps known usage overruns visible and redacts secrets/opaque reasoning from evidence", async () =>
     workspace(async (directory) => {
       const budget = new EvaluationBudget(10, 1, rates),
@@ -379,7 +429,10 @@ describe("shared creative-evaluation admission and evidence", () => {
         fullSuiteSelected: true,
       });
       expect(JSON.stringify(creativeScenarios)).toBe(original);
-      await evaluateCreativeMain(["--scenarios", "creative-festival-birthday-3d"]);
+      await evaluateCreativeMain([
+        "--scenarios",
+        "creative-festival-birthday-3d",
+      ]);
       const probe = JSON.parse(String(log.mock.calls.at(-1)![0]));
       expect(probe.totalTrials).toBe(2);
       expect(probe.scenarioSelection.fullSuiteSelected).toBe(false);
