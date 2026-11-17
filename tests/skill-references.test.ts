@@ -17,7 +17,10 @@ import {
   type SkillModelMessage,
 } from "../packages/agent-kit/src/skill-references";
 import { readSkill, builtInSkills } from "../packages/agent-kit/src/skills";
-import { skillsForSavedRun } from "../packages/agent/src/runtime-build";
+import {
+  skillsForSavedRun,
+  selectAgentKit,
+} from "../packages/agent/src/runtime-build";
 import { skillReferenceJpegSize } from "../packages/agent-kit/src/skill-reference-image";
 import type { Skill } from "../packages/agent-kit/src/catalog";
 import { runAgent } from "../packages/agent/src/loop";
@@ -71,6 +74,68 @@ const fake = () => ({
 });
 
 describe("bounded portable skill references", () => {
+  it("retains the original tool contract for a saved pre-reference current-profile skill snapshot", async () => {
+    const document = createVideoProjectDocument({
+      width: 1280,
+      height: 720,
+      fps: 30,
+      durationInFrames: 180,
+    });
+    const oldSkill: Skill = {
+      name: "festival-motion",
+      description: "Original celebration guidance.",
+      instructions: "Keep the original method.",
+    };
+    const model: import("../packages/agent/src/types").LanguageModel = {
+      complete: async (_messages, available) => {
+        expect(
+          available.find((tool) => tool.name === "read_skill")!.description,
+        ).toBe(
+          selectAgentKit("local-editor-v14", "0.2.9").toolMetadata("read_skill")
+            .description,
+        );
+        return {
+          text: "Old snapshot retained.",
+          calls: [],
+          usage: { inputTokens: 20, outputTokens: 5 },
+        };
+      },
+    };
+    await runAgent({
+      request: {
+        contract: "video-project-commands",
+        version: 1,
+        baseRevision: 0,
+        baseHash: await hashVideoProjectDocument(document),
+        document,
+        context: { selectedItemIds: [], playheadFrame: 0 },
+        instruction: "Continue",
+        authoring: { version: 1, scope: { kind: "project" } },
+      },
+      profile: "local-editor-v14",
+      agentKitVersion: "0.2.10",
+      model,
+      skills: [oldSkill],
+      signal,
+      maxSteps: 2,
+      maxToolCalls: 2,
+      maxOutputTokens: 1000,
+      stages: {
+        phase: "planning",
+        generalEditing: true,
+        deriveCaptionPlan: true,
+        preparedCommands: false,
+        planEditStages: async () => {
+          throw Error("No plan");
+        },
+        saveCaptionBatch: async () => {
+          throw Error("No captions");
+        },
+        readEditArtifact: async () => ({}),
+        resolvePreparedEdit: async (value) => value,
+      },
+    });
+  });
   it("carries the selected pixels through the real local agent loop and Responses transport", async () => {
     const s = await skill(),
       document = createVideoProjectDocument({

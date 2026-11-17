@@ -422,7 +422,7 @@ export function createEditorToolset<T>(input: {
     },
     {
       ...toolMetadata("read_skill"),
-      ...(usesSkillVisualReferences(input.profile) ? { description: toolMetadata("read_skill").description + " Selected skills may supply bundled visual reference images to the model; these are design references, not project media or permission for external actions." } : {}),
+      ...(usesSkillVisualReferences(input.profile) && input.skills.some(skill => skill.references?.some(reference => reference.image)) ? { description: toolMetadata("read_skill").description + " Selected skills may supply bundled visual reference images to the model; these are design references, not project media or permission for external actions." } : {}),
       parameters: object({ name: string }, ["name"]),
       execute: async (args) => {
         const value = record(args, ["name"]);
