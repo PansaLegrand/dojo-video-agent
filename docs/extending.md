@@ -32,11 +32,45 @@ call stages a candidate. Keep the user's final commit in the host.
 
 ## A skill
 
-Add a short Markdown file under `skills/`. Its first paragraph describes when to
-use it. The server reads only that known directory and advertises an index. Restart
-the host after editing skills. `SKILLS_DIR` optionally selects a different local
-directory. The loader admits at most 32 regular, lowercase-named `.md` files,
-64 KiB each, and rejects symlink files. The model can request details through `read_skill`.
+Add a folder such as `skills/my-motion/SKILL.md` with a short entry point:
+
+```markdown
+---
+name: my-motion
+description: Compose editable motion for a specific use case. Use when the user asks for that result.
+---
+
+# My motion
+
+Explain the creative method, the facts to preserve, and how to review the result.
+```
+
+The folder name and `name` must match. Use at most 64 lowercase letters, digits
+or hyphens, beginning with a letter or digit. Only single-line `name` and
+`description` metadata are interpreted; descriptions are limited to 500
+characters. A nonempty Markdown body is required. This is a bounded frontmatter
+format, not a general YAML parser or an executable plugin manifest.
+
+Legacy `skills/my-motion.md` files remain supported; their first nonempty,
+non-heading line supplies the index description. Folder and flat-file names share one
+namespace. The loader admits at most 32 entries, 64 KiB per entry, and rejects
+symlinks and duplicate names. It does not recursively load supporting files.
+
+The server reads that directory at startup and advertises a compact index. The
+model requests the chosen body through `read_skill`; it does not receive every
+pack's instructions in every turn. `SKILLS_DIR` optionally selects a different
+local directory. Restart after changing files. New candidate local-v14 runs
+freeze the loaded instructions privately so resuming an existing run cannot
+silently pick up a later edit. Retained builds use their original skill/build
+selection; old runs do not acquire the three new creative pack names.
+
+The built-in examples are [branded ending](../skills/branded-ending/SKILL.md),
+[chart storytelling](../skills/chart-storytelling/SKILL.md), and
+[festival motion](../skills/festival-motion/SKILL.md). Shared built-ins are bundled
+by `npm run build --workspace @dojo-video/agent-kit`; adding one also
+requires its catalog/tool eligibility and behavior checks. The commercial host
+consumes the packaged kit rather than a user's local `SKILLS_DIR`. The 0.2.10 web
+candidate is opt-in; see [qualification and limitations](creative-skill-packs-2026-11-17.md).
 
 Skills should explain a method and its domain constraints, not contain hidden
 permissions, credentials, arbitrary executable snippets, or duplicated tool schemas.
