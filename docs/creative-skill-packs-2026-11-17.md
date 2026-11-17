@@ -1,5 +1,9 @@
 # Creative skill packs — R27 development candidate
 
+Current continuation: [visual art direction and reference delivery](creative-skill-visual-direction-2026-11-18.md)
+adds richer motion concepts and actual selected-skill image inputs. Source,
+package, local verification and actual-model acceptance remain separate below.
+
 Follow-up: [GPT-6 Astra comparison](creative-skill-astra-comparison-2026-11-17.md)
 tests the same birthday/ending prompts in both hosts on the compatibility-fixed
 candidate. Four trials and exports passed; independent sampled review preferred
