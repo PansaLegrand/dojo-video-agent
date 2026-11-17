@@ -26,7 +26,13 @@ export type AgentTool<T> = ToolSpec & {
     | { kind: "waiting"; requestRef: HostRequestRef }
   >;
 };
-export type Skill = { name: string; description: string; instructions: string };
+export type SkillReference = {
+  id: string;
+  title: string;
+  instructions: string;
+  image?: { dataUrl: string; sha256: string; width: number; height: number };
+};
+export type Skill = { name: string; description: string; instructions: string; references?: readonly SkillReference[] };
 export const toolCatalog = {
   read_caption_track: {
     effect: "read",
@@ -227,7 +233,8 @@ export type ProfileCapability =
   | "semanticEditingGuidance"
   | "derivedCaptionPlan"
   | "compactReviewedProposals"
-  | "creativeSkills";
+  | "creativeSkills"
+  | "skillVisualReferences";
 type ProfileDefinition = Readonly<{
   kitVersion: string;
   capabilities: readonly ProfileCapability[];
@@ -311,7 +318,7 @@ const compactReviewedProposals = extendProfile(
   AGENT_KIT_VERSION,
   "compactReviewedProposals",
 );
-const creativeSkills = extendProfile(compactReviewedProposals, AGENT_KIT_VERSION, "creativeSkills");
+const creativeSkills = extendProfile(extendProfile(compactReviewedProposals, AGENT_KIT_VERSION, "creativeSkills"), AGENT_KIT_VERSION, "skillVisualReferences");
 export const profileCapabilities = Object.freeze({
   "local-editor-v1": legacy,
   "commercial-editing-v2": legacy,
@@ -378,6 +385,7 @@ export const usesDerivedCaptionPlan = (profile: AgentProfile) =>
 export const usesCompactReviewedProposals = (profile: AgentProfile) =>
   hasCapability(profile, "compactReviewedProposals");
 export const usesCreativeSkills = (profile: AgentProfile) => hasCapability(profile, "creativeSkills");
+export const usesSkillVisualReferences = (profile: AgentProfile) => hasCapability(profile, "skillVisualReferences");
 export const profileKitVersion = (profile: AgentProfile) =>
   profileCapabilities[profile]?.kitVersion ?? "0.1.1";
 export const profileSkills: Record<

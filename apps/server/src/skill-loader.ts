@@ -3,6 +3,7 @@ import path from "node:path";
 import type { Skill } from "../../../packages/agent/src/skills";
 import { parseSkillMarkdown } from "../../../packages/agent-kit/src/skill-markdown";
 import { markLocalSkillPack } from "../../../packages/agent/src/local-skill-origin";
+import { loadSkillReferences } from "./skill-reference-loader";
 
 /** Local Markdown only: no imports, executable modules, or permission grants. */
 export async function localSkillFiles(
@@ -76,8 +77,9 @@ export async function loadLocalSkills(directory: string): Promise<Skill[]> {
       const instructions = await readFile(file, "utf8");
       // Keep legacy local-file bytes/description exactly as before: older paid
       // checkpoints bind that description, including CRLF in custom guides.
+      const references = pack ? await loadSkillReferences(path.dirname(file)) : undefined;
       return pack
-        ? markLocalSkillPack(parseSkillMarkdown(name, instructions, true))
+        ? markLocalSkillPack({ ...parseSkillMarkdown(name, instructions, true), ...(references ? { references } : {}) })
         : {
             name,
             description: (

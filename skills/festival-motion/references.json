@@ -1,0 +1,11 @@
+[
+  {
+    "id": "motion-atlas",
+    "title": "festival-motion — three visual sequences",
+    "markdown": "references/atlas.md",
+    "image": "references/atlas.jpg",
+    "sha256": "70eef4b551389404fada8425fec0e48e3b83029f3bc6a287b4efd4476ca2fea7",
+    "width": 1296,
+    "height": 810
+  }
+]

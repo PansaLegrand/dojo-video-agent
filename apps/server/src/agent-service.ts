@@ -224,7 +224,7 @@ export class AgentService {
         captionTranslationRebase: true,
         agentProfile: this.agentProfile,
         agentKitVersion: profileKitVersion(this.agentProfile),
-        ...(this.agentProfile === "local-editor-v14" ? { skillSnapshot: this.skills.map(skill => ({ ...skill })) } : {}),
+        ...(this.agentProfile === "local-editor-v14" ? { skillSnapshot: this.skills.map(skill => structuredClone(skill)) } : {}),
         ...(this.stagedOptions.browser &&
         ["local-editor-v10", "local-editor-v11", "local-editor-v12", "local-editor-v13", "local-editor-v14"].includes(this.agentProfile)
           ? { browserToolsEnabled: true as const }

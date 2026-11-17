@@ -41,7 +41,7 @@ export function skillsForSavedRun(
   loaded: currentKit.Skill[],
 ): currentKit.Skill[] {
   if (run.skillSnapshot)
-    return run.skillSnapshot.map((skill) => ({ ...skill }));
+    return run.skillSnapshot.map((skill) => structuredClone(skill));
   const version = savedAgentKitVersion(run);
   return version === "0.2.10"
     ? loaded

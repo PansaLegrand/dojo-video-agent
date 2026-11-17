@@ -20,7 +20,7 @@ import { legacySkillsV14 } from "./skills.legacy-v14.generated.js";
 import { legacySkillsV13 } from "./skills.legacy-v13.generated.js";
 import { generatedSkills } from "./skills.generated.js";
 export const builtInSkills = (): Skill[] =>
-  generatedSkills.map((skill) => ({ ...skill }));
+  generatedSkills.map((skill) => structuredClone(skill));
 export const skillIndex = (skills: readonly Skill[]) =>
   skills.map(({ name, description }) => ({ name, description }));
 
@@ -130,5 +130,8 @@ export function readSkill(skills: readonly Skill[], name: string): string {
   const skill = skills.find((skill) => skill.name === name);
   if (!skill)
     throw new Error("Unknown skill. Inspect the available skill index.");
-  return skill.instructions;
+  return skill.instructions + (skill.references?.map(reference =>
+    `\n\n## Reference: ${reference.title} (${reference.id})\n${reference.instructions}` +
+    (reference.image ? `\nThe trusted host supplies this reference board as image input after this skill read. Study it before designing. Image SHA-256: ${reference.image.sha256}.` : "")
+  ).join("") ?? "");
 }

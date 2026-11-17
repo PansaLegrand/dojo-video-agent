@@ -8,6 +8,10 @@ description: Create or revise an editable animated chart from supplied or select
 Make the data relationship understandable, then use motion to reveal it. A chart
 must contain marks whose sizes or positions encode the supplied values; an
 animated heading or decorative counter alone does not satisfy the request.
+Study the attached editorial/process reference board for hierarchy and explanatory
+sequences. Its data is illustrative: use only the user's supplied facts in the
+new chart. The goal is a designed explanation with truthful marks, not copied
+sample numbers or a colorful title surrounding a static chart.
 
 ## Establish the data and message
 
@@ -61,12 +65,22 @@ An SVG path instead uses its explicit viewBox coordinate system.
 
 ## Choreograph the explanation
 
+Choose an explanatory action: orient the viewer to the scale, reveal the data,
+then guide attention to one supported relationship before the final reading hold.
+Use a deliberate editorial surface, hierarchy and focal emphasis. In a short
+chart, a moving focus region or a clear transition from whole series to one
+comparison can add a real second beat without changing data geometry.
+
 Keep axes and scale stable while values appear. A smooth reveal normally benefits
 from eased growth or movement, modest staggering, then a settled reading interval.
 Choose direction to match meaning: bars grow from their baseline; a trend unfolds
 in time order; parts of a whole resolve into the full total. Avoid elastic
 overshoot that temporarily suggests values beyond the data. Counters, if used,
 must finish at the exact supplied value and not obscure the chart itself.
+For line reveals, keep the drawing front, markers and labels synchronized on the
+same data positions. Do not scale a whole polyline while its markers remain fixed.
+Show the numeric domain when a line baseline is not zero. Keep absolute plot nodes
+inside a plain positioned parent, not a centered flex layout with added offsets.
 
 Use color to distinguish a series or an evidenced emphasis. Preserve series/color
 identity across panels. One highlight is often clearer than giving every mark an

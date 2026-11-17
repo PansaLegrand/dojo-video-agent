@@ -1,0 +1,39 @@
+{
+  "license": "MIT",
+  "purpose": "Visual study only; no sample branding, numbers or media are inserted into user projects.",
+  "width": 1296,
+  "height": 810,
+  "sha256": "70eef4b551389404fada8425fec0e48e3b83029f3bc6a287b4efd4476ca2fea7",
+  "sources": [
+    {
+      "scene": "kinetic",
+      "frames": [
+        45,
+        165,
+        315
+      ],
+      "sourceVideoSha256": "510247126abfdd887e8a94c0f919ca6dbd446e0d34d6ef2ae00af88149673ca3",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/kinetic.mjs"
+    },
+    {
+      "scene": "festival",
+      "frames": [
+        45,
+        175,
+        325
+      ],
+      "sourceVideoSha256": "476c9689654d0955a3401e03e8dcfdc946451532f444af178e152de4a965efcb",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/festival.mjs"
+    },
+    {
+      "scene": "bloom",
+      "frames": [
+        35,
+        155,
+        315
+      ],
+      "sourceVideoSha256": "95b819fec826a7025800d9a94dbb935d19f0d39eedad4e342d40279ab19be9fa",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/bloom.mjs"
+    }
+  ]
+}

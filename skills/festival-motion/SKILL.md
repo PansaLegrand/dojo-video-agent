@@ -5,9 +5,11 @@ description: Compose or revise celebratory motion graphics for an event, launch,
 
 # Festival motion
 
-Create a sense of occasion through composition and motion. A short request is
-enough to choose an initial direction; the user does not need to specify a palette,
-particle count, camera angle or animation curve.
+Build a small motion story with a distinctive visual idea. A short request is
+enough: choose the art direction yourself. The attached reference board shows
+three different visual languages and their progression through time. Study its
+composition, depth and transitions before designing; the accompanying notes
+explain what to adapt. Keep sample wording and figures out of the user's work.
 
 ## Find the occasion's character
 
@@ -33,6 +35,20 @@ from a locale or a person's name. An explicitly named tradition or supplied visu
 reference may guide the design.
 
 ## Compose a small visual story
+
+Choose a visual action that belongs to this occasion: something opens, unfolds,
+assembles, travels or transforms to reveal the message. Express the concept in
+one concise sentence in the edit summary. Let the composition change as that
+action happens, then resolve into a strong final pose. A birthday might feel like
+an illustrated paper stage opening for its recipient; a formal anniversary could
+assemble a sculptural emblem. These are possibilities, not required scenes.
+
+Make the reveal and final hold intentionally different compositions. Create a
+foreground, focal subject and backdrop when depth serves the concept. Give type
+a role in the action through a mask, scale transition, directional handoff or
+framing change. Reserve calm space for the exact name/message. A centered age on
+a disc with balloons/confetti is not the default finished answer; those motifs
+need a purposeful transformation or a different underlying concept.
 
 Choose a dominant focal point and keep the message readable. Build a progression
 such as anticipation, reveal and celebration, with a held composition the viewer
@@ -61,6 +77,11 @@ an asset URL, execute code from this skill, or call an unavailable authoring too
 Represent repeated motion with supported, deterministic keyframes and stable IDs.
 Keep child clocks local to their group; preserve the requested interval and paint
 order so a backdrop cannot cover the centerpiece or message.
+For an absolute composition, keep its parent a plain positioned group; do not
+combine a centered flex parent with absolute child offsets. Native flex layout
+does not behave like page CSS for that combination. Prefer one coherent method.
+Put native name/age text on stable child IDs. Completion `item_present` targets a
+timeline item, never a nested child; use a supported property check for child text.
 
 Use `review_edit` on the complete candidate with checks for the exact event text,
 placement and requested duration. For “more elegant” or “less busy,” revise the existing
@@ -72,7 +93,9 @@ remains with the host.
 
 Before finalizing, use `request_project_preview` to inspect an owned candidate at the reveal, busiest moment and final hold.
 Check that the intended mood is visible, the text survives the decoration, the
-focal point remains inside the canvas and the ending resolves cleanly. Use the
+focal point remains inside the canvas and the ending resolves cleanly. Compare
+the major poses with the reference's level of composition and change, rather
+than accepting extra particles as evidence of quality. Use the
 existing bounded repair flow and inspect its required second preview after repair.
 
 <!-- /requires-tool -->

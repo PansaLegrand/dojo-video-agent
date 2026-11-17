@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseSkillMarkdown } from "../src/skill-markdown.ts";
+import { loadSkillReferences } from "../../../apps/server/src/skill-reference-loader.ts";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const source = path.resolve(root, "../../skills");
 const names = [
@@ -25,7 +26,8 @@ const skills = await Promise.all(
     const instructions = await fs.readFile(path.join(source, pack ? `${name}/SKILL.md` : `${name}.md`), "utf8");
     if (Buffer.byteLength(instructions) > 65536)
       throw new Error("Built-in skill exceeds its byte budget.");
-    return parseSkillMarkdown(name, instructions, pack);
+    const references = pack ? await loadSkillReferences(path.join(source, name)) : undefined;
+    return { ...parseSkillMarkdown(name, instructions, pack), ...(references ? { references } : {}) };
   }),
 );
 const output =

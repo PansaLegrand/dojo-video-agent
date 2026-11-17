@@ -8,6 +8,9 @@ description: Compose or revise an editable branded ending from a name, URL, logo
 Turn a short request into a deliberate final impression. Choose a treatment from
 the supplied identity and project context; the user should not need to prescribe
 coordinates, fonts or easing curves.
+Study the attached reference board and notes: assembly, depth and typographic
+transformation are distinct ways to earn a final lockup. Adapt a visual action,
+not a complete sample layout, its words or its branding.
 
 ## Resolve the ending
 
@@ -27,6 +30,13 @@ starting point, with a substantial still hold after the entrance.
 
 ## Choose a visual idea
 
+Decide how the ending transforms into the identity: a visual object assembles,
+space opens, a ribbon becomes a frame, or monumental type settles into a lockup.
+Choose a clear action and carry it across the composition. Use a strong silhouette
+or framing change before the final reading hold. A border/underline card or a
+glowing URL can be a final pose, but a fade alone is a limited response to an
+expressive brief. A calm or minimal brief can still use one precise transformation.
+
 Decide what the viewer should remember, then build one coherent gesture around
 it. Let the project's tone guide the choice:
 
@@ -42,6 +52,8 @@ These are starting directions, not required templates. “Cool” does not requi
 known; otherwise choose a small contrasting palette. Fit the complete URL or
 message before adding decoration. A long domain needs a different composition
 from a two-word name, not a cropped or arbitrarily shortened spelling.
+Check identity size at a phone-width display. Use the canvas width and sensible
+breaks at URL boundaries before shrinking the hero identity into tiny type.
 
 ## Build the editable result
 
@@ -66,6 +78,11 @@ it to zero or move it offscreen at the ending's end. For `titleCard` or
 exit. Decorative motion may resolve around the held identity. Make the final
 composition duration agree with the ending's end; do not leave unrelated blank
 padding afterward.
+Keep absolute child layouts inside plain positioned groups rather than centered
+flex parents. Keep the exact domain in a native text child when using a larger
+graphic composition; macro roots do not necessarily expose a native `text`
+property. Bind completion checks to the actual installed node grammar before
+freezing them, and repair the authored structure without replacing frozen checks.
 
 Review the complete command batch through `review_edit`, including the exact
 identity text, appended placement and final duration in the supported completion
