@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { mkdtemp, readFile, rm, mkdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -10,7 +10,10 @@ import {
   type CreativeRequestContext,
   type CreativeRequestRecord,
 } from "../evals/agent/creative-runner";
-import { parseCreativeOptions } from "../scripts/evaluate-creative";
+import {
+  parseCreativeOptions,
+  evaluateCreativeMain,
+} from "../scripts/evaluate-creative";
 import { creativeScenarios } from "../evals/agent/creative-scenarios";
 import type { LanguageModel } from "../packages/agent/src/types";
 
@@ -283,6 +286,102 @@ describe("shared creative-evaluation admission and evidence", () => {
       parseCreativeOptions(["--repeat", "2", "--repeat", "3"]),
     ).toThrow(/duplicate/);
     expect(() => parseCreativeOptions(["--resume"])).toThrow(/Invalid/);
+  });
+  it("validates an optional focused scenario allowlist without weakening live budget flags", () => {
+    const picked = "creative-festival-birthday,creative-ending-domain";
+    const required = [
+      "--live",
+      "--web-adapter",
+      "/tmp/adapter.mjs",
+      "--repeat",
+      "1",
+      "--max-requests",
+      "28",
+      "--max-usd",
+      "6.13527775",
+      "--input-usd-per-million",
+      "1",
+      "--output-usd-per-million",
+      "1",
+      "--outputdir",
+      "/tmp/new-campaign",
+    ];
+    expect(parseCreativeOptions(required).scenarioIds).toBeUndefined();
+    expect(
+      parseCreativeOptions([...required, "--scenarios", picked]),
+    ).toMatchObject({
+      live: true,
+      scenarioIds: picked.split(","),
+      maximumRequests: 28,
+      maximumUsd: 6.13527775,
+    });
+    for (const invalid of [
+      " ",
+      ",",
+      "creative-ending-domain,",
+      ",creative-ending-domain",
+      "creative-ending-domain,,creative-festival-birthday",
+      "creative-ending-domain, creative-ending-domain",
+      "not-a-scenario",
+    ]) {
+      expect(() => parseCreativeOptions(["--scenarios", invalid])).toThrow(
+        /scenario IDs|Unknown scenario/,
+      );
+    }
+    expect(() =>
+      parseCreativeOptions(["--scenarios", picked, "--scenarios", picked]),
+    ).toThrow(/duplicate/);
+    expect(() => parseCreativeOptions(["--scenarios", ""])).toThrow(/Invalid/);
+    expect(() =>
+      parseCreativeOptions(["--live", "--scenarios", picked]),
+    ).toThrow(/requires explicit/);
+  });
+  it("records focused four-trial plans with the original prompts and keeps the all-case default", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => {});
+    const original = JSON.stringify(creativeScenarios);
+    try {
+      await evaluateCreativeMain([
+        "--scenarios",
+        "creative-festival-birthday,creative-ending-domain",
+        "--repeat",
+        "1",
+      ]);
+      const focused = JSON.parse(String(log.mock.calls.at(-1)![0]));
+      expect(focused).toMatchObject({
+        mode: "plan-only",
+        hosts: ["open-source", "commercial-web"],
+        totalTrials: 4,
+        repeats: 1,
+        scenarioSelection: {
+          mode: "explicit",
+          selectedIds: ["creative-festival-birthday", "creative-ending-domain"],
+          fullSuiteSelected: false,
+        },
+      });
+      expect(focused.scenarios).toEqual(
+        ["creative-festival-birthday", "creative-ending-domain"].map((id) => {
+          const scenario = creativeScenarios.find((value) => value.id === id)!;
+          return {
+            id,
+            turns: scenario.turns.map((turn) => ({
+              prompt: turn.prompt,
+              expected: turn.expected,
+            })),
+          };
+        }),
+      );
+      await evaluateCreativeMain(["--repeat", "2"]);
+      const all = JSON.parse(String(log.mock.calls.at(-1)![0]));
+      expect(all.totalTrials).toBe(32);
+      expect(all.scenarios).toHaveLength(8);
+      expect(all.scenarioSelection).toMatchObject({
+        mode: "all",
+        fullSuiteSelected: true,
+      });
+      expect(JSON.stringify(creativeScenarios)).toBe(original);
+    } finally {
+      log.mockRestore();
+    }
   });
 });
 

@@ -39,6 +39,7 @@ export function parseCreativeOptions(args: readonly string[]) {
     "--input-usd-per-million",
     "--output-usd-per-million",
     "--outputdir",
+    "--scenarios",
   ]);
   const values = new Map<string, string>();
   let live = false;
@@ -61,8 +62,28 @@ export function parseCreativeOptions(args: readonly string[]) {
   }
   if (live)
     for (const flag of allowed)
-      if (!values.has(flag))
+      if (flag !== "--scenarios" && !values.has(flag))
         throw new Error(`Live evaluation requires explicit ${flag}.`);
+  const scenarioIds = values.has("--scenarios")
+    ? values
+        .get("--scenarios")!
+        .split(",")
+        .map((id) => id.trim())
+    : undefined;
+  if (scenarioIds) {
+    if (
+      scenarioIds.some((id) => !id) ||
+      new Set(scenarioIds).size !== scenarioIds.length
+    )
+      throw new Error(
+        "--scenarios must contain unique, nonempty scenario IDs.",
+      );
+    const known = new Set(creativeScenarios.map((scenario) => scenario.id));
+    if (scenarioIds.some((id) => !known.has(id)))
+      throw new Error(
+        `Unknown scenario ID. Choose from: ${[...known].join(", ")}.`,
+      );
+  }
   const repeat = Number(values.get("--repeat") ?? 1),
     maximumRequests = Number(values.get("--max-requests") ?? 256),
     maximumUsd = Number(values.get("--max-usd") ?? 10);
@@ -90,6 +111,7 @@ export function parseCreativeOptions(args: readonly string[]) {
     maximumRequests,
     maximumUsd,
     rates,
+    scenarioIds,
     webAdapter: values.get("--web-adapter")
       ? path.resolve(values.get("--web-adapter")!)
       : undefined,
@@ -115,14 +137,25 @@ export async function evaluateCreativeMain(args = process.argv.slice(2)) {
     "creative-chart-percent-portrait",
     "creative-ending-calmer-followup",
   ];
-  const orderedScenarios = [...creativeScenarios].sort(
+  const availableScenarios = [...creativeScenarios].sort(
     (a, b) => order.indexOf(a.id) - order.indexOf(b.id),
   );
+  const orderedScenarios = options.scenarioIds
+    ? options.scenarioIds.map(
+        (id) => availableScenarios.find((scenario) => scenario.id === id)!,
+      )
+    : availableScenarios;
   const plan = {
     version: 1,
     mode: options.live ? "live" : "plan-only",
     hosts,
     repeats: options.repeat,
+    scenarioSelection: {
+      mode: options.scenarioIds ? "explicit" : "all",
+      availableIds: availableScenarios.map((scenario) => scenario.id),
+      selectedIds: orderedScenarios.map((scenario) => scenario.id),
+      fullSuiteSelected: orderedScenarios.length === availableScenarios.length,
+    },
     scenarios: orderedScenarios.map((scenario) => ({
       id: scenario.id,
       turns: scenario.turns.map((turn) => ({
@@ -130,7 +163,7 @@ export async function evaluateCreativeMain(args = process.argv.slice(2)) {
         expected: turn.expected,
       })),
     })),
-    totalTrials: hosts.length * creativeScenarios.length * options.repeat,
+    totalTrials: hosts.length * orderedScenarios.length * options.repeat,
     maximumRequests: options.maximumRequests,
     maximumUsd: options.maximumUsd,
     note: "No browser/creative-quality acceptance is implied by automated semantic checks. No provider call without --live.",
