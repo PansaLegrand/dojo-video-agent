@@ -1,7 +1,7 @@
 // Import supplied, editable graphics through the normal local command API.
 // No provider calls, generated media, or direct writes to the project store.
 import { readFile } from "node:fs/promises";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { parseScene } from "@dojo-video-engine/schema";
 import { validateThreeLayers } from "@dojo-video-engine/three/schema";
 
@@ -18,6 +18,9 @@ const examples = {
   sports: "NIGHT LEAGUE — sports opener",
   software: "FLOW — software concept",
   citrus: "SQUEEZE — food and drink ad",
+  lottie: "SPECIAL DELIVERY — Lottie story",
+  handwriting: "MAKE MAGIC — handwritten lettering",
+  "type-motion": "LETTER FORM — expressive typography",
 };
 const args = process.argv.slice(2);
 const checkOnly = args.includes("--check");
@@ -48,8 +51,44 @@ const scene = parseScene(
   ),
 );
 validateThreeLayers(scene.nodes);
-if (Object.keys(scene.assets).length)
-  throw new Error("These supplied showcases must not require media assets.");
+// The only media in these supplied designs is original bundled vector Lottie.
+// Compare it with the self-contained Scene before binding its public local path;
+// arbitrary data URLs, remote media and writes to the project store stay absent.
+const bundledAssets = [];
+for (const asset of Object.values(scene.assets)) {
+  if (asset.type !== "lottie" || !/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(asset.id))
+    throw new Error("Showcase assets must be named, bundled Lottie vectors.");
+  const match = /^data:application\/json(;base64)?,(.*)$/s.exec(asset.src);
+  if (!match)
+    throw new Error("The supplied Lottie must be embedded in the Scene.");
+  const json = match[1]
+    ? Buffer.from(match[2], "base64").toString("utf8")
+    : decodeURIComponent(match[2]);
+  if (Buffer.byteLength(json) > 2 * 1024 * 1024)
+    throw new Error("Showcase Lottie exceeds 2 MiB.");
+  const content = JSON.parse(json);
+  const hash = createHash("sha256")
+    .update(JSON.stringify(content))
+    .digest("hex");
+  const filename = `${example}-${asset.id}-${hash}.json`;
+  const bundled = JSON.parse(
+    await readFile(
+      new URL(`../../public/assets/showcase/${filename}`, import.meta.url),
+      "utf8",
+    ),
+  );
+  if (JSON.stringify(bundled) !== JSON.stringify(content))
+    throw new Error(
+      `Bundled Lottie ${filename} does not match the supplied Scene.`,
+    );
+  bundledAssets.push({
+    id: asset.id,
+    type: "lottie",
+    name: bundled.nm ?? asset.id,
+    source: "static",
+    src: `/assets/showcase/${filename}`,
+  });
+}
 if (Object.keys(scene.audioBuses ?? {}).length)
   throw new Error("This silent graphics importer does not import audio buses.");
 if (
@@ -225,6 +264,26 @@ const layers =
                       ["citrus-burst", "citrus-pour", "citrus-hero"],
                     ],
                   ],
+                  handwriting: [
+                    ["Paper & guides", "handwriting-paper"],
+                    ["Lottie ink strokes", "handwritten-lettering"],
+                    ["Lettering captions", "handwriting-editorial"],
+                  ],
+                  lottie: [
+                    ["Paper background", "lottie-paper"],
+                    ["Lottie vector story", "lottie-story"],
+                    ["Editorial frame", "lottie-editorial"],
+                    [
+                      "Story captions",
+                      ["lottie-open", "lottie-fly", "lottie-deliver"],
+                    ],
+                  ],
+                  "type-motion": [
+                    [
+                      "Animated type",
+                      ["type-elastic", "type-tracking", "type-expression"],
+                    ],
+                  ],
                 }[example].map(([name, id]) => ({
                   name,
                   nodes: take(Array.isArray(id) ? id : [id]),
@@ -240,6 +299,7 @@ const groupedScene = parseScene({
 validateThreeLayers(groupedScene.nodes);
 
 const commands = [
+  ...bundledAssets.map((asset) => ({ type: "addAsset", asset })),
   ...Object.entries({
     width: scene.width,
     height: scene.height,

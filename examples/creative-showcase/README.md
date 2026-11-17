@@ -1,6 +1,6 @@
 # Make these videos your own
 
-Twelve supplied designs cover different creative categories:
+Fifteen supplied designs cover different creative categories:
 
 | Scene                | Category                | Format    |
 | -------------------- | ----------------------- | --------- |
@@ -16,6 +16,9 @@ Twelve supplied designs cover different creative categories:
 | **Night League**     | Sports broadcast        | Landscape |
 | **Flow**             | Software product demo   | Landscape |
 | **Squeeze**          | Food and drink campaign | Landscape |
+| **Special Delivery** | Lottie vector story     | Landscape |
+| **Make Magic**       | Handwritten lettering   | Landscape |
+| **Letter / Form**    | Expressive typography   | Landscape |
 
 [![Six creative directions](../../docs/assets/showcase/gallery.png)](../../docs/assets/showcase/gallery.mp4)
 
@@ -23,7 +26,7 @@ These are original, code-authored examples from
 [Dojo Video Engine](https://github.com/PansaLegrand/dojo-video-engine/tree/main/examples/creative-showcase).
 The JSON files here preserve their editable Scene nodes. They are supplied designs,
 not recordings of a chat agent generating the videos. ORBIT is a fictional brand.
-All twelve examples are silent and need no external media or API keys.
+All fifteen examples are silent and need no external media or API keys.
 
 ## Open an editable copy
 
@@ -48,6 +51,9 @@ node examples/creative-showcase/import.mjs bloom
 node examples/creative-showcase/import.mjs sports
 node examples/creative-showcase/import.mjs software
 node examples/creative-showcase/import.mjs citrus
+node examples/creative-showcase/import.mjs lottie
+node examples/creative-showcase/import.mjs handwriting
+node examples/creative-showcase/import.mjs type-motion
 ```
 
 Each command creates a new project and prints its editor URL. Open that URL to
@@ -96,7 +102,7 @@ chat revisions use your configured provider and its normal charges.
 
 ## Source and licensing
 
-The twelve `.json` scenes are exported from their matching `.mjs` authors
+The fifteen `.json` scenes are exported from their matching `.mjs` authors
 in the engine's `examples/creative-showcase/` directory, using the published
 1.2.3 Scene/Three.js contract. The examples are MIT-licensed with their owning
 repositories. Browser font rendering can vary by platform.
@@ -125,8 +131,8 @@ city shadow and the exploded assembly’s title clearance.
 
 [![Actual editable festival project](../../docs/assets/showcase/editor-festival.png)](../../docs/assets/showcase/editor-festival.png)
 
-The root README features three short MP4 reels: creative directions, 3D/vector
-detail and real-world scenarios.
+The root README features four short MP4 reels: creative directions, 3D/vector
+detail, real-world scenarios, and Lottie/lettering.
 [Watch the scenario reel](../../docs/assets/showcase/scenarios.mp4).
 
 ### November 17 scenario additions
@@ -137,9 +143,23 @@ full engine and editor MP4 exports, complete FFmpeg decoding, document reload an
 imports also passed frame-by-frame native compilation comparison. No model or
 generation requests were used.
 
-Native compilation checks compared all 360 frames of all twelve imported projects with
+Native compilation checks compared all 360 frames of all fifteen imported projects with
 the original Scene, including node order, animation clocks, layout and 3D
 parameters under the host's existing numeric normalization. Source JSON copies
 match the engine versions used for the README renders. The
 [engine render reports](https://github.com/PansaLegrand/dojo-video-engine/tree/main/docs/reports/showcase)
 record the exact source hashes and browser/export evidence.
+
+### Lottie and lettering additions
+
+Special Delivery and Make Magic use original bundled Lottie vector assets. Their
+canonical JSON hashes are included in static filenames under `public/assets/showcase`;
+imports check those files against the embedded Scene data before creating a project.
+Retain the existing hashed files when authoring new versions. No media upload or
+provider request is required. Lottie artwork and handwriting paths are edited in
+source; the timeline controls the clip. Letter / Form and native captions remain
+editable text.
+
+All three passed actual-editor rendering, export, full decoding, reload and
+narrow-screen checks: 360 frames each at 1280 × 720. Native compilation preserves
+all 360 frames of all fifteen supplied projects.
