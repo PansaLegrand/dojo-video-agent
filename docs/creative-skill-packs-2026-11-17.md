@@ -1,5 +1,12 @@
 # Creative skill packs — R27 development candidate
 
+Follow-up: [GPT-6 Astra comparison](creative-skill-astra-comparison-2026-11-17.md)
+tests the same birthday/ending prompts in both hosts on the compatibility-fixed
+candidate. Four trials and exports passed; independent sampled review preferred
+Astra in four pairs while retaining concrete quality limitations. Cumulative
+task usage is 248 requests and USD 6.58101625 conservatively accounted. The older
+campaign totals and evidence below remain historical records.
+
 This requested extension follows the completed R00–R26 scope. It does not reopen
 R25 Claude qualification. Owners: Dojo Video Agent owns portable skill contracts,
 content and local recovery; web owns the commercial adapter and runtime/protocol
