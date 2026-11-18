@@ -9,9 +9,13 @@
 
 ## Make it your own
 
-### Creative directions
+### Night Garden · one brief, two cuts
 
-[Night Garden: compare two editable eight-second films](examples/art-direction/README.md) — a Fraunces botanical study and an Anton print poster. The local agent's [type-and-color guide](guides/type-and-color.md) explains how to choose the face, palette, and motion for a different brief.
+[![Eight-second animated comparison: a lilac flower opens in Nocturne while two ink layers align into a moth in Ink Press](docs/assets/showcase/night-garden/compare.gif)](docs/assets/showcase/night-garden/compare.mp4)
+
+[Watch Nocturne](docs/assets/showcase/night-garden/nocturne.mp4) · [Watch Ink Press](docs/assets/showcase/night-garden/press.mp4) · [Edit either film](examples/art-direction/README.md) · [Type and color guide](guides/type-and-color.md)
+
+### Creative directions
 
 https://github.com/user-attachments/assets/99fa44aa-1e46-4594-9938-7b8cfe312223
 
