@@ -130,6 +130,7 @@ export type NativeAgentReference = z.infer<typeof nativeReferenceSchema>;
 export const nativeAuthoringSchema = z
   .object({
     version: z.literal(1),
+    endingVisibility: z.literal("final-frame-v1").optional(),
     scope: nativeAgentScopeSchema.optional(),
     reference: nativeReferenceSchema.optional(),
     clarification: z

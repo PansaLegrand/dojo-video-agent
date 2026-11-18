@@ -570,6 +570,7 @@ it("persists the new kit build on a local v14 run and keeps it across restart an
   const started = await host.start(f.p.id, f.input);
   const done = await settle(f.store, f.p.id);
   expect(done.runs[0].agentKitVersion).toBe(profileKitVersion("local-editor-v14"));
+  expect(done.runs[0].request.authoring?.endingVisibility).toBe("final-frame-v1");
   const reopened = new ProjectStore(f.store.directory);
   await reopened.init();
   const restarted = new AgentService(reopened, model, [], undefined, "review", undefined, "local-editor-v14");

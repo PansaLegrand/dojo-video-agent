@@ -1,6 +1,32 @@
 # Readiness execution ledger
 
-Started on 2026-11-01. Last updated on 2026-11-15. The harness plan remains the acceptance contract.
+Started on 2026-11-01. Last updated on 2026-11-18. The harness plan remains the acceptance contract.
+
+## R28: final frame of an appended ending (2026-11-18)
+
+New local v14 runs bind `endingVisibility: "final-frame-v1"` in their authoring
+request. Review, receipt replay, and Review/Apply after a rebase use that saved
+choice. Older requests retain the earlier sampling and receipt behavior.
+
+For a declared `appended_ending`, native preflight reserves the composition's
+last displayed frame within its existing 24-frame budget. It checks each named
+text layer contributing to the exact closing copy. A layer that ends early,
+becomes fully transparent in a supported case, has a layout box fully outside
+the canvas or supported ancestor clip, or sits behind a later unambiguously
+opaque full-canvas rectangle receives a repair message with the layer ID and
+frame. Animating into view earlier is allowed. This check does not grade
+typography, contrast, partial glyph clipping, complex masks or arbitrary
+occlusion; use a rendered preview for those.
+
+![Decoded final frame before and after moving the URL into its clipping window](assets/ending-final-frame.png)
+
+The two 1280×720 browser exports used the same ending. In the first, the URL
+moved outside its clipping window on frame 239; the previous receipt passed.
+In the corrected export the URL remained visible. FFmpeg decoded all 240
+frames of each. In the fixed region the bright-pixel counts on frames 238/239
+were 10,472/0 before and 10,474/10,474 after. A separately decoded opaque
+slate also took the final-frame count to zero, with a different diagnostic
+naming the covering layer. No paid model or provider was used.
 
 ## November 15 release closeout
 

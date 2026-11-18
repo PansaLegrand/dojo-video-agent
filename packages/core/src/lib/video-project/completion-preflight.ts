@@ -38,6 +38,7 @@ import { compileVideoProjectDocument } from "./compilation";
 import { normalizeCompletionNumber } from "./completion-number";
 import { captionTimingDiagnostics } from "./caption-source-range";
 import { normalizeCaptionLanguage } from "./caption-pair";
+import { assertEndingFrame } from "./ending-frame-visibility";
 
 import { z } from "zod/v3";
 import { nativeAgentTargetSchema } from "./agent-schema";
@@ -521,6 +522,7 @@ function layoutChecks(
   before: VideoProjectDocument,
   after: VideoProjectDocument,
   requirements: CompletionRequirement[],
+  endingVisibility?: "final-frame-v1",
 ) {
   const required = declaredItems(requirements);
   const changed = new Set(
@@ -561,15 +563,26 @@ function layoutChecks(
           );
     }
   }
+  const closingText = new Map<string, string>();
+  const finalFrame = after.format.durationInFrames - 1;
+  if (endingVisibility === "final-frame-v1") {
+    for (const requirement of requirements) {
+      if (requirement.kind !== "appended_ending") continue;
+      const item = after.items.find(item => item.id === requirement.itemId);
+      if (item) for (const node of nodes(item.node))
+        if (node.type === "text" && node.text?.trim()) closingText.set(node.id, item.id);
+    }
+  }
+  const limit = closingText.size && !frames.has(finalFrame) ? 23 : 24;
   const sorted = [...frames]
     .filter((frame) => frame >= 0 && frame < after.format.durationInFrames)
     .sort((a, b) => a - b);
   const selected =
-    sorted.length <= 24
+    sorted.length <= limit
       ? sorted
       : Array.from(
-          { length: 24 },
-          (_, index) => sorted[Math.round((index * (sorted.length - 1)) / 23)]!,
+          { length: limit },
+          (_, index) => sorted[Math.round((index * (sorted.length - 1)) / (limit - 1))]!,
         );
   const scene = compileVideoProjectDocument(
     after,
@@ -589,6 +602,8 @@ function layoutChecks(
     after.items.filter((item) => item.caption).map((item) => item.id),
   );
   const observed = new Set<string>();
+  const checkEnding = (groups: DisplayGroup[]) => assertEndingFrame(groups, closingText, finalFrame,
+    { x: 0, y: 0, width: after.format.width, height: after.format.height });
   for (const frame of selected) {
     const boxes: Array<{
       box: { id: string; x: number; y: number; width: number; height: number };
@@ -641,9 +656,9 @@ function layoutChecks(
       }
       group.children.forEach((child) => visit(child, opacity));
     };
-    compileDisplayList(layoutScene(evaluateScene(scene, frame))).groups.forEach(
-      (group) => visit(group),
-    );
+    const groups = compileDisplayList(layoutScene(evaluateScene(scene, frame))).groups;
+    if (closingText.size && frame === finalFrame) checkEnding(groups);
+    groups.forEach(group => visit(group));
     for (let i = 0; i < boxes.length; i++)
       for (let j = i + 1; j < boxes.length; j++) {
         const a = boxes[i]!,
@@ -671,6 +686,10 @@ function layoutChecks(
           );
       }
   }
+  if (closingText.size && !selected.includes(finalFrame)) {
+    checkEnding(compileDisplayList(layoutScene(evaluateScene(scene, finalFrame))).groups);
+    selected.push(finalFrame);
+  }
   for (const id of required) {
     const candidate = after.items.find((item) => item.id === id);
     if (
@@ -691,7 +710,7 @@ export function checkNativeCompletionRequirements(
   beforeInput: VideoProjectDocument,
   afterInput: VideoProjectDocument,
   raw: unknown,
-  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean } = {},
+  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1" } = {},
 ): CompletionCheck[] {
   const before = parseVideoProjectDocument(beforeInput),
     after = parseVideoProjectDocument(afterInput),
@@ -729,7 +748,7 @@ export function checkNativeCompletionRequirements(
     checks.push({
       id: "layout",
       passed: true,
-      message: layoutChecks(before, after, requirements),
+      message: layoutChecks(before, after, requirements, options.endingVisibility),
     });
   } catch (error) {
     checks.push({
@@ -776,7 +795,7 @@ export async function reviewNativeCompletionEdit(
     base,
     executed.document,
     requirements,
-    options,
+    { ...options, endingVisibility: request.authoring?.endingVisibility },
   );
   const receipt = checks.every((check) => check.passed)
     ? await createCompletionReceipt({
