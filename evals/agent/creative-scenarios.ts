@@ -14,7 +14,11 @@ import {
 export type CreativeSkill =
   | "branded-ending"
   | "chart-storytelling"
-  | "festival-motion";
+  | "festival-motion"
+  | "kinetic-typography"
+  | "presentation-motion"
+  | "product-walkthrough"
+  | "spatial-scenes";
 export type CreativeDatum = { label: string; value: number };
 export type CreativeContract =
   | { kind: "ending"; text: string }
@@ -29,6 +33,11 @@ export type CreativeContract =
       kind: "festival";
       requiredText: readonly string[];
       occasion: "birthday" | "company-anniversary";
+      requireThreeMotion?: true;
+    }
+  | {
+      kind: "graphic";
+      requiredText: readonly string[];
       requireThreeMotion?: true;
     }
   | { kind: "missing-data" };
@@ -291,7 +300,7 @@ export const creativeScenarios: readonly CreativeScenario[] = [
 export const creativeScenarioVariants: readonly CreativeScenario[] = [
   {
     id: "creative-festival-birthday-3d",
-    skill: "festival-motion",
+    skill: "spatial-scenes",
     document: creativeFixture(),
     turns: [
       {
@@ -308,6 +317,84 @@ export const creativeScenarioVariants: readonly CreativeScenario[] = [
     visualReview: [
       ...commonVisualReview,
       "Verify visible dimensional geometry and actual object/camera motion in the export, with exact readable Noor/21 text. A flat imitation or only animated overlays is not this 3D probe.",
+    ],
+  },
+  {
+    id: "creative-kinetic-copy",
+    skill: "kinetic-typography",
+    document: creativeFixture(),
+    turns: [
+      {
+        prompt:
+          "Animate “MAKE EVERY FRAME COUNT” as an energetic motion poster.",
+        expected: "edit",
+        contract: { kind: "graphic", requiredText: ["MAKE EVERY FRAME COUNT"] },
+      },
+    ],
+    visualReview: [
+      ...commonVisualReview,
+      "Check the complete supplied phrase, word order and reading hold. Typography must carry an observable sequence, not just unrelated decoration.",
+    ],
+  },
+  {
+    id: "creative-presentation-process",
+    skill: "presentation-motion",
+    document: creativeFixture(),
+    turns: [
+      {
+        prompt:
+          "Make a clean motion slide explaining these steps: Plan, Build, Launch.",
+        expected: "edit",
+        contract: {
+          kind: "graphic",
+          requiredText: ["Plan", "Build", "Launch"],
+        },
+      },
+    ],
+    visualReview: [
+      ...commonVisualReview,
+      "Verify Plan → Build → Launch reading order and explanatory reveals. Reject invented metrics or claims. No PPTX import/export is claimed.",
+    ],
+  },
+  {
+    id: "creative-product-concept",
+    skill: "product-walkthrough",
+    document: creativeFixture(),
+    turns: [
+      {
+        prompt:
+          "Create a concept app walkthrough showing Capture, Organize, Share. Label it Concept UI.",
+        expected: "edit",
+        contract: {
+          kind: "graphic",
+          requiredText: ["Capture", "Organize", "Share", "Concept UI"],
+        },
+      },
+    ],
+    visualReview: [
+      ...commonVisualReview,
+      "Check a visible Capture → Organize → Share action/response sequence and the Concept UI label. This must not claim actual product actions were executed.",
+    ],
+  },
+  {
+    id: "creative-spatial-world",
+    skill: "spatial-scenes",
+    document: creativeFixture(),
+    turns: [
+      {
+        prompt:
+          "Make a tiny 3D island scene with a slow camera move and the title “Small world”.",
+        expected: "edit",
+        contract: {
+          kind: "graphic",
+          requiredText: ["Small world"],
+          requireThreeMotion: true,
+        },
+      },
+    ],
+    visualReview: [
+      ...commonVisualReview,
+      "Check actual dimensional island geometry, a visible slow camera move, readable Small world text and a coherent world scale. Extra objects alone are not quality.",
     ],
   },
 ];
@@ -709,7 +796,10 @@ export function gradeCreativeOutcome(
   const knownMotion = content.some(
     (node) => animated(node) || threeMotion(node),
   );
-  if (contract.kind === "festival" && contract.requireThreeMotion)
+  if (
+    (contract.kind === "festival" || contract.kind === "graphic") &&
+    contract.requireThreeMotion
+  )
     check(
       "declared-3d-motion",
       content.some(
@@ -744,7 +834,7 @@ export function gradeCreativeOutcome(
           datum.label,
           `${datum.value}${contract.unit}`,
         ])
-      : contract.kind === "festival"
+      : contract.kind === "festival" || contract.kind === "graphic"
         ? contract.requiredText
         : [contract.text];
   const textCorpus = [...text, text.join(""), text.join(" ")];
@@ -757,7 +847,12 @@ export function gradeCreativeOutcome(
           : contract.kind === "festival" && /^\d+$/.test(value)
             ? containsOrdinal(actual, value)
             : containsToken(actual.replace(/\s+%/g, "%"), value),
-      ),
+      ) ||
+        (contract.kind === "graphic" &&
+          required.length === 1 &&
+          text.length > 0 &&
+          text.every((part) => [...part].length <= 2) &&
+          compact(text.join("")) === compact(value)),
       `The authored output retains supplied text/value: ${value}.`,
     );
   if (contract.kind === "ending") {

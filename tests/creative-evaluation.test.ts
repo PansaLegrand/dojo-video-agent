@@ -369,6 +369,64 @@ describe("creative short-prompt fixtures and independent grading", () => {
     params.camera.orbit.degreesPerSecond = 10;
     expect(grade()).toBe("passed");
   });
+  it("checks expanded-copy briefs without accepting missing words, invented labels or a flat spatial scene", () => {
+    const scenario = creativeScenarioVariants.find(
+        (s) => s.id === "creative-kinetic-copy",
+      )!,
+      after = structuredClone(scenario.document);
+    after.items.push({
+      id: "message",
+      name: "Message",
+      trackId: "visual",
+      node: {
+        ...text("message", "MAKE EVERY FRAME COUNT", 400, 200),
+        from: 0,
+        duration: 180,
+        animations: motion(),
+      },
+    });
+    expect(
+      gradeCreativeOutcome(scenario, scenario.document, after).automatedStatus,
+    ).toBe("passed");
+    after.items[0].node.text = "MAKE EVERY FRAME COUNTER";
+    expect(
+      gradeCreativeOutcome(scenario, scenario.document, after).automatedStatus,
+    ).toBe("failed");
+    delete after.items[0].node.text;
+    after.items[0].node.type = "div";
+    after.items[0].node.children = [..."MAKE EVERY FRAME COUNT"].map(
+      (letter, i) => text(`glyph-${i}`, letter, 20 + i * 20, 200),
+    );
+    expect(
+      gradeCreativeOutcome(scenario, scenario.document, after).automatedStatus,
+    ).toBe("passed");
+    after.items[0].node.children.push(text("extra-glyph", "R", 700, 200));
+    expect(
+      gradeCreativeOutcome(scenario, scenario.document, after).automatedStatus,
+    ).toBe("failed");
+    after.items[0].node.type = "text";
+    delete after.items[0].node.children;
+    const product = creativeScenarioVariants.find(
+      (s) => s.id === "creative-product-concept",
+    )!;
+    after.items[0].node.text = "Capture Organize Share";
+    expect(
+      gradeCreativeOutcome(product, product.document, after).automatedStatus,
+    ).toBe("failed");
+    after.items[0].node.text = "Concept UI Capture Organize Share";
+    expect(
+      gradeCreativeOutcome(product, product.document, after).automatedStatus,
+    ).toBe("passed");
+    const spatial = creativeScenarioVariants.find(
+      (s) => s.id === "creative-spatial-world",
+    )!;
+    after.items[0].node.text = "Small world";
+    expect(
+      gradeCreativeOutcome(spatial, spatial.document, after).checks.find(
+        (c) => c.id === "declared-3d-motion",
+      )?.status,
+    ).toBe("failed");
+  });
   it("measures bars independently of their labels and catches distorted heights", () => {
     const { scenario, contract, after } = chart(),
       scene = toScene(after);
