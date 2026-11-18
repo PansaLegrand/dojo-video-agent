@@ -1,0 +1,39 @@
+{
+  "license": "MIT",
+  "purpose": "Visual study only; no sample branding, numbers or media are inserted into user projects.",
+  "width": 1296,
+  "height": 810,
+  "sha256": "9da124c9e882586d909e3a1fdc4eefd054e9d618e374eeac1dfc0457943cd225",
+  "sources": [
+    {
+      "scene": "company",
+      "frames": [
+        40,
+        175,
+        320
+      ],
+      "sourceVideoSha256": "8bc038eb87721785fca154ccaa5d743b8dffde2d808b3ed4cdeeb08a7c47bd48",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/company.mjs"
+    },
+    {
+      "scene": "data-story",
+      "frames": [
+        35,
+        155,
+        315
+      ],
+      "sourceVideoSha256": "6b1a232975c17d0f3da618288ab73fc0689755bad4d0695d262c9b212e96d1af",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/data-story.mjs"
+    },
+    {
+      "scene": "software",
+      "frames": [
+        40,
+        180,
+        315
+      ],
+      "sourceVideoSha256": "058c35cfecc1de1ed5074f8fada49b3783b7034152d64d923365e478d3a642fb",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/software.mjs"
+    }
+  ]
+}

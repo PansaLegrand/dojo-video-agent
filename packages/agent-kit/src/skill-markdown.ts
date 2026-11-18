@@ -1,6 +1,6 @@
 import type { Skill } from "./catalog.js";
 
-/** Bounded skill entry point. Only name/description metadata is interpreted;
+/** Bounded skill entry point. Name/description and optional Dojo family metadata are interpreted;
  * Markdown stays guidance and cannot install tools or executable modules. */
 export function parseSkillMarkdown(
   name: string,
@@ -29,12 +29,30 @@ export function parseSkillMarkdown(
   const fields = new Map<string, string>();
   for (const line of header[1]!.split("\n")) {
     if (!line.trim() || line.trim().startsWith("#")) continue;
-    const field = /^(name|description):\s*(.+)$/.exec(line);
+    const field = /^(name|description|metadata):\s*(.+)$/.exec(line);
     if (!field || fields.has(field[1]!))
       throw new Error(
-        "Skill frontmatter supports unique name/description fields only.",
+        "Skill frontmatter supports unique name/description/metadata fields only.",
       );
     let value = field[2]!.trim();
+    if (field[1] === "metadata") {
+      let metadata: unknown;
+      try {
+        metadata = JSON.parse(value);
+      } catch {
+        throw Error("Skill metadata must be a single-line JSON object.");
+      }
+      if (
+        !metadata ||
+        typeof metadata !== "object" ||
+        Array.isArray(metadata) ||
+        Object.keys(metadata).length !== 1 ||
+        (metadata as Record<string, unknown>)["dojo-family"] !== "creative"
+      )
+        throw Error("Supported skill metadata is dojo-family: creative only.");
+      fields.set("metadata", "creative");
+      continue;
+    }
     if (value.startsWith('"')) {
       try {
         value = JSON.parse(value);
@@ -61,5 +79,11 @@ export function parseSkillMarkdown(
     throw new Error(
       "Skill name must match its folder; description and instructions are required.",
     );
-  return { name, description, instructions };
+  const family = fields.get("metadata");
+  return {
+    name,
+    description,
+    instructions,
+    ...(family ? { family: "creative" as const } : {}),
+  };
 }

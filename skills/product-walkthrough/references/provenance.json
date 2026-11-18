@@ -1,0 +1,39 @@
+{
+  "license": "MIT",
+  "purpose": "Visual study only; no sample branding, numbers or media are inserted into user projects.",
+  "width": 1296,
+  "height": 810,
+  "sha256": "89eb9ba80cc562af33496c0236ee82cfcb2f45418940cf02b797b57d443469c9",
+  "sources": [
+    {
+      "scene": "software",
+      "frames": [
+        35,
+        150,
+        300
+      ],
+      "sourceVideoSha256": "058c35cfecc1de1ed5074f8fada49b3783b7034152d64d923365e478d3a642fb",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/software.mjs"
+    },
+    {
+      "scene": "precision",
+      "frames": [
+        65,
+        185,
+        325
+      ],
+      "sourceVideoSha256": "a39808873e7a80e054963d6dfd14de57dd1481cf258d45aa0ab5379b5d7a709a",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/precision.mjs"
+    },
+    {
+      "scene": "citrus",
+      "frames": [
+        40,
+        170,
+        325
+      ],
+      "sourceVideoSha256": "bb2aa28edcbe7f516c89e6f6c00f94476356bca2e0032badab2d2baf638765dd",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/citrus.mjs"
+    }
+  ]
+}

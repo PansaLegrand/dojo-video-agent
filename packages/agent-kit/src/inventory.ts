@@ -2,12 +2,11 @@ import {
   profileKitVersion,
   usesPagedReaders,
   toolCatalog,
-  skillRequirements,
+  requiredToolsForSkill,
   type AgentProfile,
   type AgentTool,
   type Skill,
   type CatalogToolName,
-  type BuiltinSkillName,
   usesCompletionPreflight,
   usesStagedEditing,
 } from "./catalog.js";
@@ -65,12 +64,10 @@ export function buildAgentInventory<T>(input: {
         effect: value.effect,
         reason: "No executor was registered by this host.",
       })),
-    skills: input.skills.map(({ name, description }) => ({
-      name,
-      description,
-      requiredTools: Object.hasOwn(skillRequirements, name)
-        ? skillRequirements[name as BuiltinSkillName]
-        : [],
+    skills: input.skills.map((skill) => ({
+      name: skill.name,
+      description: skill.description,
+      requiredTools: requiredToolsForSkill(skill, input.profile),
     })),
   };
 }

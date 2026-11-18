@@ -1,0 +1,39 @@
+{
+  "license": "MIT",
+  "purpose": "Visual study only; no sample branding, numbers or media are inserted into user projects.",
+  "width": 1296,
+  "height": 810,
+  "sha256": "6bca00515dd48f195477382e9169780d49b0581054e8d70053aa41197bd8f349",
+  "sources": [
+    {
+      "scene": "kinetic",
+      "frames": [
+        45,
+        165,
+        315
+      ],
+      "sourceVideoSha256": "510247126abfdd887e8a94c0f919ca6dbd446e0d34d6ef2ae00af88149673ca3",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/kinetic.mjs"
+    },
+    {
+      "scene": "type-motion",
+      "frames": [
+        55,
+        175,
+        325
+      ],
+      "sourceVideoSha256": "0a06aa4caae33c620a556c7f3a326bc229b9f710b8f74bf986625744ace81f28",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/type-motion.mjs"
+    },
+    {
+      "scene": "handwriting",
+      "frames": [
+        30,
+        145,
+        315
+      ],
+      "sourceVideoSha256": "34749ad73006b87dda5c0d03d6d8c2fa027fd09238f39c5d1aea398084f4758b",
+      "source": "https://github.com/PansaLegrand/dojo-video-engine/blob/main/examples/creative-showcase/handwriting.mjs"
+    }
+  ]
+}

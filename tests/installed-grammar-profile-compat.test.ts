@@ -18,6 +18,7 @@ import {
   createEditorHostTools as v25HostTools,
 } from "@dojo-video/agent-kit-v25";
 import { expect, it } from "vitest";
+import { CREATIVE_SKILL_NAMES } from "../packages/agent-kit/src/catalog";
 import {
   AGENT_KIT_VERSION as v24Version,
   builtInSkills as v24Skills,
@@ -553,7 +554,7 @@ it("new derived-caption profiles retain all earlier features and tools while mak
   ] as const) {
     expect(usesDerivedCaptionPlan(profile)).toBe(true);
     expect(profileKitVersion(profile)).toBe("0.2.10");
-    expect(profileSkills[profile]?.filter(name => !["branded-ending", "chart-storytelling", "festival-motion"].includes(name)) ?? null).toEqual(profileSkills[previous]);
+    expect(profileSkills[profile]?.filter(name => !(CREATIVE_SKILL_NAMES as readonly string[]).includes(name)) ?? null).toEqual(profileSkills[previous]);
     for (const feature of [
       usesCompletionPreflight,
       usesPagedReaders,

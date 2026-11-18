@@ -9,11 +9,18 @@ const sets = {
   "festival-motion": [["kinetic",[45,165,315],"TYPE AS STAGE"],["festival",[45,175,325],"SCULPTURAL CELEBRATION"],["bloom",[35,155,315],"ORGANIC REVEAL"]],
   "branded-ending": [["precision",[65,185,325],"ASSEMBLE TO A LOCKUP"],["cinema",[45,175,325],"DEPTH THEN RESOLVE"],["type-motion",[55,175,325],"TYPE TRANSFORMS"]],
   "chart-storytelling": [["data-story",[30,90,150],"EDITORIAL DATA REVEAL"],["data-story",[190,250,325],"RELATIONSHIPS OVER TIME"],["software",[35,165,315],"EXPLAIN A PROCESS"]],
+  "kinetic-typography": [["kinetic",[45,165,315],"TYPE AS A STAGE"],["type-motion",[55,175,325],"LETTER AND FORM"],["handwriting",[30,145,315],"STROKE PROGRESSION"]],
+  "presentation-motion": [["company",[40,175,320],"ONE IDEA PER BEAT"],["data-story",[35,155,315],"EDITORIAL HIERARCHY"],["software",[40,180,315],"DETAIL AND CONTEXT"]],
+  "product-walkthrough": [["software",[35,150,300],"ACTION AND RESPONSE"],["precision",[65,185,325],"LAYERS AND DETAIL"],["citrus",[40,170,325],"CAUSE AND EFFECT"]],
+  "spatial-scenes": [["city",[30,160,315],"MINIATURE WORLD"],["precision",[65,185,325],"ASSEMBLY"],["cinema",[45,175,325],"CAMERA AND DEPTH"]],
 };
+const selected = process.argv[3]?.split(",") ?? Object.keys(sets);
+if (!selected.length || new Set(selected).size !== selected.length || selected.some(name => !Object.hasOwn(sets,name))) throw Error("Select unique known atlas names.");
 const tmp = await mkdtemp(path.join(os.tmpdir(), "dojo-reference-atlas-"));
 const sha = bytes => createHash("sha256").update(bytes).digest("hex");
 try {
-  for (const [name, rows] of Object.entries(sets)) {
+  for (const name of selected) {
+    const rows = sets[name];
     const inputs = [], provenance = [];
     for (let r=0;r<rows.length;r++) {
       const [scene,frames,label] = rows[r], video = path.join(source, `${scene}.mp4`);

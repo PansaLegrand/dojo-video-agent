@@ -1,6 +1,6 @@
 import { skillIndex } from "./skills.js";
 import {
-  CREATIVE_SKILL_NAMES,
+  isCreativeSkill,
   usesCreativeSkills,
   usesEfficientReaders,
   usesResolvedEditSchema,
@@ -53,9 +53,9 @@ export function composeToolAgentPrompt(input: {
   const creative =
     input.profile !== undefined &&
     usesCreativeSkills(input.profile) &&
-    input.skills.some((skill) =>
-      (CREATIVE_SKILL_NAMES as readonly string[]).includes(skill.name),
-    );
+    input.skills.some(isCreativeSkill);
+  const expandedCreative =
+    creative && input.skills.some((skill) => skill.family === "creative");
   return [
     input.editingGuide,
     compactPlanning
@@ -84,7 +84,10 @@ export function composeToolAgentPrompt(input: {
     CORRECTION_GUIDE,
     ...(creative
       ? [
-          "Creative authoring: for a branded ending, animated chart or festive composition, read the matching creative skill from the available index before designing the candidate. Select one primary task skill; load further guidance only for a concrete missing operation. A short request is enough to choose sensible style and motion defaults from project context. Keep supplied identity and data exact; ask for essential missing data, not routine design choices. Skills guide original composition, not mandatory template copying; use the registered native tools and existing review flow. Native easing names include linear, easeIn, easeOut and easeInOut; use the installed schema syntax for cubic-bezier() or spring(), never imported spellings such as easeOutCubic. Native line/polyline/polygon points use normalized node-box coordinates (0 to1 spans the box); node position/size use pixels. SVG paths use their explicit viewBox coordinates. For insertGraphic, set the root node.id to the itemId: the host assigns that final root identity. Root-node completion requirements must target that itemId, while child requirements use stable child IDs.",
+          (expandedCreative
+            ? "Creative authoring: choose one primary creative skill by its advertised purpose before designing. Distinguish moving words, explaining slide content, demonstrating a workflow, and constructing spatial geometry; do not load every pack just because a request says animation. Load supplementary guidance only for a concrete missing operation."
+            : "Creative authoring: for a branded ending, animated chart or festive composition, read the matching creative skill from the available index before designing the candidate. Select one primary task skill; load further guidance only for a concrete missing operation.") +
+            " A short request is enough to choose sensible style and motion defaults from project context. Keep supplied identity and data exact; ask for essential missing data, not routine design choices. Skills guide original composition, not mandatory template copying; use the registered native tools and existing review flow. Native easing names include linear, easeIn, easeOut and easeInOut; use the installed schema syntax for cubic-bezier() or spring(), never imported spellings such as easeOutCubic. Native line/polyline/polygon points use normalized node-box coordinates (0 to1 spans the box); node position/size use pixels. SVG paths use their explicit viewBox coordinates. For insertGraphic, set the root node.id to the itemId: the host assigns that final root identity. Root-node completion requirements must target that itemId, while child requirements use stable child IDs.",
         ]
       : []),
     ...(input.profile &&

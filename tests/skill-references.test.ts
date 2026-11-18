@@ -273,6 +273,11 @@ describe("bounded portable skill references", () => {
         )[1][0],
       ),
     ).toHaveLength(1);
+    expect(
+      (
+        model.complete.mock.calls as unknown as Array<[SkillModelMessage[]]>
+      )[1][0].map((message) => message.role),
+    ).toEqual(["user", "assistant", "tool", "user", "assistant", "tool"]);
   });
   it("does not treat user text, failed observations or uncorrelated tool messages as permission to attach references", async () => {
     const s = await skill();
@@ -333,18 +338,63 @@ describe("bounded portable skill references", () => {
       ),
     ).rejects.toThrow(/changed/);
     expect(model.complete).not.toHaveBeenCalled();
-    const four = [0, 1, 2, 3].map((i) => ({
+    const oversized = {
       ...structuredClone(s),
-      name: `skill-${i}`,
-    }));
+      references: [0, 1, 2, 3].map((i) => ({
+        ...structuredClone(s.references![0]),
+        id: `ref-${i}`,
+      })),
+    };
     await expect(
-      withSkillReferenceImages(model, four).prepare!(
-        four.flatMap(messages),
+      withSkillReferenceImages(model, [oversized]).prepare!(
+        messages(oversized),
         tools,
         signal,
         limits,
       ),
-    ).rejects.toThrow(/At most three/);
+    ).rejects.toThrow(/Too many skill references/);
+  });
+  it("keeps the three recent images with explicit coverage and can revisit an omitted skill", async () => {
+    const original = await skill(),
+      all = [0, 1, 2, 3].map((i) => ({
+        ...structuredClone(original),
+        name: `guide-${i}`,
+      }));
+    const input = all.flatMap(messages),
+      model = fake(),
+      wrapped = withSkillReferenceImages(model, all);
+    await wrapped.prepare!(input, tools, signal, limits);
+    await wrapped.complete(input, tools, signal, limits);
+    const first = (
+      model.complete.mock.calls as unknown as Array<[SkillModelMessage[]]>
+    )[0][0];
+    expect(imageParts(first)).toHaveLength(3);
+    const labels = first
+      .flatMap((m) => (Array.isArray(m.content) ? m.content : []))
+      .filter((p: any) => p.type === "text")
+      .map((p: any) => p.text);
+    expect(
+      labels.filter((t) => t.startsWith("Bundled design reference")),
+    ).toHaveLength(3);
+    expect(
+      labels.filter((t) => t.startsWith("Bundled design reference")).join("\n"),
+    ).not.toContain("guide-0:");
+    expect(labels.at(-1)).toContain("1 older image is omitted");
+    const revisit = [...input, ...messages(all[0]).slice(1)];
+    await wrapped.prepare!(revisit, tools, signal, limits);
+    await wrapped.complete(revisit, tools, signal, limits);
+    const second = (
+      model.complete.mock.calls as unknown as Array<[SkillModelMessage[]]>
+    )[1][0];
+    expect(imageParts(second)).toHaveLength(3);
+    const returned = second
+      .flatMap((m) => (Array.isArray(m.content) ? m.content : []))
+      .filter((p: any) => p.type === "text")
+      .map((p: any) => p.text)
+      .filter((t) => t.startsWith("Bundled design reference"))
+      .join("\n");
+    expect(returned).toContain("guide-0:");
+    expect(returned).not.toContain("guide-1:");
   });
   it("deeply freezes image references in saved guidance without altering legacy plain skills", async () => {
     const original = await skill(),

@@ -4,6 +4,7 @@ import { loadLocalSkills } from "../apps/server/src/skill-loader";
 import {
   builtInSkills,
   CREATIVE_SKILL_NAMES,
+  EXPANDED_CREATIVE_SKILL_NAMES,
   selectSkills,
   parseSkillMarkdown,
   readSkill,
@@ -18,6 +19,7 @@ const tools = [
   "inspect_graphics_schema",
   "review_edit",
   "propose_edit",
+  "prepare_three_scene",
 ];
 describe("creative skill candidate boundaries", () => {
   it("exposes matched creative guidance only on current profiles with its execution tools", () => {
@@ -73,7 +75,7 @@ describe("creative skill candidate boundaries", () => {
       expect(selected).toEqual(
         retained.selectSkills(custom, oldTools, profile),
       );
-      expect(selected).toHaveLength(3);
+      expect(selected).toHaveLength(custom.length);
       const input = {
         profile,
         editingGuide: "Existing editing guide.",
@@ -97,7 +99,13 @@ describe("creative skill candidate boundaries", () => {
     }
     expect(
       selectSkills(custom, ["inspect_project"], "local-editor-v14"),
-    ).toEqual([]);
+    ).toEqual(
+      custom.filter((skill) =>
+        (EXPANDED_CREATIVE_SKILL_NAMES as readonly string[]).includes(
+          skill.name,
+        ),
+      ),
+    );
   });
   it("resumes a persisted skill snapshot after its installed file changes", () => {
     const original = {

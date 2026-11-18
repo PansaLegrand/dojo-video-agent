@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseSkillMarkdown } from "../src/skill-markdown.ts";
 import { loadSkillReferences } from "../../../apps/server/src/skill-reference-loader.ts";
+import { CREATIVE_SKILL_NAMES } from "../src/catalog.ts";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const source = path.resolve(root, "../../skills");
 const names = [
@@ -16,13 +17,11 @@ const names = [
   "speech-editing",
   "staged-editing",
   "visual-inspection",
-  "branded-ending",
-  "chart-storytelling",
-  "festival-motion",
+  ...CREATIVE_SKILL_NAMES,
 ];
 const skills = await Promise.all(
   names.map(async (name) => {
-    const pack = ["branded-ending", "chart-storytelling", "festival-motion"].includes(name);
+    const pack = CREATIVE_SKILL_NAMES.includes(name);
     const instructions = await fs.readFile(path.join(source, pack ? `${name}/SKILL.md` : `${name}.md`), "utf8");
     if (Buffer.byteLength(instructions) > 65536)
       throw new Error("Built-in skill exceeds its byte budget.");
