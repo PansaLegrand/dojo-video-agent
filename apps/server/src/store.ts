@@ -69,6 +69,7 @@ export const commitInput = z
   })
   .strict();
 export type StoredRun = VideoProjectAgentRun & {
+  skillSnapshot?: import("../../../packages/agent/src/skills").Skill[];
   /** Host policy frozen on new runs; absence preserves historical review/replay. */
   captionTranslationRebase?: true;
   browserToolsEnabled?: true;
@@ -475,6 +476,7 @@ export const runOf = (p: Project, id: string) => {
   return run;
 };
 export function publicRun({
+  skillSnapshot: _skillSnapshot,
   captionTranslationRebase: _captionTranslationRebase,
   browserToolsEnabled: _browserTools,
   appliedReceipt: _application,

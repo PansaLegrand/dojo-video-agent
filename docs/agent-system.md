@@ -14,6 +14,13 @@ New runs persist `agentKitVersion`; old local-v14 records
 without it resolve to original public 0.2.8. Original archives and completed
 qualification evidence remain intact.
 
+Default local v14 runs also receive a host-owned [type-and-color guide](../guides/type-and-color.md)
+through the existing `read_skill` tool. The host keeps the exact incoming
+skill list on those new runs; a saved run without a snapshot continues with
+the original local catalog. An explicit `SKILLS_DIR` still owns its own set.
+This adds creative guidance without changing the packaged kit, renderer or
+commercial profile.
+
 Harness [PR 14](https://github.com/PansaLegrand/dojo-video-agent/pull/14) merged
 as `d779b13`; package source remains `0872090`. All eight public CI checks passed.
 The local gate passed 1,028 tests/build and 66 browser checks with scripted HTTP;

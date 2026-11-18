@@ -34,3 +34,24 @@ export async function loadLocalSkills(directory: string): Promise<Skill[]> {
     }),
   );
 }
+
+export async function localSkillCatalog(
+  root: string,
+  customDirectory?: string,
+) {
+  const skills = await loadLocalSkills(
+    path.resolve(root, customDirectory ?? "skills"),
+  );
+  if (
+    customDirectory !== undefined ||
+    skills.length >= 32 ||
+    skills.some((s) => s.name === "type-and-color")
+  ) {
+    return { skills };
+  }
+  const guide = (await loadLocalSkills(path.join(root, "guides"))).find(
+    (s) => s.name === "type-and-color",
+  );
+  if (!guide) throw new Error("Bundled type-and-color guide is missing.");
+  return { skills, newRunSkills: [...skills, guide] };
+}

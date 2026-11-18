@@ -133,6 +133,7 @@ export class AgentService {
       | "local-editor-v13"
       | "local-editor-v14" = "local-editor-v1",
     private stagedOptions: {
+      newRunSkills?: Skill[];
       captionBatchSize?: number;
       onTransition?: (plan: EditStagePlan) => Promise<void>;
       browser?: {
@@ -221,6 +222,8 @@ export class AgentService {
         captionTranslationRebase: true,
         agentProfile: this.agentProfile,
         agentKitVersion: profileKitVersion(this.agentProfile),
+        ...(this.agentProfile === "local-editor-v14" && this.stagedOptions.newRunSkills
+          ? { skillSnapshot: structuredClone(this.stagedOptions.newRunSkills) } : {}),
         ...(this.stagedOptions.browser &&
         ["local-editor-v10", "local-editor-v11", "local-editor-v12", "local-editor-v13", "local-editor-v14"].includes(this.agentProfile)
           ? { browserToolsEnabled: true as const }
@@ -438,7 +441,7 @@ export class AgentService {
         profile: run.agentProfile ?? "local-editor-v1",
         agentKitVersion: savedAgentKitVersion(run),
         model,
-        skills: this.skills,
+        skills: run.skillSnapshot ?? this.skills,
         extraTools: [
           ...(this.extraTools?.(projectId, id, request) ?? []),
           ...browserTools,

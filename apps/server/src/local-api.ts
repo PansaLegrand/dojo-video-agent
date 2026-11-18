@@ -25,7 +25,7 @@ import {
   atomicJson,
   identifier,
 } from "./store";
-import { loadLocalSkills } from "./skill-loader";
+import { localSkillCatalog } from "./skill-loader";
 import {
   EditingWorkflowService,
   type WorkflowTaskReceipt,
@@ -72,9 +72,7 @@ export async function createLocalApi() {
     },
   });
   await providers.load();
-  const skills = await loadLocalSkills(
-    path.resolve(root, process.env.SKILLS_DIR ?? "skills"),
-  );
+  const { skills, newRunSkills } = await localSkillCatalog(root, process.env.SKILLS_DIR);
   const music = new MusicService(store, () => providers.get("music"));
   await music.recover();
   const browserRequests = new LocalBrowserRequests(store);
@@ -103,6 +101,7 @@ export async function createLocalApi() {
     },
     "local-editor-v14",
     {
+      newRunSkills,
       browser: {
         tools: (projectId, runId, request) =>
           browserRequests.tools(projectId, runId, request),
@@ -384,7 +383,7 @@ export async function createLocalApi() {
     if (parts[1] === "config" && method === "GET")
       return json(res, {
         ...providers.public(),
-        skills: skills.map(({ name, description }) => ({ name, description })),
+        skills: (newRunSkills ?? skills).map(({ name, description }) => ({ name, description })),
       });
     if (
       parts[1] === "provider-settings" &&

@@ -579,3 +579,35 @@ it("persists the new kit build on a local v14 run and keeps it across restart an
   expect((await reopened.read(f.p.id)).runs[0].agentKitVersion).toBe("0.2.9");
   expect(model.complete).toHaveBeenCalledTimes(priorCalls);
 });
+
+it("offers the bundled art guide only to new runs and keeps its saved prose private", async () => {
+  const { localSkillCatalog } = await import("../apps/server/src/skill-loader");
+  const catalog = await localSkillCatalog(process.cwd());
+  const guide = catalog.newRunSkills!.find(s => s.name === "type-and-color")!;
+  expect(guide.instructions).toContain("Ink press");
+  expect(catalog.skills.some(s => s.name === guide.name)).toBe(false);
+  expect((await localSkillCatalog(process.cwd(), "skills")).newRunSkills).toBeUndefined();
+  const observed: string[] = [];
+  const model: LanguageModel = { identity: "style-guide-test", async complete(messages) {
+    const last = messages.at(-1);
+    if (last?.role === "tool") observed.push(String(last.content));
+    if (last?.role === "user" && String(messages[0].content).includes(guide.name)) {
+      return { text: "", calls: [{ id: "look", name: "read_skill", arguments: JSON.stringify({name: guide.name}) }], usage: { inputTokens: 10, outputTokens: 5 } };
+    }
+    return { text: "Here are the available directions.", calls: [], usage: { inputTokens: 10, outputTokens: 5 } };
+  }};
+  const f = await fixture(model);
+  const oldHost = new AgentService(f.store, model, catalog.skills, undefined, "review", undefined, "local-editor-v14");
+  await oldHost.start(f.p.id, f.input);
+  await settle(f.store, f.p.id);
+  expect(observed).toHaveLength(0);
+  const host = new AgentService(f.store, model, catalog.skills, undefined, "review", undefined, "local-editor-v14", { newRunSkills: catalog.newRunSkills });
+  await host.start(f.p.id, f.input);
+  const fresh = await host.start(f.p.id, { ...f.input, operationId:"new-style-run" });
+  const p = await settle(f.store, f.p.id);
+  expect(p.runs[0].skillSnapshot).toBeUndefined();
+  expect(fresh.run).not.toHaveProperty("skillSnapshot");
+  expect(p.runs.find(r => r.id === fresh.run.id)?.skillSnapshot).toContainEqual(guide);
+  expect(observed).toHaveLength(1);
+  expect(observed[0]).toContain("Ink press");
+});
