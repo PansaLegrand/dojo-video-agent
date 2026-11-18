@@ -1,6 +1,11 @@
 # Creative skill packs — R27 development candidate
 
-Current continuation: [visual art direction and reference delivery](creative-skill-visual-direction-2026-11-18.md)
+Latest continuation: [four additional creative disciplines](creative-skill-expansion-2026-11-18.md)
+adds typography, presentation motion, product walkthroughs and spatial scenes.
+Seven creative packs are locally verified in the candidate; the four new packs
+await actual-model/rendered qualification. Production defaults remain unchanged.
+
+Previous continuation: [visual art direction and reference delivery](creative-skill-visual-direction-2026-11-18.md)
 adds richer motion concepts and actual selected-skill image inputs. Twelve core
 trials produced edits and exported successfully; the extra 3D probe retains a
 background-preservation failure and a web cost-guard stop. Current cumulative

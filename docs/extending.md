@@ -46,10 +46,17 @@ Explain the creative method, the facts to preserve, and how to review the result
 ```
 
 The folder name and `name` must match. Use at most 64 lowercase letters, digits
-or hyphens, beginning with a letter or digit. Only single-line `name` and
-`description` metadata are interpreted; descriptions are limited to 500
-characters. A nonempty Markdown body is required. This is a bounded frontmatter
-format, not a general YAML parser or an executable plugin manifest.
+or hyphens, beginning with a letter or digit. Single-line `name` and
+`description` fields are required; descriptions are limited to 500 characters.
+Creative guides may also declare exactly `metadata: {"dojo-family":"creative"}`
+on one line. The metadata value must be that JSON object; arbitrary keys and
+multiline YAML are not supported. A nonempty Markdown body is required. This
+bounded frontmatter is not an executable plugin manifest.
+
+The creative marker opts a custom guide into the candidate's creative routing
+and common authoring-tool requirements. It grants no tools or permissions.
+Older profiles omit marked guides; unmarked legacy custom guides retain their
+original semantics, including names that now match new built-ins.
 
 Legacy `skills/my-motion.md` files remain supported; their first nonempty,
 non-heading line supplies the index description. Folder and flat-file names share one
@@ -81,24 +88,33 @@ to the model input. These are trusted skill materials, not project-media uploads
 or assets inserted into the timeline. Notes and image hashes stay in the small
 tool observation; frozen private skill snapshots retain the reference bytes.
 The reference-aware hosts support at most three attached images per invocation.
-Retained runtimes keep their original behavior. A skill with no references keeps
-the same three-field representation as before.
+When more have been read, the candidate attaches the three most recent images
+and explicitly reports attached IDs and omitted coverage. Re-read an older skill
+to bring its board back. If all images fit, the existing insertion order is
+unchanged. Retained runtimes keep their original behavior. An unmarked skill
+with no references keeps the same three-field representation as before.
 
-The built-in examples are [branded ending](../skills/branded-ending/SKILL.md),
-[chart storytelling](../skills/chart-storytelling/SKILL.md), and
-[festival motion](../skills/festival-motion/SKILL.md). Shared built-ins are bundled
-by `npm run build --workspace @dojo-video/agent-kit`; adding one also
-requires its catalog/tool eligibility and behavior checks. The commercial host
-consumes the packaged kit rather than a user's local `SKILLS_DIR`. The 0.2.10 web
-candidate is opt-in; see [qualification and limitations](creative-skill-packs-2026-11-17.md).
+The candidate includes seven creative packs, alongside ten operational guides.
+Shared built-ins are bundled by `npm run build --workspace @dojo-video/agent-kit`;
+adding one also requires catalog/tool eligibility and behavior checks. The
+commercial host consumes the packaged kit rather than a user's local
+`SKILLS_DIR`. The 0.2.10 web candidate is opt-in; see the
+[expansion's checks and limits](creative-skill-expansion-2026-11-18.md).
 
-The visual examples are inspectable before using them:
+| Skill                                                         | Example instruction                                  | Visual guidance                                                                                                         |
+| ------------------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| [Branded ending](../skills/branded-ending/SKILL.md)           | Make a cool ending with dojoclip.com.                | [Board](../skills/branded-ending/references/atlas.jpg), [notes](../skills/branded-ending/references/atlas.md)           |
+| [Chart storytelling](../skills/chart-storytelling/SKILL.md)   | Animate sales: Jan 20, Feb 35, Mar 50.               | [Board](../skills/chart-storytelling/references/atlas.jpg), [notes](../skills/chart-storytelling/references/atlas.md)   |
+| [Festival motion](../skills/festival-motion/SKILL.md)         | Make a festive birthday card for Noor, age 8.        | [Board](../skills/festival-motion/references/atlas.jpg), [notes](../skills/festival-motion/references/atlas.md)         |
+| [Kinetic typography](../skills/kinetic-typography/SKILL.md)   | Animate “MAKE EVERY FRAME COUNT” as a motion poster. | [Board](../skills/kinetic-typography/references/atlas.jpg), [notes](../skills/kinetic-typography/references/atlas.md)   |
+| [Presentation motion](../skills/presentation-motion/SKILL.md) | Explain Plan, Build, Launch as a motion slide.       | [Board](../skills/presentation-motion/references/atlas.jpg), [notes](../skills/presentation-motion/references/atlas.md) |
+| [Product walkthrough](../skills/product-walkthrough/SKILL.md) | Make a concept app demo: Capture, Organize, Share.   | [Board](../skills/product-walkthrough/references/atlas.jpg), [notes](../skills/product-walkthrough/references/atlas.md) |
+| [Spatial scenes](../skills/spatial-scenes/SKILL.md)           | Make a tiny 3D island with a slow camera move.       | [Board](../skills/spatial-scenes/references/atlas.jpg), [notes](../skills/spatial-scenes/references/atlas.md)           |
 
-| Skill              | Reference board                                                  | Motion notes                                                                           |
-| ------------------ | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Festival motion    | [Nine frames](../skills/festival-motion/references/atlas.jpg)    | [Concepts and choreography](../skills/festival-motion/references/atlas.md)             |
-| Branded ending     | [Nine frames](../skills/branded-ending/references/atlas.jpg)     | [Reveal and lockup](../skills/branded-ending/references/atlas.md)                      |
-| Chart storytelling | [Nine frames](../skills/chart-storytelling/references/atlas.jpg) | [Editorial motion and data fidelity](../skills/chart-storytelling/references/atlas.md) |
+These are example briefs, not a claim that every output is visually accepted.
+Presentation motion makes video scenes from available content; it does not read
+or export PPTX files. Actual handwriting needs suitable owned paths/Lottie assets.
+Product walkthroughs use supplied facts or explicitly labeled concept interfaces.
 
 Skills should explain a method and its domain constraints, not contain hidden
 permissions, credentials, arbitrary executable snippets, or duplicated tool schemas.

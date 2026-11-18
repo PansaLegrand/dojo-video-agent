@@ -1,6 +1,15 @@
 # Readiness execution ledger
 
-Started on 2026-11-01. Last updated on 2026-11-15. The harness plan remains the acceptance contract.
+Started on 2026-11-01. Last updated on 2026-11-18. The harness plan remains the acceptance contract.
+
+## November 18 creative library expansion — local candidate
+
+The requested [R27 continuation](creative-skill-expansion-2026-11-18.md) adds four
+creative packs, bringing the library to seven visual disciplines and ten
+operational guides. Agent `8547e4e`/`cee1d3d` passed the full 1,122-test gate and
+build. Matching web and worker archives passed their consumer checks. New short
+briefs are opt-in; actual-model/rendered qualification is pending. Accepted
+0.2.9 runs and commercial production defaults remain unchanged.
 
 ## November 15 release closeout
 

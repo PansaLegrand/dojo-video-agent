@@ -183,7 +183,7 @@ Chat + tools ────┘
 
 Both editing paths share the document and history. The host validates scope, source evidence, locks, and revisions before applying an edit. The agent can inspect sources, read skills, ask structured questions, and prepare dependent stages. Registered browser tools support consented source sampling, candidate previews, one verified correction round, and export tied to the applied revision.
 
-The current local profile is **local-editor-v14**, using **agent kit 0.2.9**, **loop 0.2.0**, and published **engine 1.2.3**. Older saved runs retain their original behavior and budgets. The latest shared editing behavior is reused by the commercial host through its own adapters; commercial services are not copied into this app.
+The accepted baseline is **local-editor-v14**, using **agent kit 0.2.9**, **loop 0.2.0**, and published **engine 1.2.3**. Older saved runs retain their original behavior and budgets. The latest shared editing behavior is reused by the commercial host through its own adapters; commercial services are not copied into this app.
 
 - **Web → agent:** selected editor components, managed and checked by file hashes.
 - **Engine → both apps:** published rendering/playback/export packages at exact versions.
@@ -205,6 +205,15 @@ Start with [the guided walkthrough](docs/learn-the-harness.md) and [architecture
 | `packages/adapters/src/`                             | GPT, ASR, and music transports                                      |
 | `packages/ui/src/host/`                              | Local user, copy, and provider adapters                             |
 | `apps/server/src/`                                   | Local files, durable runs, consent, provider settings, and receipts |
+
+The **0.2.10 development candidate** adds seven visual skill packs: branded
+endings, charts, festival motion, kinetic typography, presentation motion,
+product walkthroughs and 3D scenes. Each has motion guidance and a reference
+board, loaded when selected. Try short briefs such as “Animate MAKE EVERY FRAME
+COUNT” or “Explain Plan, Build, Launch as a motion slide.” See the
+[skill catalog](docs/extending.md#a-skill) and
+[validation status](docs/creative-skill-expansion-2026-11-18.md); the four newest
+packs still await real-model visual qualification.
 
 A useful first extension is a read-only tool that counts clips on a track. Or add a trusted lowercase `skills/name.md` file and restart the host. Markdown guides registered tools; it cannot install executable code or authorize spending. Follow [the extension guide](docs/extending.md).
 
