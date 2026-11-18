@@ -3,7 +3,10 @@
 Latest continuation: [four additional creative disciplines](creative-skill-expansion-2026-11-18.md)
 adds typography, presentation motion, product walkthroughs and spatial scenes.
 Seven creative packs are locally verified in the candidate; the four new packs
-await actual-model/rendered qualification. Production defaults remain unchanged.
+await complete actual-model qualification. The first new trial stopped on Kie
+HTTP 429; its exact saved typography draft passed both editors’ export checks.
+Current task accounting is 311 requests / US$20.85847525 under the expanded
+384 / US$30 cap. Production defaults remain unchanged.
 
 Previous continuation: [visual art direction and reference delivery](creative-skill-visual-direction-2026-11-18.md)
 adds richer motion concepts and actual selected-skill image inputs. Twelve core
