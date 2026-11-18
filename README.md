@@ -11,6 +11,8 @@
 
 ### Creative directions
 
+[Night Garden: compare two editable eight-second films](examples/art-direction/README.md) — a Fraunces botanical study and an Anton print poster. The local agent's [type-and-color guide](guides/type-and-color.md) explains how to choose the face, palette, and motion for a different brief.
+
 https://github.com/user-attachments/assets/99fa44aa-1e46-4594-9938-7b8cfe312223
 
 Illustrated stories, animated data, portrait typography, cinematic titles and 3D branding.
