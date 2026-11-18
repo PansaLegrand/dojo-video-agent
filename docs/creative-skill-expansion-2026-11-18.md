@@ -89,6 +89,11 @@ live reports remain retained. Documentation changes do not alter these artifacts
 
 ## Live evaluation and retained HTTP 429 stop
 
+**User stop, 2026-11-18:** Paid testing is on hold at the user’s explicit request.
+Do not resume provider calls or the pending login/reconciliation workflow
+automatically. The remaining allowance is historical authorization, not permission
+to restart while this stop is in force. Saved evidence and reservations remain.
+
 The user added **US$10 / 64 Kie model requests**, making the cumulative task
 ceiling **US$30 / 384 requests**. Campaign
 `live-20261118-09-skill-expansion` admitted eight trials on `gpt-6-astra`, with
@@ -109,7 +114,8 @@ Kie's [Codex API documentation](https://docs.kie.ai/market/codex/gpt-codex)
 identifies 429 as rate limiting. A zero-cost account-credit query succeeded and
 confirmed a positive balance; it cannot resolve that request's billing. The
 [request log dashboard](https://kie.ai/logs) required sign-in. The reserved cost
-remains held, and further paid requests await usage reconciliation. No key,
+remains held. Further paid requests require the user to resume testing and
+resolution of the usage uncertainty. No key,
 account balance, or provider credentials are copied into tracked evidence.
 
 ### Saved-draft recovery and browser evidence
