@@ -782,13 +782,7 @@ export async function createLocalApi() {
       }
       if (parts[3] === "agent-runs") {
         if (parts.length === 4) {
-          if (method === "GET") {
-            const p = await store.read(id);
-            return json(res, {
-              runs: p.runs.slice().reverse().map(publicRun),
-              messages: p.messages,
-            });
-          }
+          if (method === "GET") return json(res, await agent.list(id));
           if (method === "POST")
             return json(res, await agent.start(id, await input(req)));
         }
@@ -871,6 +865,8 @@ export async function createLocalApi() {
         if (action === "undo") return json(res, await agent.undo(id, runId, v));
         if (action === "resume")
           return json(res, await agent.resume(id, runId, v));
+        if (action === "recover-reviewed")
+          return json(res, await agent.recoverReviewedEdit(id, runId, v));
       }
       if (parts[3] === "exports") {
         if (parts.length === 4) {

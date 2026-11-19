@@ -1,7 +1,7 @@
 {
   "version": 1,
   "sourceRepository": "dojo-video-web",
-  "sourceCommit": "1c23c5c4bc0bebe36689fed4350620768f4a4826",
+  "sourceCommit": "28bfe7f16d158fcc4031c79201635a2caffb2e49",
   "transforms": [
     "engine namespace/path rename",
     "local user import boundary",
@@ -606,14 +606,14 @@
     {
       "source": "components/editor/motionforge/video-workspace-chat.tsx",
       "target": "packages/ui/src/components/editor/dojo-video-engine/video-workspace-chat.tsx",
-      "sourceHash": "c730b18da7b9ceac922db22f432036d0e42f43dbde2abb2502be36306ce2e38b",
-      "outputHash": "c730b18da7b9ceac922db22f432036d0e42f43dbde2abb2502be36306ce2e38b"
+      "sourceHash": "140c554ea23008af26a64f6de325a34cc6fbb74a4e330e2f450e879adb0dce45",
+      "outputHash": "140c554ea23008af26a64f6de325a34cc6fbb74a4e330e2f450e879adb0dce45"
     },
     {
       "source": "components/editor/motionforge/workspace-copy.ts",
       "target": "packages/ui/src/components/editor/dojo-video-engine/workspace-copy.ts",
-      "sourceHash": "da0e925c07839e7b434bcb4ecded3e7f28c76cb151936366abfa4c001ced9078",
-      "outputHash": "da0e925c07839e7b434bcb4ecded3e7f28c76cb151936366abfa4c001ced9078"
+      "sourceHash": "aad806e3e1e4156c4c4bc12b5a3043e63300ef345d839bd346a4629a583c93fc",
+      "outputHash": "aad806e3e1e4156c4c4bc12b5a3043e63300ef345d839bd346a4629a583c93fc"
     },
     {
       "source": "components/motion-graphics/template-controls.tsx",
@@ -660,8 +660,8 @@
     {
       "source": "lib/i18n/locales/en.json",
       "target": "packages/core/src/lib/i18n/locales/en.json",
-      "sourceHash": "742d171cc31b13fc94edf2d0e50bd4dfa190a454a4d528b6fe74f5deed7ca0d3",
-      "outputHash": "947e93b10def11a94baf21486f2ba05a62d802fa4e76fc3321289a624d47ef86"
+      "sourceHash": "f974ea28513795ffd84837ad6b2f7a63559218e6366589a42d6e7fe81374e9e0",
+      "outputHash": "1d2530e936b9870968b4d24ff0f998d0cf245abeb62116e28fb52e9fe3a90165"
     },
     {
       "source": "tailwind.config.js",

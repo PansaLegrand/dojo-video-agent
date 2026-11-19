@@ -235,6 +235,12 @@ async function readStoredArtifact(
     );
   return structuredClone(artifact.value);
 }
+export async function readLocalEditStageArtifact(
+  saved: StoredEditStageState,
+  raw: EditArtifactRef,
+) {
+  return readStoredArtifact(saved, raw);
+}
 export async function putLocalEditStageArtifact(
   saved: StoredEditStageState,
   kind: EditArtifactKind,

@@ -109,6 +109,8 @@ export type VideoProjectAgentRun = {
   context: VideoProjectAgentContext;
   proposal: VideoProjectAgentProposal | null;
   recoverableOutput?: boolean;
+  recoverableReviewedEdit?: boolean;
+  recoveredFromRunId?: string;
   scope?: NativeAgentScope;
   referenceRunId?: string;
   clarification?: NativeClarification;

@@ -132,6 +132,16 @@ function parseEnvelope(
   return { ...parsed, checkpoint };
 }
 
+/** Read-only verified access to a persisted run checkpoint envelope. */
+export function readVerifiedAgentLoopCheckpoint(
+  p: Project,
+  run: StoredRun,
+  stagePlanOwnsCurrentBinding = false,
+): ParsedAgentLoopCheckpoint | null {
+  if (!run.loopCheckpoint) return null;
+  return parseEnvelope(p, run, stagePlanOwnsCurrentBinding);
+}
+
 /** History is frozen at the first model turn, independently of later chat runs. */
 export function agentCheckpointHistory(
   p: Project,

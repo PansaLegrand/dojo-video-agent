@@ -87,6 +87,10 @@ import {
   localEditStageRecovery,
   putLocalEditStageArtifact,
 } from "./edit-stage-store";
+import {
+  hasRecoverableReviewedEditLocal,
+  recoverReviewedEditInTransactionLocal,
+} from "./reviewed-edit-recovery";
 const isStageError = (
   cause: unknown,
 ): cause is
@@ -669,6 +673,12 @@ export class AgentService {
       .parse(raw);
     const run = await this.store.transaction(projectId, async (p) => {
       const r = runOf(p, id);
+      if (r.reviewedEditRecovery)
+        throw new HttpError(
+          "This interrupted run's reviewed edit has already been recovered. Review or apply the recovered card instead.",
+          409,
+          "REVIEWED_EDIT_ALREADY_RECOVERED",
+        );
       const stageState = p.editStagePlans?.[id];
       if (stageState) {
         if (this.active.has(id) && ["running", "queued"].includes(r.status))
@@ -756,6 +766,31 @@ export class AgentService {
       await this.stagedOptions.browser?.cancel(projectId, id);
     return { cancelled: true };
   }
+  async list(projectId: string) {
+    const p = await this.store.read(projectId);
+    const ordered = p.runs.slice().reverse();
+    const runs = await Promise.all(
+      ordered.map(async (run) =>
+        publicRun(run, {
+          recoverableReviewedEdit: await hasRecoverableReviewedEditLocal(
+            p,
+            run,
+          ),
+        }),
+      ),
+    );
+    return { runs, messages: p.messages };
+  }
+  async recoverReviewedEdit(projectId: string, id: string, raw: unknown) {
+    const result = await this.store.transaction(projectId, (p) =>
+      recoverReviewedEditInTransactionLocal(p, id, raw, this.speech),
+    );
+    return {
+      run: publicRun(result.run),
+      originalRun: publicRun(result.originalRun),
+      replayed: result.replayed,
+    };
+  }
   async review(projectId: string, id: string) {
     const p = await this.store.read(projectId),
       r = runOf(p, id);
@@ -832,6 +867,27 @@ export class AgentService {
     return this.store.transaction(projectId, async (p) => {
       const r = runOf(p, id);
       if (r.status === "applied") return snapshot(p);
+      if (r.recoveredFromRunId) {
+        const original = p.runs.find(
+          (candidate) => candidate.id === r.recoveredFromRunId,
+        );
+        if (
+          !original ||
+          original.status === "applied" ||
+          original.reviewedEditRecovery?.childRunId !== r.id ||
+          p.runs.some(
+            (candidate) =>
+              candidate.id !== r.id &&
+              candidate.recoveredFromRunId === r.recoveredFromRunId &&
+              candidate.status === "applied",
+          )
+        )
+          throw new HttpError(
+            "This reviewed edit has already been applied or superseded.",
+            409,
+            "REVIEWED_EDIT_ALREADY_APPLIED",
+          );
+      }
       if (
         !r.proposal ||
         !(

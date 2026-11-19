@@ -1,6 +1,31 @@
 # Readiness execution ledger
 
-Started on 2026-11-01. Last updated on 2026-11-18. The harness plan remains the acceptance contract.
+Started on 2026-11-01. Last updated on 2026-11-19. The harness plan remains the acceptance contract.
+
+## R28: recover an interrupted reviewed edit (2026-11-19)
+
+Failed runs with matching, owned verification evidence can now stage the
+original checked commands in a new **Review changes** card. Recovery does
+not invoke the model, apply an edit, or clear the original run's unknown
+usage. A later failed review, a conflicting source, or an incomplete
+preview repair cannot authorize recovery. Matching duplicate requests return
+the existing child; Apply uses the usual current revision and review basis.
+
+Two offline rehearsals against isolated copies of the original November 18
+typography 429 checkpoint produced the exact previously reviewed document
+(`sha256:62ba047eb9d27c582d3c23ffa642e55b52696e8cc75ef21b7af1713c119b7e18`).
+One exercised the recovery and Apply APIs twice. The browser rehearsal
+lost the recovery acknowledgment, reloaded, opened Review, then applied on
+explicit click. The final revision advanced once. Neither rehearsal called a
+provider or modified the original failure record. This is recovery of existing
+work, not a successful rerun of the original live qualification.
+
+For reproduction, `scripts/verify-reviewed-edit-recovery.mts` and
+`scripts/verify-reviewed-edit-recovery-browser.mjs` take a stopped fixture
+store, a fresh output directory, project ID, run ID and expected reviewed
+document hash. The browser script requires a local production build. Both
+copy only the selected project file, not provider settings. Local reports
+are in `test-results/r28-reviewed-final/` and `test-results/r28-recovery-browser-final/`.
 
 ## R28: final frame of an appended ending (2026-11-18)
 

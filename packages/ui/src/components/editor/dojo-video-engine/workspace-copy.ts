@@ -43,3 +43,19 @@ for (const [locale, [linked, outside, unlink]] of Object.entries(speechLinks)) {
 
 const cachedGraphics: Record<string, [string, string]> = { zh: ["恢复已生成图形", "在播放头位置复用已生成图形，并取消先前的语音关联。应用前可检查，不消耗生成积分。"], es: ["Recuperar gráfico guardado", "Reutiliza el gráfico en el cabezal, sin su vínculo de voz anterior. Revisa antes de aplicar; no consume créditos de generación."], fr: ["Récupérer le graphique", "Réutilisez le graphique à la tête de lecture, sans son ancien lien vocal. Vérifiez avant d’appliquer ; aucun crédit de génération."], de: ["Gespeicherte Grafik wiederverwenden", "Grafik am Abspielkopf ohne bisherigen Sprachanker wiederverwenden. Vor dem Anwenden prüfen; keine Generierungscredits."], it: ["Recupera grafica salvata", "Riutilizza la grafica sulla testina, senza il precedente collegamento vocale. Rivedi prima di applicare; nessun credito di generazione."], pt: ["Recuperar gráfico salvo", "Reutilize o gráfico no cursor, sem o vínculo de fala anterior. Revise antes de aplicar; sem créditos de geração."], ko: ["저장된 그래픽 복구", "이전 음성 연결을 해제하고 재생 헤드에서 그래픽을 다시 사용합니다. 적용 전에 검토하며 생성 크레딧은 사용하지 않습니다."], ja: ["保存済みグラフィックを復元", "以前の音声リンクを解除し、再生ヘッド位置でグラフィックを再利用します。適用前に確認でき、生成クレジットは不要です。"] };
 for (const [locale, [action, description]] of Object.entries(cachedGraphics)) { workspaceCopy[locale]!["Recover saved graphic"] = action; workspaceCopy[locale]!["Reuse the saved graphic at the playhead, detached from its previous speech link. Review before applying; no generation credits."] = description; }
+
+const reviewedRecovery: Record<string, [string, string, string]> = {
+  zh: ["恢复已验证修改", "已恢复的验证修改", "中断前已保存通过验证的修改。无需再次调用模型即可恢复并检查后再应用。"],
+  es: ["Recuperar edición revisada", "Edición revisada recuperada", "Se guardó una edición verificada antes de la interrupción. Recupérala para revisarla sin una nueva llamada al modelo."],
+  fr: ["Récupérer la modification vérifiée", "Modification vérifiée récupérée", "Une modification vérifiée a été enregistrée avant l’interruption. Récupérez-la pour la vérifier sans nouvel appel au modèle."],
+  de: ["Geprüfte Bearbeitung wiederherstellen", "Wiederhergestellte geprüfte Bearbeitung", "Vor der Unterbrechung wurde eine geprüfte Bearbeitung gespeichert. Ohne neuen Modellaufruf zur Prüfung wiederherstellen."],
+  it: ["Recupera modifica verificata", "Modifica verificata recuperata", "Una modifica verificata è stata salvata prima dell’interruzione. Recuperala per rivederla senza una nuova chiamata al modello."],
+  pt: ["Recuperar edição verificada", "Edição verificada recuperada", "Uma edição verificada foi salva antes da interrupção. Recupere-a para revisar sem nova chamada ao modelo."],
+  ko: ["검증된 편집 복구", "복구된 검증 편집", "중단 전에 검증을 통과한 편집이 저장되었습니다. 추가 모델 호출 없이 복구하여 검토 후 적용할 수 있습니다."],
+  ja: ["検証済みの編集を復元", "復元された検証済み編集", "中断前に検証済みの編集が保存されています。追加のモデル呼び出しなしで復元して確認できます。"],
+};
+for (const [locale, [action, badge, notice]] of Object.entries(reviewedRecovery)) {
+  workspaceCopy[locale]!["Recover reviewed edit"] = action;
+  workspaceCopy[locale]!["Recovered reviewed edit"] = badge;
+  workspaceCopy[locale]!["Verified edit saved before the interruption. Recover it for review with no new model call."] = notice;
+}

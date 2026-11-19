@@ -54,7 +54,7 @@ export function VideoWorkspaceChat({ extensions, resizeHandle, controller, sourc
   const shortcutHintId = useId(), generation = useRef(0), liveController = useRef(controller); liveController.current = controller;
   const inFlight = useRef(new Set<string>()), attemptedApply = useRef(new Set<string>());
   const sendAttempt = useRef<{ instruction: string; body: unknown } | null>(null), applyAttempts = useRef(new Map<string, unknown>());
-  const recoveryAttempts = useRef(new Map<string, unknown>()), undoAttempts = useRef(new Map<string, unknown>());
+  const recoveryAttempts = useRef(new Map<string, unknown>()), reviewedRecoveryAttempts = useRef(new Map<string, {operationId:string; baseRevision:number; baseHash:string}>()), undoAttempts = useRef(new Map<string, unknown>());
   const answerAttempts = useRef(new Map<string, { choice: string; body: unknown }>());
   const reviewSequence = useRef(0), attemptedUploads = useRef(new Set<string>());
   const reviewReturnFocus = useRef<HTMLElement | null>(null);
@@ -63,7 +63,7 @@ export function VideoWorkspaceChat({ extensions, resizeHandle, controller, sourc
   const current = (epoch: number) => generation.current === epoch && liveController.current === controller;
   useEffect(() => {
     generation.current++; setData({ runs: [], messages: [] }); setInstruction(""); setReferenceId(null); setComparison(null); setReviewingId(null); setError(null); setBusy(null); setScopeChoice(initialScope); setActionNotice(null); setAnswers({});
-    inFlight.current.clear(); attemptedApply.current.clear(); attemptedUploads.current.clear(); applyAttempts.current.clear(); recoveryAttempts.current.clear(); undoAttempts.current.clear(); answerAttempts.current.clear(); sendAttempt.current = null; reviewReturnFocus.current = null;
+    inFlight.current.clear(); attemptedApply.current.clear(); attemptedUploads.current.clear(); applyAttempts.current.clear(); recoveryAttempts.current.clear(); reviewedRecoveryAttempts.current.clear(); undoAttempts.current.clear(); answerAttempts.current.clear(); sendAttempt.current = null; reviewReturnFocus.current = null;
     return () => { generation.current++; reviewSequence.current++; };
   }, [controller]);
   const refresh = useCallback(async () => {
@@ -83,6 +83,9 @@ export function VideoWorkspaceChat({ extensions, resizeHandle, controller, sourc
   }, [data.runs]);
   useEffect(() => {
     for (const run of data.runs) {
+      if (run.recoveredFromRunId && reviewedRecoveryAttempts.current.get(run.recoveredFromRunId)?.operationId === run.operationId) {
+        reviewedRecoveryAttempts.current.delete(run.recoveredFromRunId); setError(null);
+      }
       const pending = answerAttempts.current.get(run.id);
       if (!pending) continue;
       if (editorClarificationAcknowledged(run, (pending.body as {operationId:string}).operationId, data.runs)) {
@@ -209,6 +212,17 @@ export function VideoWorkspaceChat({ extensions, resizeHandle, controller, sourc
     } catch (cause) { if (!current(epoch)) return; if (definitiveRejection(cause)) recoveryAttempts.current.delete(run.id); setError(messageFor(cause, "The saved graphic could not be prepared for review.")); }
     finally { if (current(epoch)) { inFlight.current.delete(run.id); setBusy(null); } }
   }
+  async function recoverReviewed(run: WorkspaceAgentRun) {
+    if (inFlight.current.has(run.id)) return;
+    const epoch = generation.current; inFlight.current.add(run.id); setBusy(run.id); setError(null);
+    try {
+      const snapshot = await controller.prepareAgentContext(); if (!current(epoch)) return;
+      if (!reviewedRecoveryAttempts.current.has(run.id)) reviewedRecoveryAttempts.current.set(run.id, { operationId: crypto.randomUUID(), baseRevision: snapshot.revision, baseHash: snapshot.documentHash });
+      await videoProjectRequest(endpoint + "/" + encodeURIComponent(run.id) + "/recover-reviewed", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(reviewedRecoveryAttempts.current.get(run.id)) });
+      if (!current(epoch)) return; reviewedRecoveryAttempts.current.delete(run.id); await refresh();
+    } catch (cause) { if (!current(epoch)) return; if (definitiveRejection(cause)) reviewedRecoveryAttempts.current.delete(run.id); setError(messageFor(cause, "The saved reviewed edit could not be recovered.")); await refresh().catch(() => {}); }
+    finally { if (current(epoch)) { inFlight.current.delete(run.id); setBusy(null); } }
+  }
   function reference(run: WorkspaceAgentRun, prefill = false) {
     const document = controller.getState().document;
     const directIds = (run.proposal?.changedItemIds ?? []).filter(id => !run.proposal?.propagatedItemIds?.includes(id));
@@ -317,6 +331,7 @@ export function VideoWorkspaceChat({ extensions, resizeHandle, controller, sourc
         onExportOutput={onExportOutput} onPublishOutput={onPublishOutput} onDownloadOutput={onDownloadOutput} onOutputPublicationVerified={onOutputPublicationVerified} files={outputFiles} onRelinkSource={onRelinkSource} restoringSources={restoringSources} />}
       {run.externalJobs?.map(job => <EditorGenerationCard key={job.id} job={job} run={run} runs={data.runs} controller={controller} disabled={disabled} active={!hidden} onChanged={refresh} onAuthorizeSources={onAuthorizeSources} onRelinkSource={onRelinkSource} onPausePreview={onPausePreview} mainPreviewPlaying={mainPreviewPlaying} />)}
       {run.clarificationParentRunId && <span className="editor-agent-scope-label">{t("Included reply")}</span>}
+      {run.recoveredFromRunId && <span className="editor-agent-scope-label">{t("Recovered reviewed edit")}</span>}
       {run.clarification && !answered && run.status === "needs_input" && <EditorClarification run={run} value={answers[run.id] ?? ""} disabled={disabled}
         stale={workspace.snapshot?.documentHash !== run.baseHash} retryPending={answerAttempts.current.has(run.id)}
         onChange={value => setAnswers(values => ({ ...values, [run.id]: value }))} onAnswer={optionId => void answer(run, optionId)} onRetry={() => void answer(run, undefined, true)} />}
@@ -324,8 +339,9 @@ export function VideoWorkspaceChat({ extensions, resizeHandle, controller, sourc
       {["submit_uncertain", "preparation_retry"].includes(run.phase) && <button className={button} disabled={!!busy} onClick={() => void resume(run)}>{t("Retry same request")}</button>}
       {run.progress?.recovery.canResume && !["submit_uncertain", "preparation_retry", "cancellation_pending"].includes(run.phase) && !(run.status === "running" && Date.now() - Date.parse(run.updatedAt) > 60_000) && <button className={button} disabled={!!busy} onClick={() => void resume(run)}>{t("Check progress")}</button>}
       {run.prerequisites?.status === "consent_required" && (!run.cloudConsent || attemptedUploads.current.has(run.id) && !busy) && <><p className="editor-authoring-notice">{t("This request needs cloud transcription. Selected local media will be uploaded to storage and the speech provider. Standard transcription credits apply.")}</p><button className={button} disabled={!!busy} onClick={() => void resume(run, true)}>{t(run.cloudConsent ? "Retry same request" : "Upload and continue")}</button></>}
+      {run.status === "failed" && run.recoverableReviewedEdit && <><p className="editor-agent-saved-result">{t("Verified edit saved before the interruption. Recover it for review with no new model call.")}</p><button className={button} disabled={disabled} onClick={() => void recoverReviewed(run)}>{t("Recover reviewed edit")}</button></>}
       {run.recoverableOutput && run.proposal?.commands.some(command => command.type === "addItem" && !workspace.document?.items.some(item => item.id === command.item.id)) && <button className={button} disabled={disabled} onClick={() => void recoverGraphic(run)}>{t("Recover saved graphic")}</button>}
-      {run.progress?.recovery.canReuseSavedResult && <p className="editor-agent-saved-result">{t("Saved result available. Recovery reuses this result without new generation.")}</p>}
+      {run.progress?.recovery.canReuseSavedResult && !(run.status === "failed" && run.recoverableReviewedEdit) && <p className="editor-agent-saved-result">{t("Saved result available. Recovery reuses this result without new generation.")}</p>}
       {run.proposal && ["ready", "awaiting_review", "stale", "applied"].includes(run.status) && <div className="editor-agent-card-actions">
         {applied && <button className={button} disabled={disabled || reviewingId === run.id} onClick={() => void openReview(run)}>{t(reviewingId === run.id ? "Preparing comparison…" : "Compare")}</button>}
         {!applied && run.manualReviewRequired && ["ready", "awaiting_review"].includes(run.status) && <button className={button} disabled={disabled || reviewingId === run.id} onClick={() => void openReview(run)}>{t(reviewingId === run.id ? "Preparing comparison…" : "Review changes")}</button>}

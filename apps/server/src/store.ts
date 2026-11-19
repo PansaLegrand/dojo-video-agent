@@ -89,6 +89,7 @@ export type StoredRun = VideoProjectAgentRun & {
   preludeCheckpoints?: StoredAgentLoopCheckpoint[];
   stageProgress?: import("../../../packages/agent-kit/src/stage-progress").EditStageProgress;
   stageRecovery?: { canResume: boolean; canReuseSavedResult: boolean };
+  reviewedEditRecovery?: import("./reviewed-edit-recovery").ReviewedEditRecoveryReceipt;
   agentKitVersion?: string;
   skillSnapshot?: import("../../../packages/agent-kit/src/index").Skill[];
   agentProfile?:
@@ -476,25 +477,30 @@ export const runOf = (p: Project, id: string) => {
   if (!run) throw new HttpError("Run not found", 404);
   return run;
 };
-export function publicRun({
-  skillSnapshot: _skillSnapshot,
-  captionTranslationRebase: _captionTranslationRebase,
-  focusedGraphicsDiscovery: _focusedGraphicsDiscovery,
-  browserToolsEnabled: _browserTools,
-  appliedReceipt: _application,
-  request: _request,
-  requestHash: _hash,
-  appliedBefore: _before,
-  appliedAfter: _after,
-  answers: _answers,
-  speechContinuation: _speech,
-  loopCheckpoint: _checkpoint,
-  preludeCheckpoints: _preludes,
-  stageProgress: _stages,
-  stageRecovery: _stageRecovery,
-  completion: _completion,
-  ...run
-}: StoredRun) {
+export function publicRun(
+  {
+    skillSnapshot: _skillSnapshot,
+    captionTranslationRebase: _captionTranslationRebase,
+    focusedGraphicsDiscovery: _focusedGraphicsDiscovery,
+    browserToolsEnabled: _browserTools,
+    appliedReceipt: _application,
+    request: _request,
+    requestHash: _hash,
+    appliedBefore: _before,
+    appliedAfter: _after,
+    answers: _answers,
+    speechContinuation: _speech,
+    loopCheckpoint: _checkpoint,
+    preludeCheckpoints: _preludes,
+    stageProgress: _stages,
+    stageRecovery: _stageRecovery,
+    reviewedEditRecovery: _reviewedEditRecovery,
+    completion: _completion,
+    ...run
+  }: StoredRun,
+  options: { recoverableReviewedEdit?: boolean } = {},
+) {
+  const recoverableReviewedEdit = options.recoverableReviewedEdit === true;
   const progress = _stages
     ? nativeAgentProgress(
         {
@@ -528,7 +534,8 @@ export function publicRun({
             taskId: source.taskId,
           })),
         },
-        _stageRecovery?.canReuseSavedResult ?? false,
+        (_stageRecovery?.canReuseSavedResult ?? false) ||
+          recoverableReviewedEdit,
       )
     : undefined;
   if (progress && _stages) {
@@ -548,6 +555,7 @@ export function publicRun({
   }
   return {
     ...run,
+    ...(recoverableReviewedEdit ? { recoverableReviewedEdit: true } : {}),
     ...(progress ? { progress } : {}),
     manualReviewRequired: run.proposal?.impact === "review",
     ...(run.replyState

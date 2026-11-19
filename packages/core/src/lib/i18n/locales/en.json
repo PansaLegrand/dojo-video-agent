@@ -3527,6 +3527,15 @@
   "application.design_agent.target_size.long_image.description": "Auto-height scroll design",
   "application": {
     "music_visualizer": {
+      "conflict": {
+        "title": "Project has editor changes",
+        "description": "This project was changed in the video editor. Save this Visualizer as a new project to keep both versions.",
+        "save_as_new": "Save as new project",
+        "saving": "Saving new project…",
+        "open_saved": "Open saved project",
+        "saved": "Saved as a new project. Your original project is unchanged.",
+        "save_failed": "Could not save the new project. Try again."
+      },
       "action": {
         "all_music_video_types": "All music video types",
         "sign_in_to_start": "Sign in to start",
