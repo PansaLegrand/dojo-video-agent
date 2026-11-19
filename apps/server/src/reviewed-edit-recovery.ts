@@ -125,7 +125,7 @@ function completionOptionsForRun(run: StoredRun) {
       profile,
     ),
     endingVisibility: run.request.authoring?.endingVisibility,
-    spatialCanvas: run.request.authoring?.spatialCanvas,
+    requiredTextLayout: run.request.authoring?.requiredTextLayout, spatialCanvas: run.request.authoring?.spatialCanvas,
   };
 }
 

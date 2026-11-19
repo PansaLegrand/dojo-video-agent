@@ -40,7 +40,8 @@ import { compileVideoProjectDocument } from "./compilation";
 import { normalizeCompletionNumber } from "./completion-number";
 import { captionTimingDiagnostics } from "./caption-source-range";
 import { normalizeCaptionLanguage } from "./caption-pair";
-import { assertEndingFrame } from "./ending-frame-visibility";
+import { requiredTextLayoutReview, RequiredTextLayoutError } from "./required-text-layout";
+import { boundsText, assertEndingFrame } from "./ending-frame-visibility";
 
 import { z } from "zod/v3";
 import { nativeAgentTargetSchema } from "./agent-schema";
@@ -525,6 +526,7 @@ function layoutChecks(
   after: VideoProjectDocument,
   requirements: CompletionRequirement[],
   endingVisibility?: "final-frame-v1",
+  requiredTextLayout?: "sampled-v1",
 ) {
   const required = declaredItems(requirements);
   const changed = new Set(
@@ -550,6 +552,20 @@ function layoutChecks(
     );
     frames.add(from + Math.floor(duration / 2));
     frames.add(from + Math.max(0, duration - 2));
+    if (requiredTextLayout && required.has(item.id)) {
+      // Nested intervals are parent-local. A short label may be active between
+      // all three ordinary item samples.
+      const addMidpoint = (node: SceneNodeInput, start: number, end: number) => {
+        for (const child of node.children ?? []) {
+          const from = start + (child.from ?? 0);
+          const to = Math.min(end, from + (child.duration ?? end - from));
+          if (to <= from) continue;
+          if (child.type === "text") frames.add(from + Math.floor((to - from) / 2));
+          addMidpoint(child, from, to);
+        }
+      };
+      addMidpoint(item.node, from, from + duration);
+    }
     if (item.caption) {
       const cues = item.caption.cues;
       for (const cue of [
@@ -604,6 +620,8 @@ function layoutChecks(
     after.items.filter((item) => item.caption).map((item) => item.id),
   );
   const observed = new Set<string>();
+  const textReview = requiredTextLayout ? requiredTextLayoutReview(requirements,
+    { x: 0, y: 0, width: after.format.width, height: after.format.height }) : undefined;
   const checkEnding = (groups: DisplayGroup[]) => assertEndingFrame(groups, closingText, finalFrame,
     { x: 0, y: 0, width: after.format.width, height: after.format.height });
   for (const frame of selected) {
@@ -640,7 +658,7 @@ function layoutChecks(
               box.y + box.height > after.format.height + 1
             )
               throw new Error(
-                `Text ${group.nodeId} has zero/off-canvas layout at frame ${frame}.`,
+                `Text ${group.nodeId} has zero/off-canvas layout at frame ${frame}.${requiredTextLayout ? ` Bounds [${boundsText(box)}], canvas [0, 0, ${after.format.width}, ${after.format.height}].` : ""}`,
               );
             const m = group.worldTransform;
             const size =
@@ -660,6 +678,7 @@ function layoutChecks(
     };
     const groups = compileDisplayList(layoutScene(evaluateScene(scene, frame))).groups;
     if (closingText.size && frame === finalFrame) checkEnding(groups);
+    textReview?.sample(groups, frame, itemFor, closingText.size > 0 && frame === finalFrame);
     groups.forEach(group => visit(group));
     for (let i = 0; i < boxes.length; i++)
       for (let j = i + 1; j < boxes.length; j++) {
@@ -689,7 +708,9 @@ function layoutChecks(
       }
   }
   if (closingText.size && !selected.includes(finalFrame)) {
-    checkEnding(compileDisplayList(layoutScene(evaluateScene(scene, finalFrame))).groups);
+    const groups = compileDisplayList(layoutScene(evaluateScene(scene, finalFrame))).groups;
+    checkEnding(groups);
+    textReview?.sample(groups, finalFrame, itemFor, true);
     selected.push(finalFrame);
   }
   for (const id of required) {
@@ -706,6 +727,7 @@ function layoutChecks(
         `Required text ${id} was not visible in bounded layout samples.`,
       );
   }
+  textReview?.finish();
   return `Checked ${selected.length} bounded layout frames: ${selected.join(",")}.`;
 }
 // A scene may carry an interval-local backdrop. A global canvas edit belongs
@@ -740,7 +762,7 @@ export function checkNativeCompletionRequirements(
   beforeInput: VideoProjectDocument,
   afterInput: VideoProjectDocument,
   raw: unknown,
-  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1" } = {},
+  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1"; requiredTextLayout?: "sampled-v1" } = {},
 ): CompletionCheck[] {
   const before = parseVideoProjectDocument(beforeInput),
     after = parseVideoProjectDocument(afterInput),
@@ -778,11 +800,11 @@ export function checkNativeCompletionRequirements(
     checks.push({
       id: "layout",
       passed: true,
-      message: layoutChecks(before, after, requirements, options.endingVisibility),
+      message: layoutChecks(before, after, requirements, options.endingVisibility, options.requiredTextLayout),
     });
   } catch (error) {
     checks.push({
-      id: "layout",
+      id: error instanceof RequiredTextLayoutError ? error.checkId : "layout",
       passed: false,
       message: (error instanceof Error ? error.message : "Layout failed").slice(
         0,
@@ -829,7 +851,7 @@ export async function reviewNativeCompletionEdit(
     base,
     executed.document,
     requirements,
-    { ...options, endingVisibility: request.authoring?.endingVisibility, spatialCanvas: request.authoring?.spatialCanvas },
+    { ...options, endingVisibility: request.authoring?.endingVisibility, spatialCanvas: request.authoring?.spatialCanvas, requiredTextLayout: request.authoring?.requiredTextLayout },
   );
   const receipt = checks.every((check) => check.passed)
     ? await createCompletionReceipt({

@@ -13,16 +13,15 @@ function intersection(first: Bounds, second: Bounds) {
     height: Math.min(first.y + first.height, second.y + second.height) - y,
   };
 }
-function boundsText(bounds: Bounds) {
+export function boundsText(bounds: Bounds) {
   return [bounds.x, bounds.y, bounds.width, bounds.height]
     .map((value) => Math.round(value * 10) / 10)
     .join(", ");
 }
-function solidCanvasCover(group: DisplayGroup, canvas: Bounds) {
+export function solidCanvasBackground(group: DisplayGroup, canvas: Bounds) {
   const { background, worldTransform, composite } = group;
   if (
     group.nodeType !== "div" ||
-    group.children.length ||
     group.clip ||
     group.mask ||
     composite.opacity !== 1 ||
@@ -54,7 +53,7 @@ export function assertEndingFrame(
   const seen = new Set<string>();
   let coverIndex = -1;
   groups.forEach((group, index) => {
-    if (solidCanvasCover(group, canvas)) coverIndex = index;
+    if (!group.children.length && solidCanvasBackground(group, canvas)) coverIndex = index;
   });
   const fail = (id: string, why: string): never => {
     throw Error(
