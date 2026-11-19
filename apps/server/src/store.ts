@@ -71,6 +71,7 @@ export const commitInput = z
 export type StoredRun = VideoProjectAgentRun & {
   /** Host policy frozen on new runs; absence preserves historical review/replay. */
   captionTranslationRebase?: true;
+  focusedGraphicsDiscovery?: true;
   browserToolsEnabled?: true;
   appliedReceipt?: {
     operationId: string;
@@ -478,6 +479,7 @@ export const runOf = (p: Project, id: string) => {
 export function publicRun({
   skillSnapshot: _skillSnapshot,
   captionTranslationRebase: _captionTranslationRebase,
+  focusedGraphicsDiscovery: _focusedGraphicsDiscovery,
   browserToolsEnabled: _browserTools,
   appliedReceipt: _application,
   request: _request,

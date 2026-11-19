@@ -102,6 +102,7 @@ export async function createLocalApi() {
     "local-editor-v14",
     {
       newRunSkills,
+      focusedGraphicsDiscovery: process.env.DOJO_FOCUSED_GRAPHICS_DISCOVERY === "1",
       browser: {
         tools: (projectId, runId, request) =>
           browserRequests.tools(projectId, runId, request),

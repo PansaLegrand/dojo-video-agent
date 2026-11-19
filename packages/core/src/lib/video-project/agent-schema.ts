@@ -1,4 +1,4 @@
-import { macroDefinitions } from "@dojo-video-engine/presets/macros";
+import { nativeInsertableMacros, type NativeMacroCatalog } from "./native-macro-catalog";
 import { z } from "zod/v3";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import {
@@ -731,11 +731,9 @@ function native2dGraphicsSchema(options: { installedGrammar?: true } = {}) {
 /** Read-only discovery from the installed engine. No registry mutation or execution surface. */
 export function nativeAgentGraphicsSchema(
   query: { kind?: "native" | "macro"; macro?: string } = {},
-  options: { installedGrammar?: true } = {},
+  options: { installedGrammar?: true; macroCatalog?: NativeMacroCatalog } = {},
 ) {
-  const macros = macroDefinitions().filter(
-    (definition) => !["captions", "subtitles"].includes(definition.name),
-  );
+  const macros = nativeInsertableMacros(options.macroCatalog);
   if (query.kind === "macro") {
     if (!query.macro)
       return {

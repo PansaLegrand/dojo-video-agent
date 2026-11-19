@@ -52,9 +52,12 @@ For a numeric domain `low..high`, place a value proportionally using
 series without division by zero. Category spacing and data spacing are different:
 a time series with irregular intervals should not imply equal elapsed time.
 
-The installed registry may not contain a dedicated chart macro. Discover the
-actual native shape/text grammar with `inspect_graphics_schema`; do not invent a
-`barChart` or `lineChart` tool. Build marks, labels and axes as editable nodes, or
+Check the installed macro index with `inspect_graphics_schema({kind:"macro"})`.
+If it lists a suitable chart, inspect its named schema and use it inside
+`insertGraphic.node`. Use it only when its axis, label capacity and timing
+match the supplied data. For follow-up edits, inspect the existing expanded
+nodes and preserve any manual changes. If no suitable macro is installed, use
+the native shape/text grammar. Build marks, labels and axes as editable nodes, or
 use `prepare_svg_graphic` for suitable vector paths while keeping readable labels
 as text. Give data marks and labels stable IDs so follow-up edits can target them.
 Native `line`, `polyline` and `polygon` points are normalized against their node

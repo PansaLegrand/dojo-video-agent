@@ -1,3 +1,4 @@
+import { installedChartCatalog } from "../../../packages/core/src/lib/video-project/native-macro-catalog";
 import { savedAgentKitVersion, sourceRequirementValidation, skillsForSavedRun } from "../../../packages/agent/src/runtime-build";
 import { EditStageError as RetainedV29EditStageError } from "@dojo-video/agent-kit-v29";
 import { EditStageError as RetainedV28EditStageError } from "@dojo-video/agent-kit-v28";
@@ -137,6 +138,7 @@ export class AgentService {
       | "local-editor-v14" = "local-editor-v1",
     private stagedOptions: {
       newRunSkills?: Skill[];
+      focusedGraphicsDiscovery?: boolean;
       captionBatchSize?: number;
       onTransition?: (plan: EditStagePlan) => Promise<void>;
       browser?: {
@@ -205,6 +207,7 @@ export class AgentService {
           input.scope ?? { kind: "project" },
         ),
         now = new Date().toISOString();
+      const macroCatalog = this.agentProfile === "local-editor-v14" ? installedChartCatalog() : undefined;
       const run: StoredRun = {
         id: randomUUID(),
         operationId: input.operationId,
@@ -226,6 +229,7 @@ export class AgentService {
         agentProfile: this.agentProfile,
         agentKitVersion: profileKitVersion(this.agentProfile),
         ...(this.agentProfile === "local-editor-v14" ? { skillSnapshot: structuredClone(this.stagedOptions.newRunSkills ?? this.skills) } : {}),
+        ...(this.agentProfile === "local-editor-v14" && this.stagedOptions.focusedGraphicsDiscovery ? { focusedGraphicsDiscovery: true } : {}),
         ...(this.stagedOptions.browser &&
         ["local-editor-v10", "local-editor-v11", "local-editor-v12", "local-editor-v13", "local-editor-v14"].includes(this.agentProfile)
           ? { browserToolsEnabled: true as const }
@@ -240,7 +244,10 @@ export class AgentService {
           document: p.document,
           context: input.context,
           instruction: input.instruction,
-          authoring: { version: 1, scope, ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const } : {}) },
+          authoring: { version: 1, scope,
+            ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const } : {}),
+            ...(macroCatalog ? { macroCatalog } : {}),
+          },
         },
       };
       if (input.referenceRunId) {
@@ -442,6 +449,7 @@ export class AgentService {
         request,
         profile: run.agentProfile ?? "local-editor-v1",
         agentKitVersion: savedAgentKitVersion(run),
+        focusedGraphicsDiscovery: run.focusedGraphicsDiscovery === true,
         model,
         skills: skillsForSavedRun(run, this.skills),
         extraTools: [

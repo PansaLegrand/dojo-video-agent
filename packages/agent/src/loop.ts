@@ -62,6 +62,7 @@ export async function runAgent(input: {
   extraTools?: AgentTool[];
   profile?: AgentProfile;
   agentKitVersion?: string;
+  focusedGraphicsDiscovery?: boolean;
   stages?: EditorStagePorts<NativeAgentResult>;
   previewEvidence?: (
     requestId: string,
@@ -125,6 +126,7 @@ export async function runAgent(input: {
   const toolset = createVideoToolset(request, skills, input.extraTools ?? [], {
     profile: input.profile,
     agentKitVersion: input.agentKitVersion,
+    focusedGraphicsDiscovery: input.focusedGraphicsDiscovery,
     ...(input.stages ? { stages: input.stages } : {}),
     ...(input.previewEvidence
       ? { previewEvidence: input.previewEvidence }

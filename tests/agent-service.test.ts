@@ -4,6 +4,7 @@ import path from "node:path";
 import os from "node:os";
 import { ProjectStore, snapshot } from "../apps/server/src/store";
 import { AgentService } from "../apps/server/src/agent-service";
+import * as macros from "../packages/core/src/lib/video-project/native-macro-catalog";
 import type { LanguageModel, ModelReply } from "../packages/agent/src";
 const roots: string[] = [];
 afterEach(async () => {
@@ -567,12 +568,14 @@ it("persists the new kit build on a local v14 run and keeps it across restart an
   const model: LanguageModel = { identity: "new-build-test", complete: vi.fn(async () => ({ text: "Nothing changed.", calls: [], usage: { inputTokens: 10, outputTokens: 5 } })) };
   const f = await fixture(model);
   const guide = { name: "branded-ending", description: "Original guide", instructions: "Keep the exact URL." };
-  const host = new AgentService(f.store, model, [guide], undefined, "review", undefined, "local-editor-v14");
+  const host = new AgentService(f.store, model, [guide], undefined, "review", undefined, "local-editor-v14", { focusedGraphicsDiscovery: true });
   const started = await host.start(f.p.id, f.input);
   const done = await settle(f.store, f.p.id);
   expect(done.runs[0].agentKitVersion).toBe(profileKitVersion("local-editor-v14"));
   expect(done.runs[0].request.authoring?.endingVisibility).toBe("final-frame-v1");
   expect(done.runs[0].skillSnapshot).toEqual([guide]);
+  expect(done.runs[0].focusedGraphicsDiscovery).toBe(true);
+  expect(started.run).not.toHaveProperty("focusedGraphicsDiscovery");
   expect(started.run).not.toHaveProperty("skillSnapshot");
   const reopened = new ProjectStore(f.store.directory);
   await reopened.init();
@@ -582,6 +585,7 @@ it("persists the new kit build on a local v14 run and keeps it across restart an
   expect(repeated.run.id).toBe(started.run.id);
   expect((await reopened.read(f.p.id)).runs[0].agentKitVersion).toBe("0.2.10");
   expect((await reopened.read(f.p.id)).runs[0].skillSnapshot).toEqual([guide]);
+  expect((await reopened.read(f.p.id)).runs[0].focusedGraphicsDiscovery).toBe(true);
   expect(model.complete).toHaveBeenCalledTimes(priorCalls);
 });
 
@@ -615,4 +619,30 @@ it("offers the bundled art guide only to new runs and keeps its saved prose priv
   expect(p.runs.find(r => r.id === fresh.run.id)?.skillSnapshot).toContainEqual(guide);
   expect(observed).toHaveLength(1);
   expect(observed[0]).toContain("Ink press");
+});
+
+it("binds the installed chart catalog only when starting a new v14 run", async () => {
+  const model: LanguageModel = { complete: vi.fn(async () => ({ text: "No edit.", calls: [] })) };
+  const f = await fixture(model);
+  const makeHost = (store: ProjectStore) => new AgentService(store, model, [], undefined, "review", undefined, "local-editor-v14");
+  const installed = vi.spyOn(macros, "installedChartCatalog").mockReturnValue(undefined);
+  try {
+    const older = await makeHost(f.store).start(f.p.id, f.input);
+    await settle(f.store, f.p.id);
+    installed.mockReturnValue("engine-1.3.0");
+    const reopened = new ProjectStore(f.store.directory);
+    await reopened.init();
+    const host = makeHost(reopened);
+    const repeated = await host.start(f.p.id, f.input);
+    expect(repeated.run.id).toBe(older.run.id);
+    expect((await reopened.read(f.p.id)).runs[0].request.authoring).not.toHaveProperty("macroCatalog");
+    const newer = await host.start(f.p.id, { ...f.input, operationId: "new-engine" });
+    const disk = await settle(reopened, f.p.id);
+    expect(disk.runs.find(r => r.id === newer.run.id)?.request.authoring?.macroCatalog).toBe("engine-1.3.0");
+    installed.mockReturnValue(undefined);
+    await host.start(f.p.id, { ...f.input, operationId: "new-engine" });
+    expect((await reopened.read(f.p.id)).runs.at(-1)?.request.authoring?.macroCatalog).toBe("engine-1.3.0");
+  } finally {
+    installed.mockRestore();
+  }
 });

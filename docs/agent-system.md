@@ -5,15 +5,16 @@ v14/commercial v15 and all previous archives. The accepted release remains 0.2.9
 See [candidate scope and evidence](creative-skill-packs-2026-11-17.md).
 
 The shared model/tool loop is `packages/agent-loop` **0.2.0**. Portable editor definitions
-are `packages/agent-kit` **0.2.9**, with tool metadata and schemas, trusted Markdown skill
+live in `packages/agent-kit`, with tool metadata and schemas, trusted Markdown skill
 requirements, a tool factory with native host ports, and explicit prompt sections.
 There are no engine, database, provider SDK or credit dependencies in either kit.
 
-## Current runtime, 2026-11-15
+## Local source and accepted baseline
 
 The local API starts new runs with `local-editor-v14`. Its commercial counterpart
-is `commercial-editing-v15`. The engine dependency is **1.2.3**. The current build
-is 0.2.9 under the existing profiles, with one central capability table.
+is `commercial-editing-v15`. The engine dependency is **1.2.3**. New local
+runs use the 0.2.10 source candidate; 0.2.9 remains the accepted release
+under the same behavior profiles.
 New runs persist `agentKitVersion`; old local-v14 records
 without it resolve to original public 0.2.8. Original archives and completed
 qualification evidence remain intact.

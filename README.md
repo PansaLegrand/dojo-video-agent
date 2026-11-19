@@ -221,6 +221,12 @@ COUNT” or “Explain Plan, Build, Launch as a motion slide.” See the
 [validation status](docs/creative-skill-expansion-2026-11-18.md); the four newest
 packs still await real-model visual qualification.
 
+For new local candidate runs, start the server with
+`DOJO_FOCUSED_GRAPHICS_DISCOVERY=1 npm run dev` to expose `clip`, `mask`, and
+`effect` lookups through `inspect_graphics_schema`. Each reply contains only
+that feature’s installed fields and a native node example. Existing runs retain
+their original tool contract when resumed.
+
 A useful first extension is a read-only tool that counts clips on a track. Or add a trusted lowercase `skills/name.md` file and restart the host. Markdown guides registered tools; it cannot install executable code or authorize spending. Follow [the extension guide](docs/extending.md).
 
 Agent packages are source workspaces here, not a published embeddable SDK. Engine packages are published separately. Durable recovery retains completed replies and receipts; uncertain paid submissions need reconciliation. See [the current agent map](docs/agent-system.md) and [edge cases](docs/edge-cases.md) for exact limits.

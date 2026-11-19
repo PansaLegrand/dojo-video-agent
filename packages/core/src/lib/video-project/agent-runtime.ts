@@ -1,3 +1,4 @@
+import { nativeMacroNames } from "./native-macro-catalog";
 import { requiresWordGroundedTiming } from "./agent-timing-intent";
 import { importSvgGraphic } from "@dojo-video-engine/interchange/svg";
 import { z } from "zod/v3";
@@ -207,6 +208,7 @@ function normalizeAnimations(node: SceneNodeInput): unknown {
 function graphicCommands(
   document: VideoProjectDocument,
   input: z.infer<typeof nativeGraphicSchema>,
+  allowedMacroNames: readonly string[],
 ): VideoProjectCommand[] {
   if (["captions", "subtitles"].includes(String(input.node.macro)))
     throw new Error(
@@ -217,7 +219,7 @@ function graphicCommands(
     duration: document.format.durationInFrames,
     assets: document.assets,
     nodes: [{ ...input.node, id: input.itemId }],
-  });
+  }, { allowedMacroNames });
   if (expanded.errors.length) throw new Error(expanded.errors.join(" "));
   const roots = (expanded.value as { nodes: SceneNodeInput[] }).nodes.map(
     (node) => sceneNodeSchema.parse(normalizeAnimations(node)),
@@ -279,6 +281,7 @@ export async function compileNativeAgentResult(
   modelOutput: unknown,
 ): Promise<NativeAgentResult> {
   const request = nativeAgentRequestSchema.parse(requestInput);
+  const allowedMacroNames = nativeMacroNames(request.authoring?.macroCatalog);
   const base = parseVideoProjectDocument(request.document);
   if ((await hashVideoProjectDocument(base)) !== request.baseHash)
     throw new Error("Native agent snapshot hash mismatch.");
@@ -435,9 +438,9 @@ export async function compileNativeAgentResult(
                 from: candidate.from,
                 duration: candidate.duration,
               }).node,
-            })
+            }, allowedMacroNames)
           : candidate.type === "insertGraphic"
-            ? graphicCommands(document, candidate)
+            ? graphicCommands(document, candidate, allowedMacroNames)
             : candidate.type === "captionSource"
               ? captionSourceCommands(document, candidate)
               : candidate.type === "cutSpeech"

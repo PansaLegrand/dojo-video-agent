@@ -1,5 +1,6 @@
 import { graphicsAuthoringGuide } from "./graphics-guide";
-import { macroDefinitions } from "@dojo-video-engine/presets/macros";
+import { nativeInsertableMacros } from "./native-macro-catalog";
+import type { NativeAuthoring } from "./agent-authoring";
 import type { SceneNodeInput } from "@dojo-video-engine/schema";
 import { editorCaptionPresets } from "@/lib/editor/caption-presets";
 import { motionTemplates } from "@/lib/motion-graphics/catalog";
@@ -82,13 +83,14 @@ function named(text: string, name: string): boolean {
 /** Catalog values come from the installed engine; aliases choose detail, never author data. */
 export function selectNativeAgentPromptModules(input: {
   instruction: string; document: VideoProjectDocument; context: VideoProjectAgentContext;
+  authoring?: NativeAuthoring;
 }) {
   const text = input.instruction.normalize("NFKC").toLowerCase();
   const capabilities = getVideoAgentDojoVideoEngineRuntimeCapabilities();
   const selected = new Set(input.context.selectedItemIds);
   const items = input.document.items.filter(item => selected.has(item.id) || named(text, item.id) || named(text, item.name));
   const nodes = walk(items.map(item => item.node));
-  const definitions = macroDefinitions().filter(macro => !["captions", "subtitles"].includes(macro.name));
+  const definitions = nativeInsertableMacros(input.authoring?.macroCatalog);
   const explicitMacros = definitions.filter(macro => named(text, macro.name));
   const namedStickers = videoAgentLottieLibrary.filter(entry => named(text, entry.id) || named(text, entry.label));
   const selectedLottieAssets = new Set(nodes.filter(node => node.type === "lottie").map(node => node.assetId));
@@ -122,7 +124,7 @@ export function buildNativeAgentSystemPrompt(input: Parameters<typeof selectNati
   const modules = selectNativeAgentPromptModules(input);
   const hasGraphics = (nodes: readonly SceneNodeInput[]): boolean => nodes.some(node => node.type === "shape" || node.extension?.name === "dojo.three-scene" || hasGraphics(node.children ?? []));
   const detailedGraphics = /svg|three|3d|vector|illustrat|draw|dessin|dibuja|zeichne|disegna|desenhe|绘制|画一|画个|鹈鹕|三维|立体|矢量|描|그려/iu.test(input.instruction) || hasGraphics(input.document.items.map(item => item.node));
-  const insertable = macroDefinitions().filter(macro => !["captions", "subtitles"].includes(macro.name));
+  const insertable = nativeInsertableMacros(input.authoring?.macroCatalog);
   const sections = [coreGuide(responseMode),
     nativeAgentDescriptorGuide(),
     `Installed DojoVideoEngine Scene ${capabilities.sceneVersion}. Node types: ${capabilities.nodeTypes.join(", ")}. Supported style keys: ${capabilities.styleKeys.join(", ")}.`,

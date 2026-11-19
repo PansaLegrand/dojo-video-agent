@@ -9,6 +9,7 @@ import {
   type PreviewRepairClaim,
 } from "./preview-repair.js";
 import { parseEditArtifactRef } from "./stages.js";
+import { focusedGraphicsDescriptor, graphicsFeatures, type GraphicsFeature } from "./focused-graphics.js";
 import { deriveCaptionPlanRequirements } from "./caption-plan.js";
 import type { StageCaptionPair } from "./staged-coordinator.js";
 import {
@@ -35,6 +36,7 @@ import {
   usesDerivedCaptionPlan,
   usesCompactReviewedProposals,
   usesSkillVisualReferences,
+  usesFocusedGraphicsDiscovery,
 } from "./catalog.js";
 import {
   completionCanonical,
@@ -92,6 +94,7 @@ export type CaptionTrackQuery = {
   cursor?: string;
 };
 export type EditorToolPorts<T> = {
+  graphicsFeatureGrammar?: (kind: GraphicsFeature) => Record<string, unknown>;
   readCaptionTrack?: (
     input: CaptionTrackQuery,
     signal: AbortSignal,
@@ -296,6 +299,8 @@ export function createEditorToolset<T>(input: {
   const { ports } = input;
   const completion = usesCompletionPreflight(input.profile);
   const authoring = usesAuthoringContracts(input.profile);
+  const featureGrammar = usesFocusedGraphicsDiscovery(input.profile) ? ports.graphicsFeatureGrammar : undefined;
+  const graphicsKinds = ["native", "macro", "three", ...(featureGrammar ? graphicsFeatures : [])];
   const previewRepair = usesPreviewRepair(input.profile);
   const appendPreviewRepair = usesAppendPreviewRepair(input.profile);
   const previewAvailable =
@@ -483,9 +488,10 @@ export function createEditorToolset<T>(input: {
         ? object({
             kind: {
               type: "string",
-              enum: ["native", "macro", "three"],
+              enum: graphicsKinds,
               description:
-                "Defaults to native 2D primitives and keyframe syntax; request only the missing kind.",
+                "Defaults to native 2D primitives and keyframe syntax; request only the missing kind." +
+                (featureGrammar ? " Choose clip, mask, or effect for its installed fields, constraints and a native node example." : ""),
             },
             macro: {
               type: "string",
@@ -502,7 +508,8 @@ export function createEditorToolset<T>(input: {
           return observed(await ports.inspectGraphicsSchema(signal));
         const kind = value.kind ?? "native";
         if (
-          !["native", "macro", "three"].includes(String(kind)) ||
+          (featureGrammar && value.kind !== undefined && typeof value.kind !== "string") ||
+          !graphicsKinds.includes(String(kind)) ||
           (value.macro !== undefined &&
             (kind !== "macro" ||
               typeof value.macro !== "string" ||
@@ -510,8 +517,11 @@ export function createEditorToolset<T>(input: {
               value.macro.length > 64))
         )
           throw new Error(
-            "Choose kind:native, kind:macro with an optional installed macro name, or kind:three.",
+            featureGrammar ? "Choose kind:native, macro, three, clip, mask or effect. Only kind:macro accepts a macro name." :
+              "Choose kind:native, kind:macro with an optional installed macro name, or kind:three.",
           );
+        const feature = graphicsFeatures.find((name) => name === kind);
+        if (feature && featureGrammar) return observed(focusedGraphicsDescriptor(feature, featureGrammar(feature)));
         return observed(
           await ports.inspectGraphicsSchema(signal, {
             kind: kind as "native" | "macro" | "three",

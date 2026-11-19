@@ -1,4 +1,5 @@
 import { selectAgentKit, sourceRequirementValidation } from "./runtime-build";
+import { graphicsFeatureGrammar } from "../../core/src/lib/video-project/graphics-feature-grammar";
 import { sourceAudioTrackPresence } from "../../core/src/lib/video-project/source-audio";
 import { importSvgGraphic } from "@dojo-video-engine/interchange/svg";
 import {
@@ -91,6 +92,7 @@ export function createVideoToolset(
   options: {
     profile?: AgentProfile;
     agentKitVersion?: string;
+    focusedGraphicsDiscovery?: boolean;
     initialCompletionState?: CompletionState;
     stages?: EditorStagePorts<NativeAgentResult>;
     previewEvidence?: (
@@ -124,6 +126,7 @@ export function createVideoToolset(
       anchorHold: usesCompletionPreflight(options.profile ?? "local-editor-v1"),
     }),
     ports: {
+      ...(options.focusedGraphicsDiscovery ? { graphicsFeatureGrammar } : {}),
       ...(usesPreviewRepair(options.profile ?? "local-editor-v1") &&
       options.previewEvidence
         ? { previewEvidence: options.previewEvidence }
@@ -160,9 +163,8 @@ export function createVideoToolset(
         query?.kind !== "three"
           ? nativeAgentGraphicsSchema(
               query as { kind?: "native" | "macro"; macro?: string },
-              usesInstalledGraphicsGrammar(options.profile ?? "local-editor-v1")
-                ? { installedGrammar: true }
-                : {},
+              { ...(usesInstalledGraphicsGrammar(options.profile ?? "local-editor-v1")
+                ? { installedGrammar: true } : {}), macroCatalog: request.authoring?.macroCatalog },
             )
           : {
               three: zodToJsonSchema(threeSceneSchema, {

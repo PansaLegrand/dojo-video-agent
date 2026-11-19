@@ -3,6 +3,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { localSkillCatalog } from "../../apps/server/src/skill-loader";
 import { runAgent } from "../../packages/agent/src/loop";
+import { profileKitVersion } from "../../packages/agent-kit/src/index";
 import {
   createVideoProjectDocument,
   hashVideoProjectDocument,
@@ -41,7 +42,7 @@ for (const direction of ["nocturne", "press"]) {
       authoring: { version: 1, scope: { kind: "project" } },
     },
     profile: "local-editor-v14",
-    agentKitVersion: "0.2.9",
+    agentKitVersion: profileKitVersion("local-editor-v14"),
     skills: catalog.newRunSkills!,
     signal: new AbortController().signal,
     stages: {

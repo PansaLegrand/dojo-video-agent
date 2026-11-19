@@ -297,7 +297,8 @@ export type ProfileCapability =
   | "derivedCaptionPlan"
   | "compactReviewedProposals"
   | "creativeSkills"
-  | "skillVisualReferences";
+  | "skillVisualReferences"
+  | "focusedGraphicsDiscovery";
 type ProfileDefinition = Readonly<{
   kitVersion: string;
   capabilities: readonly ProfileCapability[];
@@ -386,6 +387,7 @@ const creativeSkills = extendProfile(
   AGENT_KIT_VERSION,
   "skillVisualReferences",
 );
+const expressiveGraphics = extendProfile(creativeSkills, AGENT_KIT_VERSION, "focusedGraphicsDiscovery");
 export const profileCapabilities = Object.freeze({
   "local-editor-v1": legacy,
   "commercial-editing-v2": legacy,
@@ -413,8 +415,8 @@ export const profileCapabilities = Object.freeze({
   "commercial-editing-v13": appendPreviewRepair,
   "local-editor-v13": semanticEditingGuidance,
   "commercial-editing-v14": semanticEditingGuidance,
-  "local-editor-v14": creativeSkills,
-  "commercial-editing-v15": creativeSkills,
+  "local-editor-v14": expressiveGraphics,
+  "commercial-editing-v15": expressiveGraphics,
 } satisfies Record<AgentProfile, ProfileDefinition>);
 const hasCapability = (
   profile: AgentProfile,
@@ -455,6 +457,8 @@ export const usesCreativeSkills = (profile: AgentProfile) =>
   hasCapability(profile, "creativeSkills");
 export const usesSkillVisualReferences = (profile: AgentProfile) =>
   hasCapability(profile, "skillVisualReferences");
+export const usesFocusedGraphicsDiscovery = (profile: AgentProfile) =>
+  hasCapability(profile, "focusedGraphicsDiscovery");
 /** New names never reclassify an older unmarked custom guide. Family metadata is
  * frozen with new guidance; it filters against installed tools, never grants them. */
 export function requiredToolsForSkill(

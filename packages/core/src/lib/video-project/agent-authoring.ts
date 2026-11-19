@@ -127,8 +127,10 @@ export const nativeReferenceSchema = z
   .strict();
 export type NativeAgentReference = z.infer<typeof nativeReferenceSchema>;
 
+export const chartMacroCatalog = "engine-1.3.0" as const;
 export const nativeAuthoringSchema = z
   .object({
+    macroCatalog: z.literal(chartMacroCatalog).optional(),
     version: z.literal(1),
     endingVisibility: z.literal("final-frame-v1").optional(),
     scope: nativeAgentScopeSchema.optional(),

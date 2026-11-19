@@ -71,7 +71,7 @@ function readAssetTypes(input: unknown): Record<string, { type: string }> {
  */
 export function expandVideoAgentSceneMacros(
   sceneInput: unknown,
-  options: { transcripts?: VideoAgentMacroTranscripts } = {},
+  options: { transcripts?: VideoAgentMacroTranscripts; allowedMacroNames?: readonly string[] } = {},
 ): VideoAgentMacroExpansion {
   if (!isRecord(sceneInput) || !Array.isArray(sceneInput.nodes)) {
     return { value: sceneInput, diagnostics: [], errors: [] };
@@ -84,6 +84,7 @@ export function expandVideoAgentSceneMacros(
     duration: readPositiveInt(sceneInput.duration, DEFAULT_SCENE.duration),
     assets: readAssetTypes(sceneInput.assets),
     transcripts: options.transcripts,
+    ...(options.allowedMacroNames ? { allowedMacroNames: options.allowedMacroNames } : {}),
   };
 
   const result = expandMacroNodes(sceneInput.nodes, ctx);
