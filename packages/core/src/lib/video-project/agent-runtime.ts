@@ -662,7 +662,7 @@ export function buildNativeAgentPrompts(
     ? "\nFor a 3D scene, keep the existing canvas dimensions, fps and background. An empty starter with its default background may take an initial color. On an existing canvas place a full-size div at the scene start and duration, before the mesh in paint order. Use zIndex 0 for the backdrop and mesh; negative values can place the backdrop behind the project canvas. Declare a project-wide format property only when the user requests that change."
     : "";
   const kineticGuide = input.authoring?.macroCatalog === "engine-1.3.0-kinetic-v1"
-    ? "\nFor a staggered title, inspect the kineticSplit macro. Preserve the words, set authored line breaks and leave holdFrames for reading. The expanded row and text nodes remain individually editable."
+    ? "\nFor a staggered title, inspect kineticSplit. Use maskSlide for a crisp editorial reveal, trackingExpand for an airy wordmark, elasticRise for a buoyant entrance, or cascadePop for short percussive beats. Split by word to keep phrases readable, by char for short display lettering, or by line for connected scripts. Preserve the supplied copy and line breaks. Reserve holdFrames for reading. Revise the existing native text layers on follow-up edits."
     : "";
   return { systemPrompt: systemPrompt + spatialGuide + kineticGuide, userPrompt };
 }
