@@ -2,6 +2,22 @@
 
 Started on 2026-11-01. Last updated on 2026-11-19. The harness plan remains the acceptance contract.
 
+## R28 · required titles and paint order (2026-11-19)
+
+New local-v14 runs freeze a sampled text layout policy. Review identifies
+required copy cut by a line limit or clipping ancestor, and text beneath a
+later opaque full-canvas background. Errors include the text node and sampled
+frame. A temporary entrance cover is allowed if the text has a clear sample.
+Unbound requests retain the previous receipt behavior. The two source kernels
+share the same regression fixtures, including the centered flex anniversary
+layout and exact text declared through stable child paths.
+
+In the commercial editor's eight-second After Hours film, fixing the
+one-line cap restored the entire second line. Correcting the misplaced
+background restored the full headline. The repaired export contained all
+192 frames. The model stage used scripted replies for this verification.
+The matching SDK source is web `58b357dc`.
+
 ## R28 · preserve the canvas around a 3D edit (2026-11-19)
 
 New local-v14 requests freeze a scene canvas policy. Review and Apply check

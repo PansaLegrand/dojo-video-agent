@@ -255,6 +255,41 @@ describe("readability of required native text", () => {
     ).toBeDefined();
   });
 
+  it("reports the centered flex plus absolute offset from the anniversary regression", async () => {
+    const label: SceneNodeInput = {
+      id: "anniversary-line",
+      type: "text",
+      text: "25 YEARS",
+      style: { ...rect(0, 216, 640, 26), fontSize: 20 },
+    };
+    const group: SceneNodeInput = {
+      id: "centered",
+      type: "div",
+      style: {
+        ...rect(0, 0, 640, 360),
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      children: [label],
+    };
+    const bad = await fixture([group]);
+    expect(bad.checked.checks).toContainEqual(
+      expect.objectContaining({
+        id: "layout",
+        passed: false,
+        message: expect.stringMatching(
+          /anniversary-line.*Bounds.*canvas \[0, 0, 640, 360\]/,
+        ),
+      }),
+    );
+    expect(
+      (await fixture([{ ...group, style: rect(0, 0, 640, 360) }])).checked
+        .receipt,
+    ).toBeDefined();
+  });
+
   it("includes brief parent-local text intervals in bounded review", async () => {
     const group: SceneNodeInput = {
       id: "short-shot",
