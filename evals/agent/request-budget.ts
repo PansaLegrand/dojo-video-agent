@@ -15,8 +15,10 @@ export class EvaluationBudget {
   get accountedUsd() { return this.requests.reduce((sum, request) => sum + (request.actualUsd ?? request.reservedUsd), 0); }
   admit(inputBytes: number, maximumOutputTokens: number) {
     if (this.requests.some(request => request.status !== "completed")) throw new Error("Uncertain provider usage requires reconciliation; no automatic retry.");
-    // One token per UTF-8 byte plus a fixed envelope allowance is conservative for
-    // these text-only fixtures. Actual provider overrun remains visible, never clamped.
+    // Buffer supplied UTF-8 bytes (including reference images) plus the envelope.
+    // This is an admission estimate, not a guarantee about provider-side context
+    // or accounting. The campaign stops if reported cost exceeds this reservation.
+    // Actual provider overrun remains visible, never clamped.
     const reservedUsd = ((inputBytes + 4096) * this.rates.inputUsdPerMillion + maximumOutputTokens * this.rates.outputUsdPerMillion) / 1_000_000;
     if (this.requests.length >= this.maximumRequests || this.accountedUsd + reservedUsd > this.maximumUsd)
       throw new EvaluationAdmissionError("Evaluation request budget exhausted; no automatic retry.");

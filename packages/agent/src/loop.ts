@@ -1,4 +1,5 @@
 import { selectAgentKit } from "./runtime-build";
+import { withSkillReferenceImages } from "../../agent-kit/src/skill-references";
 import {
   usesCompletionPreflight,
   usesPagedReaders,
@@ -215,7 +216,7 @@ export async function runAgent(input: {
     checkpoint!.load = async () => saved;
   }
   const completed = await runToolLoop({
-    model,
+    model: kit.AGENT_KIT_VERSION === "0.2.10" ? withSkillReferenceImages(model, toolset.skills) : model,
     messages,
     tools,
     signal,

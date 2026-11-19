@@ -69,7 +69,6 @@ export const commitInput = z
   })
   .strict();
 export type StoredRun = VideoProjectAgentRun & {
-  skillSnapshot?: import("../../../packages/agent/src/skills").Skill[];
   /** Host policy frozen on new runs; absence preserves historical review/replay. */
   captionTranslationRebase?: true;
   browserToolsEnabled?: true;
@@ -90,6 +89,7 @@ export type StoredRun = VideoProjectAgentRun & {
   stageProgress?: import("../../../packages/agent-kit/src/stage-progress").EditStageProgress;
   stageRecovery?: { canResume: boolean; canReuseSavedResult: boolean };
   agentKitVersion?: string;
+  skillSnapshot?: import("../../../packages/agent-kit/src/index").Skill[];
   agentProfile?:
     | "local-editor-v1"
     | "local-editor-v2"

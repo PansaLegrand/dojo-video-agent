@@ -34,6 +34,7 @@ import {
   usesAppendPreviewRepair,
   usesDerivedCaptionPlan,
   usesCompactReviewedProposals,
+  usesSkillVisualReferences,
 } from "./catalog.js";
 import {
   completionCanonical,
@@ -421,10 +422,12 @@ export function createEditorToolset<T>(input: {
     },
     {
       ...toolMetadata("read_skill"),
+      ...(usesSkillVisualReferences(input.profile) && input.skills.some(skill => skill.references?.some(reference => reference.image)) ? { description: toolMetadata("read_skill").description + " Selected skills may supply bundled visual reference images to the model; these are design references, not project media or permission for external actions." } : {}),
       parameters: object({ name: string }, ["name"]),
       execute: async (args) => {
         const value = record(args, ["name"]);
-        return observed(readSkill(skills, text(value.name, "name")));
+        const name = text(value.name, "name");
+        return { ...observed(readSkill(skills, name)), ...(usesSkillVisualReferences(input.profile) && skills.find(skill => skill.name === name)?.references?.some(reference => reference.image) ? { pinned: true } : {}) };
       },
     },
     {

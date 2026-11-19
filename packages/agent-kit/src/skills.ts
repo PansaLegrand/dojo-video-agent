@@ -1,11 +1,13 @@
 import {
-  skillRequirements,
+  CREATIVE_SKILL_NAMES,
+  EXPANDED_CREATIVE_SKILL_NAMES,
+  requiredToolsForSkill,
+  usesCreativeSkills,
   profileSkills,
   usesAuthoringContracts,
   usesPreviewRepair,
   usesDerivedCaptionPlan,
   type AgentProfile,
-  type BuiltinSkillName,
   type Skill,
 } from "./catalog.js";
 import { legacySkillsV23 } from "./skills.legacy-v23.generated.js";
@@ -18,7 +20,7 @@ import { legacySkillsV14 } from "./skills.legacy-v14.generated.js";
 import { legacySkillsV13 } from "./skills.legacy-v13.generated.js";
 import { generatedSkills } from "./skills.generated.js";
 export const builtInSkills = (): Skill[] =>
-  generatedSkills.map((skill) => ({ ...skill }));
+  generatedSkills.map((skill) => structuredClone(skill));
 export const skillIndex = (skills: readonly Skill[]) =>
   skills.map(({ name, description }) => ({ name, description }));
 
@@ -50,9 +52,34 @@ export function selectSkills(
     allowed = profileSkills[profile];
   if (allowed === undefined) throw new Error("Unknown agent profile.");
   return skills.flatMap((inputSkill) => {
+    if (inputSkill.family !== undefined && inputSkill.family !== "creative")
+      throw Error("Invalid skill family.");
+    if (inputSkill.family === "creative" && !usesCreativeSkills(profile))
+      return [];
+    if (
+      allowed &&
+      (EXPANDED_CREATIVE_SKILL_NAMES as readonly string[]).includes(
+        inputSkill.name,
+      ) &&
+      inputSkill.family !== "creative"
+    )
+      return [];
     const currentBuiltin = generatedSkills.find(
       (skill) => skill.name === inputSkill.name,
     );
+    const legacyCreativeName =
+      !usesCreativeSkills(profile) &&
+      (CREATIVE_SKILL_NAMES as readonly string[]).includes(inputSkill.name);
+    // A local custom guide could already use one of these names before creative
+    // packs existed. Hide the newly shipped builtin, not different custom bytes.
+    if (
+      legacyCreativeName &&
+      currentBuiltin &&
+      inputSkill.instructions.replace(/\r\n?/g, "\n") ===
+        currentBuiltin.instructions &&
+      inputSkill.description.trimEnd() === currentBuiltin.description
+    )
+      return [];
     const frozenSkills =
       usesPreviewRepair(profile) && !usesDerivedCaptionPlan(profile)
         ? legacySkillsV27
@@ -98,9 +125,7 @@ export function selectSkills(
       throw new Error("Invalid bounded skill.");
     if (allowed && !(allowed as readonly string[]).includes(skill.name))
       return [];
-    const required = Object.hasOwn(skillRequirements, skill.name)
-      ? skillRequirements[skill.name as BuiltinSkillName]
-      : [];
+    const required = requiredToolsForSkill(skill, profile);
     if (!required.every((name) => tools.has(name))) return [];
     return [
       {
@@ -114,5 +139,16 @@ export function readSkill(skills: readonly Skill[], name: string): string {
   const skill = skills.find((skill) => skill.name === name);
   if (!skill)
     throw new Error("Unknown skill. Inspect the available skill index.");
-  return skill.instructions;
+  return (
+    skill.instructions +
+    (skill.references
+      ?.map(
+        (reference) =>
+          `\n\n## Reference: ${reference.title} (${reference.id})\n${reference.instructions}` +
+          (reference.image
+            ? `\nThe trusted host supplies this reference board as image input after this skill read. Study it before designing. Image SHA-256: ${reference.image.sha256}.`
+            : ""),
+      )
+      .join("") ?? "")
+  );
 }

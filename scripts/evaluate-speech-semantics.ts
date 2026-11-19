@@ -6,7 +6,7 @@ import path from "node:path";
 import assert from "node:assert/strict";
 import { runAgent } from "../packages/agent/src/loop";
 import { GptResponsesModel } from "../packages/adapters/src/gpt-responses";
-import { loadLocalSkills } from "../apps/server/src/skill-loader";
+import { loadLocalSkills, localSkillFiles } from "../apps/server/src/skill-loader";
 import {
   canonicalSerialize,
   createVideoProjectDocument,
@@ -40,7 +40,7 @@ const files = [
   "packages/core/src/lib/video-project/source-clock.ts",
   "packages/core/src/lib/video-project/commands.ts",
   "package-lock.json",
-  ...skills.map((s) => `skills/${s.name}.md`),
+  ...(await localSkillFiles("skills")).map(({file}) => file),
 ];
 const hashes = async () =>
   Object.fromEntries(

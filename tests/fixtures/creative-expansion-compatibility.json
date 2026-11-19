@@ -1,0 +1,50 @@
+{
+  "sourceCommit": "2d8b5ede6e814ffc903d994d495761739282fccc",
+  "purpose": "Wire-visible skill/prompt/inventory compatibility for saved pre-expansion guidance. Captured before expansion; do not rewrite to hide regressions.",
+  "tools": [
+    "inspect_project",
+    "inspect_graphics_schema",
+    "review_edit",
+    "propose_edit",
+    "prepare_three_scene",
+    "prepare_svg_graphic",
+    "prepare_text_overlay"
+  ],
+  "originalNames": [
+    "basic-editing-workflow",
+    "completion-preflight",
+    "generated-media",
+    "motion-design",
+    "music-generation",
+    "multi-asset-editing",
+    "precise-editing",
+    "speech-editing",
+    "staged-editing",
+    "visual-inspection",
+    "branded-ending",
+    "chart-storytelling",
+    "festival-motion"
+  ],
+  "cases": [
+    {
+      "profile": "local-editor-v14",
+      "kind": "pre-expansion-library",
+      "sha256": "c95284619fac0a0be3d5ceb6737184a16fe1e99e3302aad0b7c7bf8eeef82220"
+    },
+    {
+      "profile": "local-editor-v14",
+      "kind": "custom-name-collisions",
+      "sha256": "875cd8ccad8cc12f275f8e6f21d171f32a7b37d0218c0ecd9cf582aea8aaa89b"
+    },
+    {
+      "profile": "commercial-editing-v15",
+      "kind": "pre-expansion-library",
+      "sha256": "c95284619fac0a0be3d5ceb6737184a16fe1e99e3302aad0b7c7bf8eeef82220"
+    },
+    {
+      "profile": "commercial-editing-v15",
+      "kind": "custom-name-collisions",
+      "sha256": "889842dd47fa4bfeac8042570de1ad6c412b79374294c06210db817af84f24bf"
+    }
+  ]
+}

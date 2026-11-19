@@ -98,15 +98,12 @@ describe("shared agent capability and skill catalog", () => {
     ).toBe("host");
   });
   it("renders only available helper instructions from the same canonical Markdown", async () => {
-    for (const skill of builtInSkills())
-      expect(skill.instructions).toBe(
-        (
-          await readFile(
-            new URL(`../skills/${skill.name}.md`, import.meta.url),
-            "utf8",
-          )
-        ).replace(/\r\n?/g, "\n"),
-      );
+    const { CREATIVE_SKILL_NAMES, parseSkillMarkdown } = await import("../packages/agent-kit/src/index");
+    for (const skill of builtInSkills()) {
+      const pack = (CREATIVE_SKILL_NAMES as readonly string[]).includes(skill.name);
+      const markdown = await readFile(new URL(`../skills/${skill.name}${pack ? "/SKILL.md" : ".md"}`, import.meta.url), "utf8");
+      expect(skill.instructions).toBe(parseSkillMarkdown(skill.name, markdown, pack).instructions);
+    }
     const commercial = fixture().skills.find(
       (skill) => skill.name === "motion-design",
     )!;

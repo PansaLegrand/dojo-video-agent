@@ -1,3 +1,4 @@
+import { loadLocalSkills } from "../../apps/server/src/skill-loader";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
@@ -149,20 +150,7 @@ export async function runScenario(
       return reply;
     },
   };
-  const skills = await Promise.all(
-    (await readdir("skills"))
-      .filter((n) => n.endsWith(".md"))
-      .map(async (name) => {
-        const instructions = await readFile(path.join("skills", name), "utf8");
-        return {
-          name: name.slice(0, -3),
-          description:
-            instructions.split("\n").find((l) => l && !l.startsWith("#")) ??
-            name,
-          instructions,
-        };
-      }),
-  );
+  const skills = await loadLocalSkills(path.resolve("skills"));
   let agent = new AgentService(store, model, skills, undefined, "review", undefined, profile);
   let projectId: string | undefined;
   let activeRun: string | undefined;

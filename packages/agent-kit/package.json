@@ -1,6 +1,6 @@
 {
   "name": "@dojo-video/agent-kit",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Portable editor tool catalog, trusted skills and prompt composition for Dojo agent hosts.",
   "license": "MIT",
   "type": "module",
@@ -22,8 +22,8 @@
     "node": ">=20.19"
   },
   "scripts": {
-    "build": "node scripts/generate-skills.mjs && tsc -p tsconfig.json",
-    "check:skills": "node scripts/generate-skills.mjs --check"
+    "build": "node --import tsx scripts/generate-skills.mjs && tsc -p tsconfig.json",
+    "check:skills": "node --import tsx scripts/generate-skills.mjs --check"
   },
   "repository": {
     "type": "git",

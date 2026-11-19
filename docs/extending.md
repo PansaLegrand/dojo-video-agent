@@ -32,11 +32,89 @@ call stages a candidate. Keep the user's final commit in the host.
 
 ## A skill
 
-Add a short Markdown file under `skills/`. Its first paragraph describes when to
-use it. The server reads only that known directory and advertises an index. Restart
-the host after editing skills. `SKILLS_DIR` optionally selects a different local
-directory. The loader admits at most 32 regular, lowercase-named `.md` files,
-64 KiB each, and rejects symlink files. The model can request details through `read_skill`.
+Add a folder such as `skills/my-motion/SKILL.md` with a short entry point:
+
+```markdown
+---
+name: my-motion
+description: Compose editable motion for a specific use case. Use when the user asks for that result.
+---
+
+# My motion
+
+Explain the creative method, the facts to preserve, and how to review the result.
+```
+
+The folder name and `name` must match. Use at most 64 lowercase letters, digits
+or hyphens, beginning with a letter or digit. Single-line `name` and
+`description` fields are required; descriptions are limited to 500 characters.
+Creative guides may also declare exactly `metadata: {"dojo-family":"creative"}`
+on one line. The metadata value must be that JSON object; arbitrary keys and
+multiline YAML are not supported. A nonempty Markdown body is required. This
+bounded frontmatter is not an executable plugin manifest.
+
+The creative marker opts a custom guide into the candidate's creative routing
+and common authoring-tool requirements. It grants no tools or permissions.
+Older profiles omit marked guides; unmarked legacy custom guides retain their
+original semantics, including names that now match new built-ins.
+
+Legacy `skills/my-motion.md` files remain supported; their first nonempty,
+non-heading line supplies the index description. Folder and flat-file names share one
+namespace. The loader admits at most 32 entries, 64 KiB per entry, and rejects
+symlinks and duplicate names. It does not recursively discover supporting files.
+Directories without `SKILL.md`, such as existing `references/` folders, are
+ignored and do not count toward the skill limit.
+
+The server reads that directory at startup and advertises a compact index. The
+model requests the chosen body through `read_skill`; it does not receive every
+pack's instructions in every turn. `SKILLS_DIR` optionally selects a different
+local directory. Restart after changing files. New candidate local-v14 runs
+freeze the loaded instructions privately so resuming an existing run cannot
+silently pick up a later edit. Retained builds use their original skill/build
+selection; old runs do not acquire newly loaded folder packs. Existing flat
+custom guides retain their bytes even when a name matches a new built-in pack.
+
+For a visual skill, explicitly declare supporting resources in `references.json`
+beside `SKILL.md`. Each entry has a lowercase `id`, a `title`, a `markdown` path
+such as `references/atlas.md`, and optionally an `image` path such as
+`references/atlas.jpg`, its hex `sha256`, `width` and `height`. Only these fields
+are supported. Use one to three entries; each Markdown file is at most 12 KiB.
+JPEGs are at most 128 KiB, 2048 pixels per side and two megapixels. Paths stay
+inside `references/`; symlinks and remote URLs are rejected. Files not declared
+in this manifest are not loaded. See the shipped festival pack for an example.
+
+After a successful skill read, the current host adds its declared reference pixels
+to the model input. These are trusted skill materials, not project-media uploads
+or assets inserted into the timeline. Notes and image hashes stay in the small
+tool observation; frozen private skill snapshots retain the reference bytes.
+The reference-aware hosts support at most three attached images per invocation.
+When more have been read, the candidate attaches the three most recent images
+and explicitly reports attached IDs and omitted coverage. Re-read an older skill
+to bring its board back. If all images fit, the existing insertion order is
+unchanged. Retained runtimes keep their original behavior. An unmarked skill
+with no references keeps the same three-field representation as before.
+
+The candidate includes seven creative packs, alongside ten operational guides.
+Shared built-ins are bundled by `npm run build --workspace @dojo-video/agent-kit`;
+adding one also requires catalog/tool eligibility and behavior checks. The
+commercial host consumes the packaged kit rather than a user's local
+`SKILLS_DIR`. The 0.2.10 web candidate is opt-in; see the
+[expansion's checks and limits](creative-skill-expansion-2026-11-18.md).
+
+| Skill                                                         | Example instruction                                  | Visual guidance                                                                                                         |
+| ------------------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| [Branded ending](../skills/branded-ending/SKILL.md)           | Make a cool ending with dojoclip.com.                | [Board](../skills/branded-ending/references/atlas.jpg), [notes](../skills/branded-ending/references/atlas.md)           |
+| [Chart storytelling](../skills/chart-storytelling/SKILL.md)   | Animate sales: Jan 20, Feb 35, Mar 50.               | [Board](../skills/chart-storytelling/references/atlas.jpg), [notes](../skills/chart-storytelling/references/atlas.md)   |
+| [Festival motion](../skills/festival-motion/SKILL.md)         | Make a festive birthday card for Noor, age 8.        | [Board](../skills/festival-motion/references/atlas.jpg), [notes](../skills/festival-motion/references/atlas.md)         |
+| [Kinetic typography](../skills/kinetic-typography/SKILL.md)   | Animate “MAKE EVERY FRAME COUNT” as a motion poster. | [Board](../skills/kinetic-typography/references/atlas.jpg), [notes](../skills/kinetic-typography/references/atlas.md)   |
+| [Presentation motion](../skills/presentation-motion/SKILL.md) | Explain Plan, Build, Launch as a motion slide.       | [Board](../skills/presentation-motion/references/atlas.jpg), [notes](../skills/presentation-motion/references/atlas.md) |
+| [Product walkthrough](../skills/product-walkthrough/SKILL.md) | Make a concept app demo: Capture, Organize, Share.   | [Board](../skills/product-walkthrough/references/atlas.jpg), [notes](../skills/product-walkthrough/references/atlas.md) |
+| [Spatial scenes](../skills/spatial-scenes/SKILL.md)           | Make a tiny 3D island with a slow camera move.       | [Board](../skills/spatial-scenes/references/atlas.jpg), [notes](../skills/spatial-scenes/references/atlas.md)           |
+
+These are example briefs, not a claim that every output is visually accepted.
+Presentation motion makes video scenes from available content; it does not read
+or export PPTX files. Actual handwriting needs suitable owned paths/Lottie assets.
+Product walkthroughs use supplied facts or explicitly labeled concept interfaces.
 
 Skills should explain a method and its domain constraints, not contain hidden
 permissions, credentials, arbitrary executable snippets, or duplicated tool schemas.

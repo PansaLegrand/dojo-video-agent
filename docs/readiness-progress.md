@@ -28,6 +28,15 @@ were 10,472/0 before and 10,474/10,474 after. A separately decoded opaque
 slate also took the final-frame count to zero, with a different diagnostic
 naming the covering layer. No paid model or provider was used.
 
+## November 18 creative library expansion — local candidate
+
+The requested [R27 continuation](creative-skill-expansion-2026-11-18.md) adds four
+creative packs, bringing the library to seven visual disciplines and ten
+operational guides. Agent `8547e4e`/`cee1d3d` passed the full 1,122-test gate and
+build. Matching web and worker archives passed their consumer checks. New short
+briefs are opt-in; actual-model/rendered qualification is pending. Accepted
+0.2.9 runs and commercial production defaults remain unchanged.
+
 ## November 15 release closeout
 
 Harness [PR 14](https://github.com/PansaLegrand/dojo-video-agent/pull/14) merged

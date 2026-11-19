@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from "vitest";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm, mkdir, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import os from "node:os";
 import path from "node:path";
@@ -12,6 +12,8 @@ import {
 } from "../apps/server/src/store";
 import { createAgentCheckpointPort } from "../apps/server/src/agent-loop-checkpoint";
 import { runAgent } from "../packages/agent/src/loop";
+import { loadLocalSkills } from "../apps/server/src/skill-loader";
+import { skillsForSavedRun } from "../packages/agent/src/runtime-build";
 import type {
   AgentTool,
   Skill,
@@ -1028,7 +1030,7 @@ it("records an oversize opaque provider reply as a breach without automatically 
   expect(fetch).toHaveBeenCalledTimes(1);
 });
 
-it.each([undefined, "0.2.8", "0.2.9"])("restarts a local v14 paid checkpoint with its saved kit build %s", async storedVersion => {
+it.each([undefined, "0.2.8", "0.2.9", "0.2.10"])("restarts a local v14 paid checkpoint with its saved kit build %s", async storedVersion => {
   const { savedAgentKitVersion } = await import("../packages/agent/src/runtime-build");
   const f = await seed();
   await f.store.transaction(f.projectId, p => {
@@ -1055,4 +1057,88 @@ it.each([undefined, "0.2.8", "0.2.9"])("restarts a local v14 paid checkpoint wit
   expect((await invoke(reopened, false)).outcome).toBe("answer");
   expect(model.complete).toHaveBeenCalledTimes(1);
   expect(savedAgentKitVersion((await reopened.read(f.projectId)).runs[0])).toBe(expected);
+});
+
+it("replays a saved .9 reply with a same-name flat custom skill after new packs are installed", async () => {
+  const f = await seed();
+  await f.store.transaction(f.projectId, (p) => {
+    p.runs[0].agentProfile = "local-editor-v14";
+    p.runs[0].agentKitVersion = "0.2.9";
+  });
+  const directory = path.join(f.store.directory, "skills");
+  await mkdir(directory);
+  const instructions =
+    "# Custom ending\r\nUse my existing finishing method.\r\n";
+  await writeFile(path.join(directory, "branded-ending.md"), instructions);
+  const model: LanguageModel = {
+    identity: "legacy-custom-skill-test",
+    complete: vi.fn(async () => ({
+      text: "The source remains unchanged.",
+      calls: [],
+      usage,
+    })),
+  };
+  const invoke = async (store: ProjectStore, crash: boolean) => {
+    const run = (await store.read(f.projectId)).runs[0];
+    const loaded = await loadLocalSkills(directory);
+    const skills = skillsForSavedRun(run, loaded);
+    expect(skills.map((skill) => skill.name)).toEqual(["branded-ending"]);
+    expect(skills[0].instructions).toBe(instructions);
+    return runAgent({
+      request: f.request,
+      profile: "local-editor-v14",
+      agentKitVersion: "0.2.9",
+      model,
+      skills,
+      signal: new AbortController().signal,
+      stages: {
+        phase: "planning",
+        generalEditing: true,
+        deriveCaptionPlan: true,
+        preparedCommands: false,
+        planEditStages: async () => {
+          throw Error("No plan in answer replay");
+        },
+        saveCaptionBatch: async () => {
+          throw Error("No batch in answer replay");
+        },
+        readEditArtifact: async () => ({}),
+        resolvePreparedEdit: async (value) => value,
+      },
+      checkpoint: async ({ inventory, skills }) => {
+        const port = await createAgentCheckpointPort({
+          store,
+          projectId: f.projectId,
+          runId: f.runId,
+          request: f.request,
+          history: [],
+          inventory,
+          skills,
+          modelIdentity: model.identity,
+          signal: new AbortController().signal,
+        });
+        return {
+          ...port,
+          save: async (next, previous) => {
+            await port.save(next, previous);
+            if (crash && next.phase === "model-returned")
+              throw Error("Crash after paid response");
+          },
+        };
+      },
+    });
+  };
+  await expect(invoke(f.store, true)).rejects.toThrow(
+    /Crash after paid response/,
+  );
+  await mkdir(path.join(directory, "festival-motion"));
+  await writeFile(
+    path.join(directory, "festival-motion/SKILL.md"),
+    "---\nname: festival-motion\ndescription: New festival guidance.\n---\nCompose an original celebration.",
+  );
+  await mkdir(path.join(directory, "references"));
+  const reopened = new ProjectStore(f.store.directory);
+  await reopened.init();
+  expect((await invoke(reopened, false)).outcome).toBe("answer");
+  expect(model.complete).toHaveBeenCalledTimes(1);
 });

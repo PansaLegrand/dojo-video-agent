@@ -566,18 +566,22 @@ it("persists the new kit build on a local v14 run and keeps it across restart an
   const { profileKitVersion } = await import("../packages/agent-kit/src/index");
   const model: LanguageModel = { identity: "new-build-test", complete: vi.fn(async () => ({ text: "Nothing changed.", calls: [], usage: { inputTokens: 10, outputTokens: 5 } })) };
   const f = await fixture(model);
-  const host = new AgentService(f.store, model, [], undefined, "review", undefined, "local-editor-v14");
+  const guide = { name: "branded-ending", description: "Original guide", instructions: "Keep the exact URL." };
+  const host = new AgentService(f.store, model, [guide], undefined, "review", undefined, "local-editor-v14");
   const started = await host.start(f.p.id, f.input);
   const done = await settle(f.store, f.p.id);
   expect(done.runs[0].agentKitVersion).toBe(profileKitVersion("local-editor-v14"));
   expect(done.runs[0].request.authoring?.endingVisibility).toBe("final-frame-v1");
+  expect(done.runs[0].skillSnapshot).toEqual([guide]);
+  expect(started.run).not.toHaveProperty("skillSnapshot");
   const reopened = new ProjectStore(f.store.directory);
   await reopened.init();
-  const restarted = new AgentService(reopened, model, [], undefined, "review", undefined, "local-editor-v14");
+  const restarted = new AgentService(reopened, model, [{ ...guide, instructions: "An updated file." }], undefined, "review", undefined, "local-editor-v14");
   const priorCalls = vi.mocked(model.complete).mock.calls.length;
   const repeated = await restarted.start(f.p.id, f.input);
   expect(repeated.run.id).toBe(started.run.id);
-  expect((await reopened.read(f.p.id)).runs[0].agentKitVersion).toBe("0.2.9");
+  expect((await reopened.read(f.p.id)).runs[0].agentKitVersion).toBe("0.2.10");
+  expect((await reopened.read(f.p.id)).runs[0].skillSnapshot).toEqual([guide]);
   expect(model.complete).toHaveBeenCalledTimes(priorCalls);
 });
 
@@ -606,7 +610,7 @@ it("offers the bundled art guide only to new runs and keeps its saved prose priv
   await host.start(f.p.id, f.input);
   const fresh = await host.start(f.p.id, { ...f.input, operationId:"new-style-run" });
   const p = await settle(f.store, f.p.id);
-  expect(p.runs[0].skillSnapshot).toBeUndefined();
+  expect(p.runs[0].skillSnapshot).not.toContainEqual(guide);
   expect(fresh.run).not.toHaveProperty("skillSnapshot");
   expect(p.runs.find(r => r.id === fresh.run.id)?.skillSnapshot).toContainEqual(guide);
   expect(observed).toHaveLength(1);

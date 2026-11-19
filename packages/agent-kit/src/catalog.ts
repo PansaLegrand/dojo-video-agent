@@ -1,4 +1,19 @@
-export const AGENT_KIT_VERSION = "0.2.9" as const;
+export const AGENT_KIT_VERSION = "0.2.10" as const;
+export const BASE_CREATIVE_SKILL_NAMES = [
+  "branded-ending",
+  "chart-storytelling",
+  "festival-motion",
+] as const;
+export const EXPANDED_CREATIVE_SKILL_NAMES = [
+  "kinetic-typography",
+  "presentation-motion",
+  "product-walkthrough",
+  "spatial-scenes",
+] as const;
+export const CREATIVE_SKILL_NAMES = [
+  ...BASE_CREATIVE_SKILL_NAMES,
+  ...EXPANDED_CREATIVE_SKILL_NAMES,
+] as const;
 export type ToolEffect = "read" | "propose" | "ask";
 export type ToolSpec = {
   name: string;
@@ -25,7 +40,22 @@ export type AgentTool<T> = ToolSpec & {
     | { kind: "waiting"; requestRef: HostRequestRef }
   >;
 };
-export type Skill = { name: string; description: string; instructions: string };
+export type SkillReference = {
+  id: string;
+  title: string;
+  instructions: string;
+  image?: { dataUrl: string; sha256: string; width: number; height: number };
+};
+export type Skill = {
+  name: string;
+  description: string;
+  instructions: string;
+  references?: readonly SkillReference[];
+  family?: "creative";
+};
+export const isCreativeSkill = (skill: Skill) =>
+  skill.family === "creative" ||
+  (BASE_CREATIVE_SKILL_NAMES as readonly string[]).includes(skill.name);
 export const toolCatalog = {
   read_caption_track: {
     effect: "read",
@@ -148,6 +178,49 @@ export function toolMetadata(name: CatalogToolName) {
   return { name, description, effect };
 }
 export const skillRequirements = {
+  "branded-ending": [
+    "inspect_project",
+    "inspect_graphics_schema",
+    "review_edit",
+    "propose_edit",
+  ],
+  "chart-storytelling": [
+    "inspect_project",
+    "inspect_graphics_schema",
+    "review_edit",
+    "propose_edit",
+  ],
+  "festival-motion": [
+    "inspect_project",
+    "inspect_graphics_schema",
+    "review_edit",
+    "propose_edit",
+  ],
+  "kinetic-typography": [
+    "inspect_project",
+    "inspect_graphics_schema",
+    "review_edit",
+    "propose_edit",
+  ],
+  "presentation-motion": [
+    "inspect_project",
+    "inspect_graphics_schema",
+    "review_edit",
+    "propose_edit",
+  ],
+  "product-walkthrough": [
+    "inspect_project",
+    "inspect_graphics_schema",
+    "review_edit",
+    "propose_edit",
+  ],
+  "spatial-scenes": [
+    "inspect_project",
+    "inspect_graphics_schema",
+    "prepare_three_scene",
+    "review_edit",
+    "propose_edit",
+  ],
   "generated-media": ["prepare_generated_media"],
   "visual-inspection": ["inspect_image", "sample_video_frames"],
   "staged-editing": [
@@ -222,7 +295,9 @@ export type ProfileCapability =
   | "appendPreviewRepair"
   | "semanticEditingGuidance"
   | "derivedCaptionPlan"
-  | "compactReviewedProposals";
+  | "compactReviewedProposals"
+  | "creativeSkills"
+  | "skillVisualReferences";
 type ProfileDefinition = Readonly<{
   kitVersion: string;
   capabilities: readonly ProfileCapability[];
@@ -306,6 +381,11 @@ const compactReviewedProposals = extendProfile(
   AGENT_KIT_VERSION,
   "compactReviewedProposals",
 );
+const creativeSkills = extendProfile(
+  extendProfile(compactReviewedProposals, AGENT_KIT_VERSION, "creativeSkills"),
+  AGENT_KIT_VERSION,
+  "skillVisualReferences",
+);
 export const profileCapabilities = Object.freeze({
   "local-editor-v1": legacy,
   "commercial-editing-v2": legacy,
@@ -333,8 +413,8 @@ export const profileCapabilities = Object.freeze({
   "commercial-editing-v13": appendPreviewRepair,
   "local-editor-v13": semanticEditingGuidance,
   "commercial-editing-v14": semanticEditingGuidance,
-  "local-editor-v14": compactReviewedProposals,
-  "commercial-editing-v15": compactReviewedProposals,
+  "local-editor-v14": creativeSkills,
+  "commercial-editing-v15": creativeSkills,
 } satisfies Record<AgentProfile, ProfileDefinition>);
 const hasCapability = (
   profile: AgentProfile,
@@ -371,6 +451,36 @@ export const usesDerivedCaptionPlan = (profile: AgentProfile) =>
   hasCapability(profile, "derivedCaptionPlan");
 export const usesCompactReviewedProposals = (profile: AgentProfile) =>
   hasCapability(profile, "compactReviewedProposals");
+export const usesCreativeSkills = (profile: AgentProfile) =>
+  hasCapability(profile, "creativeSkills");
+export const usesSkillVisualReferences = (profile: AgentProfile) =>
+  hasCapability(profile, "skillVisualReferences");
+/** New names never reclassify an older unmarked custom guide. Family metadata is
+ * frozen with new guidance; it filters against installed tools, never grants them. */
+export function requiredToolsForSkill(
+  skill: Skill,
+  profile: AgentProfile,
+): readonly string[] {
+  if (
+    (!usesCreativeSkills(profile) &&
+      (CREATIVE_SKILL_NAMES as readonly string[]).includes(skill.name)) ||
+    ((EXPANDED_CREATIVE_SKILL_NAMES as readonly string[]).includes(
+      skill.name,
+    ) &&
+      skill.family !== "creative")
+  )
+    return [];
+  return Object.hasOwn(skillRequirements, skill.name)
+    ? skillRequirements[skill.name as BuiltinSkillName]
+    : skill.family === "creative"
+      ? [
+          "inspect_project",
+          "inspect_graphics_schema",
+          "review_edit",
+          "propose_edit",
+        ]
+      : [];
+}
 export const profileKitVersion = (profile: AgentProfile) =>
   profileCapabilities[profile]?.kitVersion ?? "0.1.1";
 export const profileSkills: Record<
@@ -393,6 +503,7 @@ export const profileSkills: Record<
   "local-editor-v13": null,
   "local-editor-v14": null,
   "commercial-editing-v15": [
+    ...CREATIVE_SKILL_NAMES,
     "precise-editing",
     "motion-design",
     "speech-editing",

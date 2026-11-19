@@ -1,5 +1,9 @@
 # Editor agent ownership and extensions
 
+The active creative-skill development candidate is kit **0.2.10**, retaining local
+v14/commercial v15 and all previous archives. The accepted release remains 0.2.9.
+See [candidate scope and evidence](creative-skill-packs-2026-11-17.md).
+
 The shared model/tool loop is `packages/agent-loop` **0.2.0**. Portable editor definitions
 are `packages/agent-kit` **0.2.9**, with tool metadata and schemas, trusted Markdown skill
 requirements, a tool factory with native host ports, and explicit prompt sections.

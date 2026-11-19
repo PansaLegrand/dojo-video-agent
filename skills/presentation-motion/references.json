@@ -1,0 +1,11 @@
+[
+  {
+    "id": "motion-atlas",
+    "title": "presentation-motion — three visual sequences",
+    "markdown": "references/atlas.md",
+    "image": "references/atlas.jpg",
+    "sha256": "9da124c9e882586d909e3a1fdc4eefd054e9d618e374eeac1dfc0457943cd225",
+    "width": 1296,
+    "height": 810
+  }
+]
