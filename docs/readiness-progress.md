@@ -2,6 +2,23 @@
 
 Started on 2026-11-01. Last updated on 2026-11-19. The harness plan remains the acceptance contract.
 
+## R28 · preserve the canvas around a 3D edit (2026-11-19)
+
+New local-v14 requests freeze a scene canvas policy. Review and Apply check
+the original and resulting documents. Incidental changes to dimensions, frame
+rate or an authored canvas alongside a changed Three.js layer require repair.
+A deliberately requested global format edit can declare its exact property
+and value. An empty project with the stock canvas can choose its initial color.
+New guidance places an interval-local backdrop before the mesh at z-index zero.
+Saved requests without the policy retain their prior checks and receipts.
+
+The original Noor birthday trial remains recorded as failed. A separate offline
+regrade of its saved output passes the revised empty-starter rule. The first
+commercial request reconstructs to 78,466 UTF-8 bytes on the GPT adapter.
+Future creative evaluations measure the final provider body before reserving
+funds and record its byte count. The original 164,171-token provider report and
+the outstanding 429 usage investigation remain open.
+
 ## R28: recover an interrupted reviewed edit (2026-11-19)
 
 Failed runs with matching, owned verification evidence can now stage the

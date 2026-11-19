@@ -317,6 +317,22 @@ describe("creative short-prompt fixtures and independent grading", () => {
       gradeCreativeOutcome(scenario, scenario.document, after).automatedStatus,
     ).toBe("passed");
   });
+  it("allows initial art direction only on an empty default canvas", () => {
+    const scenario = creativeScenarioVariants[0];
+    const formatGrade = (populated: boolean, color?: string, width?: number) => {
+      const before = structuredClone(scenario.document);
+      if (populated) before.items = structuredClone(find("creative-ending-domain").document.items);
+      if (color) before.format.backgroundColor = color;
+      const after = structuredClone(before);
+      after.format.backgroundColor = "#29154d";
+      if (width) after.format.width = width;
+      return gradeCreativeOutcome(scenario, before, after).checks.find(check => check.id === "preserve-format")?.status;
+    };
+    expect(formatGrade(false)).toBe("passed");
+    expect(formatGrade(true)).toBe("failed");
+    expect(formatGrade(false, "#24354a")).toBe("failed");
+    expect(formatGrade(false, undefined, 640)).toBe("failed");
+  });
   it("requires actual declared 3D mesh motion for the opt-in 3D brief", () => {
     const scenario = creativeScenarioVariants[0],
       after = structuredClone(scenario.document);

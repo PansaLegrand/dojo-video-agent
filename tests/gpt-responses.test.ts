@@ -55,6 +55,15 @@ function provider(body: unknown, status = 200) {
   return fetch;
 }
 describe("GPT Responses transport", () => {
+  it("measures the exact wire JSON including UTF-8 and opaque replay before dispatch", async () => {
+    const send = provider(complete([answer])), model = new GptResponsesModel(config);
+    const messages = [{ role: "user" as const, content: "模型" },
+      { role: "assistant" as const, content: null, providerOutput: [reasoning] }];
+    const bytes = model.requestBytes(messages, [tool], 9000);
+    expect(send).not.toHaveBeenCalled();
+    await model.complete(messages, [tool], signal(), { maxOutputTokens: 9000 });
+    expect(Buffer.byteLength(String(send.mock.calls[0][1]?.body))).toBe(bytes);
+  });
   it.each([
     [20000, 8192],
     [4853, 4853],

@@ -138,6 +138,23 @@ export class GptResponsesModel implements LanguageModel {
   get identity() {
     return this.#identity;
   }
+  private serializeRequest(messages: ChatMessage[], tools: ToolSpec[], outputTokenLimit: number) {
+    return JSON.stringify({
+      model: this.#config.model,
+      input: responseInput(messages),
+      tools: tools.map((t) => ({ type: "function", ...t, strict: false })),
+      ...(tools.length
+        ? { tool_choice: "auto", parallel_tool_calls: false }
+        : {}),
+      max_output_tokens: outputTokenLimit,
+      stream: false,
+      store: false,
+      include: ["reasoning.encrypted_content"],
+    });
+  }
+  requestBytes(messages: ChatMessage[], tools: ToolSpec[], maxOutputTokens: number) {
+    return new TextEncoder().encode(this.serializeRequest(messages, tools, Math.min(8192, maxOutputTokens))).byteLength;
+  }
   async complete(
     messages: ChatMessage[],
     tools: ToolSpec[],
@@ -167,18 +184,7 @@ export class GptResponsesModel implements LanguageModel {
           ? { Authorization: `Bearer ${this.#config.apiKey}` }
           : {}),
       },
-      body: JSON.stringify({
-        model: this.#config.model,
-        input: responseInput(messages),
-        tools: tools.map((t) => ({ type: "function", ...t, strict: false })),
-        ...(tools.length
-          ? { tool_choice: "auto", parallel_tool_calls: false }
-          : {}),
-        max_output_tokens: outputTokenLimit,
-        stream: false,
-        store: false,
-        include: ["reasoning.encrypted_content"],
-      }),
+      body: this.serializeRequest(messages, tools, outputTokenLimit),
     });
     const raw = await providerJson(response);
     // Kie can return an error envelope with HTTP 200. Never echo provider messages.

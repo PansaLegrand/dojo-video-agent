@@ -64,6 +64,7 @@ export type CreativeRequestRecord = CreativeRequestContext & {
   phase: "dispatching" | "completed" | "unknown" | "not-dispatched";
   requestFile: string;
   responseFile?: string;
+  wireBytes?: number;
   error?: string;
 };
 
@@ -90,7 +91,7 @@ export async function writeCreativeArtifact(
 
 /** One instance owns admission across every host, case and repetition. */
 export function createCreativeCampaignModel(options: {
-  transport: LanguageModel;
+  transport: LanguageModel & { requestBytes?: (messages: Parameters<LanguageModel["complete"]>[0], tools: Parameters<LanguageModel["complete"]>[1], maxOutputTokens: number) => number };
   budget: EvaluationBudget;
   requests: CreativeRequestRecord[];
   directory: string;
@@ -148,10 +149,13 @@ export function createCreativeCampaignModel(options: {
           return stop(
             "No positive output allowance remains; stopped before admission.",
           );
-        let admitted;
+        let admitted, wireBytes: number | undefined;
         try {
+          wireBytes = options.transport.requestBytes?.(messages, tools, maximumOutputTokens);
+          if (wireBytes !== undefined && (!Number.isSafeInteger(wireBytes) || wireBytes < 0 || wireBytes > 1024 * 1024))
+            throw new EvaluationAdmissionError("Creative request exceeds the serialized provider input limit before dispatch.");
           admitted = options.budget.admit(
-            Buffer.byteLength(JSON.stringify({ messages, tools })),
+            Math.max(wireBytes ?? 0, Buffer.byteLength(JSON.stringify({ messages, tools }))),
             maximumOutputTokens,
           );
         } catch (cause) {
@@ -160,6 +164,7 @@ export function createCreativeCampaignModel(options: {
         const record: CreativeRequestRecord = {
           ...options.context(),
           ordinal: admitted.ordinal,
+          ...(wireBytes === undefined ? {} : { wireBytes }),
           phase: "dispatching",
           requestFile: `requests/${String(admitted.ordinal).padStart(4, "0")}.request.json`,
         };

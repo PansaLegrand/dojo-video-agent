@@ -721,8 +721,9 @@ export function gradeCreativeOutcome(
     before.format.width === after.format.width &&
       before.format.height === after.format.height &&
       before.format.fps === after.format.fps &&
-      before.format.backgroundColor === after.format.backgroundColor,
-    "Canvas dimensions, frame rate and project background remain unchanged.",
+      (before.format.backgroundColor === after.format.backgroundColor ||
+        (before.items.length === 0 && before.format.backgroundColor === createVideoProjectDocument().format.backgroundColor)),
+    "Preserve dimensions, frame rate and the existing canvas. An empty starter may choose its initial background.",
   );
   const {
     items: _bi,

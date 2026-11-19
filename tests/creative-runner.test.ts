@@ -36,6 +36,17 @@ const context: CreativeRequestContext = {
 };
 
 describe("shared creative-evaluation admission and evidence", () => {
+  it("rejects an oversized serialized provider body before reserving or dispatching", async () =>
+    workspace(async directory => {
+      const budget = new EvaluationBudget(2, 1, rates), records: CreativeRequestRecord[] = [];
+      const complete = vi.fn(async () => ({ text: "", calls: [], usage: { inputTokens: 1, outputTokens: 1 } }));
+      const campaign = createCreativeCampaignModel({ budget, requests: records, directory, context: () => context,
+        sourceUnchanged: async () => true, persist: async () => {}, transport: { complete, requestBytes: () => 1024 * 1024 + 1 } });
+      await expect(campaign.model.complete([], [], new AbortController().signal)).rejects.toThrow(/serialized provider input limit/);
+      expect(complete).not.toHaveBeenCalled();
+      expect(records).toHaveLength(0);
+      expect(budget.requests).toHaveLength(0);
+    }));
   it("shares one cap across hosts and persists the reservation/request before dispatch", async () =>
     workspace(async (directory) => {
       const budget = new EvaluationBudget(2, 1, rates),

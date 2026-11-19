@@ -132,7 +132,8 @@ export const nativeAuthoringSchema = z
   .object({
     macroCatalog: z.literal(chartMacroCatalog).optional(),
     version: z.literal(1),
-    endingVisibility: z.literal("final-frame-v1").optional(),
+    spatialCanvas: z.literal("scene-v1").optional(),
+  endingVisibility: z.literal("final-frame-v1").optional(),
     scope: nativeAgentScopeSchema.optional(),
     reference: nativeReferenceSchema.optional(),
     clarification: z

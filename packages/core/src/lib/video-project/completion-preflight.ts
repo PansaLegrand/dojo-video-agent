@@ -27,6 +27,8 @@ import {
   type VideoProjectTarget,
 } from "./commands";
 import {
+  canonicalSerialize,
+  createVideoProjectDocument,
   parseVideoProjectDocument,
   hashVideoProjectDocument,
   type VideoProjectDocument,
@@ -706,11 +708,39 @@ function layoutChecks(
   }
   return `Checked ${selected.length} bounded layout frames: ${selected.join(",")}.`;
 }
+// A scene may carry an interval-local backdrop. A global canvas edit belongs
+// in the declared outcomes when it accompanies a changed Three.js layer.
+function spatialCanvasConflict(
+  before: VideoProjectDocument,
+  after: VideoProjectDocument,
+  requirements: CompletionRequirement[],
+): string | undefined {
+  const protectedFields = ["width", "height", "fps", "backgroundColor"] as const;
+  const fields = protectedFields.filter(field => {
+    if (before.format[field] === after.format[field]) return false;
+    if (field === "backgroundColor" && before.items.length === 0 &&
+        before.format.backgroundColor === createVideoProjectDocument().format.backgroundColor) return false;
+    return !requirements.some(check => check.kind === "property" && check.target.kind === "format" &&
+      check.path.length === 1 && check.path[0] === field && check.equals === after.format[field]);
+  });
+  if (!fields.length) return;
+  const hasThree = (node: SceneNodeInput): boolean =>
+    node.extension?.name === "dojo.three-scene" || !!node.children?.some(hasThree);
+  const original = new Map(before.items.map(item => [item.id, item]));
+  const changed = after.items.some(item => {
+    const prior = original.get(item.id);
+    original.delete(item.id);
+    return (hasThree(item.node) || !!prior && hasThree(prior.node)) &&
+      (!prior || canonicalSerialize(prior.node) !== canonicalSerialize(item.node));
+  }) || [...original.values()].some(item => hasThree(item.node));
+  if (changed) return `The 3D edit also changes project ${fields.join(", ")}. Keep the canvas settings and place a backdrop behind the scene for its interval. For a requested project-wide change, declare its exact format property in the edit requirements.`;
+}
+
 export function checkNativeCompletionRequirements(
   beforeInput: VideoProjectDocument,
   afterInput: VideoProjectDocument,
   raw: unknown,
-  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1" } = {},
+  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1" } = {},
 ): CompletionCheck[] {
   const before = parseVideoProjectDocument(beforeInput),
     after = parseVideoProjectDocument(afterInput),
@@ -760,6 +790,10 @@ export function checkNativeCompletionRequirements(
       ),
     });
   }
+  if (options.spatialCanvas) {
+    const conflict = spatialCanvasConflict(before, after, requirements);
+    if (conflict) checks.push({ id: "spatial-canvas", passed: false, message: conflict });
+  }
   return checks;
 }
 export async function reviewNativeCompletionEdit(
@@ -795,7 +829,7 @@ export async function reviewNativeCompletionEdit(
     base,
     executed.document,
     requirements,
-    { ...options, endingVisibility: request.authoring?.endingVisibility },
+    { ...options, endingVisibility: request.authoring?.endingVisibility, spatialCanvas: request.authoring?.spatialCanvas },
   );
   const receipt = checks.every((check) => check.passed)
     ? await createCompletionReceipt({

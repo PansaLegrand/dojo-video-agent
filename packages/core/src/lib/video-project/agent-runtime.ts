@@ -658,5 +658,8 @@ export function buildNativeAgentPrompts(
     throw new Error(
       "The conversation and selected context exceed the native agent prompt budget.",
     );
-  return { systemPrompt, userPrompt };
+  const spatialGuide = input.authoring?.spatialCanvas
+    ? "\nFor a 3D scene, keep the existing canvas dimensions, fps and background. An empty starter with its default background may take an initial color. On an existing canvas place a full-size div at the scene start and duration, before the mesh in paint order. Use zIndex 0 for the backdrop and mesh; negative values can place the backdrop behind the project canvas. Declare a project-wide format property only when the user requests that change."
+    : "";
+  return { systemPrompt: systemPrompt + spatialGuide, userPrompt };
 }
