@@ -156,21 +156,39 @@ function textIssue(
 export function requiredTextLayoutReview(
   requirements: CompletionRequirement[],
   canvas: Bounds,
+  rootForItem: ReadonlyMap<string, string>,
 ) {
   const items = new Set<string>(),
     exactItems = new Set<string>();
   const nodeTargets = new Map<string, Set<string>>();
   const exactNodes = new Set<string>();
+  const endings = new Set<string>();
   for (const r of requirements) {
-    if (r.kind === "property" && r.target.kind === "node") {
-      const ids = nodeTargets.get(r.target.itemId) ?? new Set<string>();
-      ids.add(r.target.nodeId);
-      nodeTargets.set(r.target.itemId, ids);
-      if (r.path[0] === "text" || r.path[0] === "runs")
-        exactNodes.add(r.target.nodeId);
+    if (
+      r.kind === "property" &&
+      (r.target.kind === "node" ||
+        (r.target.kind === "item" && r.path[0] === "node"))
+    ) {
+      const { itemId } = r.target;
+      let nodeId =
+        r.target.kind === "node" ? r.target.nodeId : rootForItem.get(itemId);
+      let offset = r.target.kind === "node" ? 0 : 1;
+      // Both item.node and node targets can address descendants by stable child ID.
+      while (r.path[offset] === "children" && r.path[offset + 1]) {
+        nodeId = r.path[offset + 1];
+        offset += 2;
+      }
+      if (!nodeId) continue;
+      const ids = nodeTargets.get(itemId) ?? new Set<string>();
+      ids.add(nodeId);
+      nodeTargets.set(itemId, ids);
+      if (r.path[offset] === "text" || r.path[offset] === "runs")
+        exactNodes.add(nodeId);
     } else if (r.kind === "caption_pair") {
       items.add(r.originalItemId);
       items.add(r.translatedItemId);
+      exactItems.add(r.originalItemId);
+      exactItems.add(r.translatedItemId);
     } else if (
       r.kind === "item_present" ||
       r.kind === "appended_ending" ||
@@ -178,9 +196,13 @@ export function requiredTextLayoutReview(
       r.kind === "speech_highlight"
     ) {
       items.add(r.itemId);
-      if (r.kind === "appended_ending") exactItems.add(r.itemId);
-    } else if (r.kind === "property" && "itemId" in r.target)
+      if (r.kind !== "item_present") exactItems.add(r.itemId);
+      if (r.kind === "appended_ending") endings.add(r.itemId);
+    } else if (r.kind === "property" && "itemId" in r.target) {
       items.add(r.target.itemId);
+      if (r.target.kind === "cue" && r.path[0] === "text")
+        exactItems.add(r.target.itemId);
+    }
   }
   const failures = new Map<string, RequiredTextLayoutError>(),
     clear = new Set<string>();
@@ -224,7 +246,7 @@ export function requiredTextLayoutReview(
           visibleText(text, alpha)
         ) {
           const key = JSON.stringify([g.nodeId, text.value]);
-          const finalCopy = finalEndingFrame && exactItems.has(item);
+          const finalCopy = finalEndingFrame && endings.has(item);
           if (finalCopy || !clear.has(key)) {
             const issue: Issue | undefined =
               cover && cover.paintOrder > g.paintOrder

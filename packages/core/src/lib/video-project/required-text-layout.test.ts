@@ -160,6 +160,33 @@ describe("readability of required native text", () => {
     expect((await fixture([truncate], exact)).checked.receipt).toBeUndefined();
   });
 
+  it("protects literal copy addressed through a parent or the item node path", async () => {
+    const truncated = {
+      ...title,
+      style: { ...title.style, textFit: "truncate" as const },
+    };
+    for (const [target, path] of [
+      [
+        { kind: "item", itemId: "poster" },
+        ["node", "children", "headline", "text"],
+      ],
+      [
+        { kind: "node", itemId: "poster", nodeId: "poster" },
+        ["children", "headline", "text"],
+      ],
+    ] as const) {
+      const { checked } = await fixture(
+        [truncated],
+        [{ id: "copy", kind: "property", target, path, equals: title.text }],
+      );
+      expect(
+        checked.checks
+          .filter((check) => !check.passed)
+          .map((check) => check.id),
+      ).toEqual(["text-overflow"]);
+    }
+  });
+
   it("identifies a later opaque background in nested paint order and accepts putting it behind the title", async () => {
     const panel: SceneNodeInput = {
       ...cover,

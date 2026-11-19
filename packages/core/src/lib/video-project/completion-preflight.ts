@@ -621,7 +621,8 @@ function layoutChecks(
   );
   const observed = new Set<string>();
   const textReview = requiredTextLayout ? requiredTextLayoutReview(requirements,
-    { x: 0, y: 0, width: after.format.width, height: after.format.height }) : undefined;
+    { x: 0, y: 0, width: after.format.width, height: after.format.height },
+    new Map(after.items.map(item => [item.id, item.node.id]))) : undefined;
   const checkEnding = (groups: DisplayGroup[]) => assertEndingFrame(groups, closingText, finalFrame,
     { x: 0, y: 0, width: after.format.width, height: after.format.height });
   for (const frame of selected) {
