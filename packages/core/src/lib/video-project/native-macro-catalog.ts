@@ -1,7 +1,7 @@
 import { macroDefinitions } from "@dojo-video-engine/presets/macros";
 
-import { chartMacroCatalog } from "./agent-authoring";
-export type NativeMacroCatalog = typeof chartMacroCatalog;
+import { chartMacroCatalog, kineticMacroCatalog } from "./agent-authoring";
+export type NativeMacroCatalog = typeof chartMacroCatalog | typeof kineticMacroCatalog;
 
 const legacyNames = Object.freeze([
   "effectOverlay", "cartoonBurst", "textEffect", "lowerThird", "titleCard",
@@ -11,13 +11,20 @@ const legacyNames = Object.freeze([
 ]);
 const chartNames = Object.freeze([...legacyNames, "dataChart"]);
 
-export function installedChartCatalog() {
-  return macroDefinitions().some(({ name }) => name === "dataChart") ? chartMacroCatalog : undefined;
+const kineticNames = Object.freeze([...chartNames, "kineticSplit"]);
+
+export function installedNativeMacroCatalog(): NativeMacroCatalog | undefined {
+  const names = new Set(macroDefinitions().map(({ name }) => name));
+  if (!names.has("dataChart")) return undefined;
+  return names.has("kineticSplit") ? kineticMacroCatalog : chartMacroCatalog;
 }
 
 export function nativeMacroNames(catalog?: NativeMacroCatalog): readonly string[] {
-  if (catalog && catalog !== installedChartCatalog()) throw new Error("The saved chart macro catalog is not installed.");
-  return catalog === chartMacroCatalog ? chartNames : legacyNames;
+  if (!catalog) return legacyNames;
+  const installed = installedNativeMacroCatalog();
+  if (catalog === chartMacroCatalog && installed) return chartNames;
+  if (catalog === kineticMacroCatalog && installed === kineticMacroCatalog) return kineticNames;
+  throw new Error(catalog === chartMacroCatalog ? "The saved chart macro catalog is not installed." : "The saved kinetic macro catalog is not installed.");
 }
 
 export function nativeInsertableMacros(catalog?: NativeMacroCatalog) {

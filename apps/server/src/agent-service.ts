@@ -1,4 +1,4 @@
-import { installedChartCatalog } from "../../../packages/core/src/lib/video-project/native-macro-catalog";
+import { installedNativeMacroCatalog } from "../../../packages/core/src/lib/video-project/native-macro-catalog";
 import { savedAgentKitVersion, sourceRequirementValidation, skillsForSavedRun } from "../../../packages/agent/src/runtime-build";
 import { EditStageError as RetainedV29EditStageError } from "@dojo-video/agent-kit-v29";
 import { EditStageError as RetainedV28EditStageError } from "@dojo-video/agent-kit-v28";
@@ -211,7 +211,7 @@ export class AgentService {
           input.scope ?? { kind: "project" },
         ),
         now = new Date().toISOString();
-      const macroCatalog = this.agentProfile === "local-editor-v14" ? installedChartCatalog() : undefined;
+      const macroCatalog = this.agentProfile === "local-editor-v14" ? installedNativeMacroCatalog() : undefined;
       const run: StoredRun = {
         id: randomUUID(),
         operationId: input.operationId,

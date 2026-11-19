@@ -385,3 +385,17 @@ The exact 1.1.3 candidate at `2b04163` passed isolated consumer checks:
 355 tests, build and 47 browser checks including real media. Engine 1.1.3 is now published and adopted with verified registry integrity;
 registry-installed checks also passed.
 Human acceptance remains pending after the user chose to review later.
+
+## R29 · staggered title entrances (2026-11-20)
+
+With the staged engine presets installed, a new local v14 run can discover
+`kineticSplit`, review its output and propose separately editable text nodes.
+Word, grapheme and line entrances share one local clock and end in a reading
+hold. A saved chart-only catalog still exposes `dataChart` alone among the new
+macros. A saved run without a catalog keeps the published 1.2.3 vocabulary.
+
+The local and commercial kernels produced identical document hashes for a
+landscape letter reveal and a portrait word reveal. The commercial editor
+exported the landscape film through all 192 frames and restored a manually
+changed title unit through Undo. Engine source is `6af441d`. The installed
+registry pins and live provider qualification remain as previously recorded.
