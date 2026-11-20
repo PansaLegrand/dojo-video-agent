@@ -734,6 +734,18 @@ export function nativeAgentGraphicsSchema(
   options: { installedGrammar?: true; macroCatalog?: NativeMacroCatalog } = {},
 ) {
   const macros = nativeInsertableMacros(options.macroCatalog);
+  const macroName = query.macro;
+  if (query.kind === "macro" && (macroName === "remixBlueprint" || macroName?.startsWith("remixBlueprint/"))) {
+    const entry = macros.find(m => m.name === "remixBlueprint");
+    if (entry && "blueprints" in entry && typeof entry.blueprints === "function" &&
+        "describeBlueprint" in entry && typeof entry.describeBlueprint === "function") {
+      const details = macroName === "remixBlueprint"
+        ? { blueprints: entry.blueprints() }
+        : { blueprint: entry.describeBlueprint(macroName.slice("remixBlueprint/".length)) };
+      return { version: 1, kind: "macro", name: entry.name, ...details,
+        parameters: shallowSchema(entry.params, -1), example: JSON.parse(entry.usage) };
+    }
+  }
   if (query.kind === "macro") {
     if (!query.macro)
       return {

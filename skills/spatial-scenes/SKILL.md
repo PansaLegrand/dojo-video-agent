@@ -11,6 +11,11 @@ Design a spatial event with a readable focal point. Study the attached
 for world scale, assembly and camera direction. Invent an appropriate composition;
 do not copy the source's object count, labels or branding.
 
+If the installed macro index lists `remixBlueprint`, inspect the index and
+then `remixBlueprint/<id>` for its slots. Little Worlds and Precision preserve the camera and object choreography. Frame a supplied subject as a design study when its geometry is illustrative.
+Choose the change the viewer should see before choosing layers. After a copy,
+timing or aspect-ratio revision, inspect the transition and the final reading hold.
+
 ## Choose the spatial action
 
 Resolve the canvas, interval and supplied subject from context. Choose ordinary

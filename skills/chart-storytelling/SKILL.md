@@ -13,6 +13,11 @@ sequences. Its data is illustrative: use only the user's supplied facts in the
 new chart. The goal is a designed explanation with truthful marks, not copied
 sample numbers or a colorful title surrounding a static chart.
 
+If the installed macro index lists `remixBlueprint`, inspect the index and
+then `remixBlueprint/<id>` for its slots. Field Notes can carry supplied comparison data. Recompute the geometry, marker and value cell together when revising a number.
+Choose the change the viewer should see before choosing layers. After a copy,
+timing or aspect-ratio revision, inspect the transition and the final reading hold.
+
 ## Establish the data and message
 
 Use the user's supplied values or authoritative project context. Read only the

@@ -11,6 +11,11 @@ three different visual languages and their progression through time. Study its
 composition, depth and transitions before designing; the accompanying notes
 explain what to adapt. Keep sample wording and figures out of the user's work.
 
+If the installed macro index lists `remixBlueprint`, inspect the index and
+then `remixBlueprint/<id>` for its slots. After Hours lets a rotating sculpture lead into an invitation. Let the date and occasion settle before the closing beat.
+Choose the change the viewer should see before choosing layers. After a copy,
+timing or aspect-ratio revision, inspect the transition and the final reading hold.
+
 ## Find the occasion's character
 
 Use the current project context or a targeted `inspect_project` read for the

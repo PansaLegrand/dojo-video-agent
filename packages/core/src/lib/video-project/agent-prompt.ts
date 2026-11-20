@@ -127,7 +127,7 @@ export function buildNativeAgentSystemPrompt(input: Parameters<typeof selectNati
   const insertable = nativeInsertableMacros(input.authoring?.macroCatalog);
   const sections = [coreGuide(responseMode),
     nativeAgentDescriptorGuide(),
-    `Installed DojoVideoEngine Scene ${capabilities.sceneVersion}. Node types: ${capabilities.nodeTypes.join(", ")}. Supported style keys: ${capabilities.styleKeys.join(", ")}.`,
+    `Installed DojoVideoEngine Scene ${capabilities.sceneVersion}. Node types: ${capabilities.nodeTypes.join(", ")}. Supported style keys: ${(input.authoring?.macroCatalog === "engine-1.3.0-blueprints-v1" ? capabilities.styleKeys : capabilities.styleKeys.filter(key=>!["trimStart","trimEnd","trimOffset","backdropFilter"].includes(key))).join(", ")}.`,
     `Insertable macro index: ${insertable.map(macro => macro.name).join(", ")}. Caption macros are not native project operations; use captionSource for speech or native editable caption cues for supplied text.`,
   ];
   if (modules.creation && !detailedGraphics) sections.push("Graphic catalog summary: " + insertable.map(macro => `${macro.name}: ${macro.description.split(/(?<=[.!?])\s/u)[0]!.slice(0, 120)}`).join("; "));

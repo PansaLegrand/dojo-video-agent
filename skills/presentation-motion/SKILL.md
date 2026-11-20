@@ -10,6 +10,11 @@ Make the audience understand one idea at a time. Study the attached
 [reference board](references/atlas.jpg) and [motion notes](references/atlas.md)
 for information hierarchy, diagram builds and transitions between contexts.
 
+If the installed macro index lists `remixBlueprint`, inspect the index and
+then `remixBlueprint/<id>` for its slots. Orbit or Precision can reveal the subject before the takeaway. Introduce a conclusion only when supported by the brief.
+Choose the change the viewer should see before choosing layers. After a copy,
+timing or aspect-ratio revision, inspect the transition and the final reading hold.
+
 ## Start with the supplied argument
 
 Use existing native slide elements, supplied text or owned slide images. Preserve

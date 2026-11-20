@@ -127,6 +127,7 @@ export const nativeReferenceSchema = z
   .strict();
 export type NativeAgentReference = z.infer<typeof nativeReferenceSchema>;
 
+export const blueprintMacroCatalog = "engine-1.3.0-blueprints-v1" as const;
 export const comparisonMacroCatalog = "engine-1.3.0-comparison-v1" as const;
 export const walkthroughMacroCatalog = "engine-1.3.0-walkthrough-v1" as const;
 export const radialMacroCatalog = "engine-1.3.0-radial-v1" as const;
@@ -134,7 +135,7 @@ export const kineticMacroCatalog = "engine-1.3.0-kinetic-v1" as const;
 export const chartMacroCatalog = "engine-1.3.0" as const;
 export const nativeAuthoringSchema = z
   .object({
-    macroCatalog: z.enum([chartMacroCatalog, kineticMacroCatalog, radialMacroCatalog, walkthroughMacroCatalog, comparisonMacroCatalog]).optional(),
+    macroCatalog: z.enum([chartMacroCatalog, kineticMacroCatalog, radialMacroCatalog, walkthroughMacroCatalog, comparisonMacroCatalog, blueprintMacroCatalog]).optional(),
     version: z.literal(1),
     requiredTextLayout: z.literal("sampled-v1").optional(),
   spatialCanvas: z.literal("scene-v1").optional(),

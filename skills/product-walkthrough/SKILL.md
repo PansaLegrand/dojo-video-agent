@@ -11,6 +11,11 @@ Show what changes when someone uses the product. Study the attached
 for focus, causality and detail reveals. A walkthrough is a sequence the viewer
 can follow, not a collection of decorative interface cards.
 
+If the installed macro index lists `remixBlueprint`, inspect the index and
+then `remixBlueprint/<id>` for its slots. Flow lets the cursor arrive before attention advances. Preserve the other steps when revising one label.
+Choose the change the viewer should see before choosing layers. After a copy,
+timing or aspect-ratio revision, inspect the transition and the final reading hold.
+
 ## Establish what is real
 
 Use supplied steps, existing project facts and owned product assets. Preserve

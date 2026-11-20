@@ -11,6 +11,11 @@ Turn the supplied copy into a visual sequence. Study the attached
 for scale changes, typographic contrast and deliberate reveal order. The host
 loads these references with this skill; no separate fetch is needed.
 
+If the installed macro index lists `remixBlueprint`, inspect the index and
+then `remixBlueprint/<id>` for its slots. Letter Form can bring words through a moving grid. Choose the line break and allow the complete phrase to hold.
+Choose the change the viewer should see before choosing layers. After a copy,
+timing or aspect-ratio revision, inspect the transition and the final reading hold.
+
 ## Find the typographic action
 
 Read the canvas, intended interval and exact wording from project context. Choose

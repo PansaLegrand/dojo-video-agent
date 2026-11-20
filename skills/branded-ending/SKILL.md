@@ -12,6 +12,11 @@ Study the attached reference board and notes: assembly, depth and typographic
 transformation are distinct ways to earn a final lockup. Adapt a visual action,
 not a complete sample layout, its words or its branding.
 
+If the installed macro index lists `remixBlueprint`, inspect the index and
+then `remixBlueprint/<id>` for its slots. For a sculptural ending, discover Orbit or Deep Field and reserve the held URL for the final beat.
+Choose the change the viewer should see before choosing layers. After a copy,
+timing or aspect-ratio revision, inspect the transition and the final reading hold.
+
 ## Resolve the ending
 
 Use the current project facts or a targeted `inspect_project` read to establish

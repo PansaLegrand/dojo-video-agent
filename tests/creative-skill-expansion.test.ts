@@ -23,16 +23,16 @@ describe("expanded creative library", () => {
         "utf8",
       ),
     );
-    const savedChart = parseSkillMarkdown(
-      "chart-storytelling",
-      await readFile("tests/fixtures/pre-expansion-chart-storytelling.md", "utf8"),
-      true,
-    );
+    const savedGuides = new Map<string, Skill>();
+    for (const name of ["chart-storytelling", "festival-motion", "branded-ending"]) {
+      savedGuides.set(name, parseSkillMarkdown(name,
+        await readFile(`tests/fixtures/pre-expansion-${name}.md`, "utf8"), true));
+    }
     for (const c of fixture.cases) {
       const input: Skill[] =
         c.kind === "pre-expansion-library"
           ? builtInSkills().filter((s) => fixture.originalNames.includes(s.name))
-              .map((s) => s.name === savedChart.name ? { ...s, ...savedChart } : s)
+              .map((s) => ({ ...s, ...savedGuides.get(s.name) }))
           : EXPANDED_CREATIVE_SKILL_NAMES.map((name) => ({
               name,
               description: "Existing custom guide " + name,

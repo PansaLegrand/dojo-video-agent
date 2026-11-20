@@ -260,6 +260,16 @@ export function referencedEditorAssetIds(document: EditorDocument): string[] {
     document.items.map((i) => i.node),
     (node) => {
       if (node.assetId) result.add(node.assetId);
+    if (node.extension?.name === "dojo.three-scene") {
+      const materials = node.extension.params.materials;
+      if (materials && typeof materials === "object" && !Array.isArray(materials)) {
+        for (const m of Object.values(materials)) {
+          if (!m || typeof m !== "object" || Array.isArray(m) || typeof m.mapAssetId !== "string") continue;
+          if (document.assets[m.mapAssetId]?.type !== "image") throw Error("A 3D material must use an image declared in this project.");
+          result.add(m.mapAssetId);
+        }
+      }
+    }
       for (const key of ["audioAssetId", "coverAssetId"] as const) {
         const value = node.params?.[key];
         if (typeof value === "string") result.add(value);
