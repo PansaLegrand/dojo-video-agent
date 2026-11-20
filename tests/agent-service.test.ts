@@ -645,6 +645,12 @@ it("binds the installed chart catalog only when starting a new v14 run", async (
     const updated = await reopened.read(f.p.id);
     expect(updated.runs.find(r => r.id === stagger.run.id)?.request.authoring?.macroCatalog).toBe("engine-1.3.0-kinetic-v1");
     expect(updated.runs.find(r => r.id === newer.run.id)?.request.authoring?.macroCatalog).toBe("engine-1.3.0");
+    installed.mockReturnValue("engine-1.3.0-radial-v1");
+    const radial = await host.start(f.p.id, { ...f.input, operationId: "radial-installed" });
+    await settle(reopened, f.p.id);
+    const latest = await reopened.read(f.p.id);
+    expect(latest.runs.find(r => r.id === radial.run.id)?.request.authoring?.macroCatalog).toBe("engine-1.3.0-radial-v1");
+    expect(latest.runs.find(r => r.id === stagger.run.id)?.request.authoring?.macroCatalog).toBe("engine-1.3.0-kinetic-v1");
     installed.mockReturnValue(undefined);
     await host.start(f.p.id, { ...f.input, operationId: "new-engine" });
     expect((await reopened.read(f.p.id)).runs.find(r => r.id === newer.run.id)?.request.authoring?.macroCatalog).toBe("engine-1.3.0");

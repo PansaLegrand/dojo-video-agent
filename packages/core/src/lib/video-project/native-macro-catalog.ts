@@ -1,7 +1,7 @@
 import { macroDefinitions } from "@dojo-video-engine/presets/macros";
 
-import { chartMacroCatalog, kineticMacroCatalog } from "./agent-authoring";
-export type NativeMacroCatalog = typeof chartMacroCatalog | typeof kineticMacroCatalog;
+import { chartMacroCatalog, kineticMacroCatalog, radialMacroCatalog } from "./agent-authoring";
+export type NativeMacroCatalog = typeof chartMacroCatalog | typeof kineticMacroCatalog | typeof radialMacroCatalog;
 
 const legacyNames = Object.freeze([
   "effectOverlay", "cartoonBurst", "textEffect", "lowerThird", "titleCard",
@@ -13,17 +13,24 @@ const chartNames = Object.freeze([...legacyNames, "dataChart"]);
 
 const kineticNames = Object.freeze([...chartNames, "kineticSplit"]);
 
+const radialNames = Object.freeze([...kineticNames, "radialGroup"]);
+
 export function installedNativeMacroCatalog(): NativeMacroCatalog | undefined {
   const names = new Set(macroDefinitions().map(({ name }) => name));
   if (!names.has("dataChart")) return undefined;
-  return names.has("kineticSplit") ? kineticMacroCatalog : chartMacroCatalog;
+  if (!names.has("kineticSplit")) return chartMacroCatalog;
+  return names.has("radialGroup") ? radialMacroCatalog : kineticMacroCatalog;
 }
 
 export function nativeMacroNames(catalog?: NativeMacroCatalog): readonly string[] {
   if (!catalog) return legacyNames;
   const installed = installedNativeMacroCatalog();
   if (catalog === chartMacroCatalog && installed) return chartNames;
-  if (catalog === kineticMacroCatalog && installed === kineticMacroCatalog) return kineticNames;
+  if (catalog === kineticMacroCatalog && (installed === kineticMacroCatalog || installed === radialMacroCatalog)) return kineticNames;
+  if (catalog === radialMacroCatalog) {
+    if (installed === radialMacroCatalog) return radialNames;
+    throw new Error("The saved radial macro catalog is not installed.");
+  }
   throw new Error(catalog === chartMacroCatalog ? "The saved chart macro catalog is not installed." : "The saved kinetic macro catalog is not installed.");
 }
 

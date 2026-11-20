@@ -399,3 +399,17 @@ landscape letter reveal and a portrait word reveal. The commercial editor
 exported the landscape film through all 192 frames and restored a manually
 changed title unit through Undo. Engine source is `6af441d`. The installed
 registry pins and live provider qualification remain as previously recorded.
+
+## R29 · editable radial motion (2026-11-20)
+
+With the radial engine candidate installed, new local-v14 runs can discover
+`radialGroup` and author a full ring or partial arc as editable native marks.
+Each mark retains a stable identity, fill, geometry and local motion track.
+Older chart and kinetic catalogs keep their previous menus and replay.
+
+The local and commercial hosts reviewed the same Solar Bloom project and
+produced identical hashes. Its 26-petal outer flower required 243 bytes of
+macro JSON. In the commercial editor, changing the width of the fourth petal
+preserved every other mark and Undo restored the original project. Engine
+source is `1a650b2`. The asset-free eight-second H.264 decoded through all
+192 frames. The hosted model and release remain outside this verification.
