@@ -1,0 +1,3076 @@
+[
+  {
+    "type": "set",
+    "target": {
+      "kind": "format"
+    },
+    "path": [
+      "width"
+    ],
+    "value": 960
+  },
+  {
+    "type": "set",
+    "target": {
+      "kind": "format"
+    },
+    "path": [
+      "height"
+    ],
+    "value": 540
+  },
+  {
+    "type": "set",
+    "target": {
+      "kind": "format"
+    },
+    "path": [
+      "fps"
+    ],
+    "value": 24
+  },
+  {
+    "type": "set",
+    "target": {
+      "kind": "format"
+    },
+    "path": [
+      "durationInFrames"
+    ],
+    "value": 192
+  },
+  {
+    "type": "set",
+    "target": {
+      "kind": "format"
+    },
+    "path": [
+      "backgroundColor"
+    ],
+    "value": "#121c20"
+  },
+  {
+    "type": "addAsset",
+    "asset": {
+      "id": "Fraunces",
+      "type": "font",
+      "name": "Fraunces",
+      "source": "static",
+      "src": "/fonts/fraunces/fraunces-latin-wght-normal.woff2",
+      "mediaMetadata": {
+        "fontFamily": "Fraunces",
+        "fontWeight": "100 900",
+        "fontStyle": "normal"
+      }
+    }
+  },
+  {
+    "type": "addAsset",
+    "asset": {
+      "id": "Space Grotesk",
+      "type": "font",
+      "name": "Space Grotesk",
+      "source": "static",
+      "src": "/fonts/space-grotesk/space-grotesk-latin-wght-normal.woff2",
+      "mediaMetadata": {
+        "fontFamily": "Space Grotesk",
+        "fontWeight": "300 700",
+        "fontStyle": "normal"
+      }
+    }
+  },
+  {
+    "type": "addAsset",
+    "asset": {
+      "id": "IBM Plex Mono:400",
+      "type": "font",
+      "name": "IBM Plex Mono 400",
+      "source": "static",
+      "src": "/fonts/ibm-plex-mono/ibm-plex-mono-latin-400-normal.woff2",
+      "mediaMetadata": {
+        "fontFamily": "IBM Plex Mono",
+        "fontWeight": 400,
+        "fontStyle": "normal"
+      }
+    }
+  },
+  {
+    "type": "addAsset",
+    "asset": {
+      "id": "IBM Plex Mono:500",
+      "type": "font",
+      "name": "IBM Plex Mono 500",
+      "source": "static",
+      "src": "/fonts/ibm-plex-mono/ibm-plex-mono-latin-500-normal.woff2",
+      "mediaMetadata": {
+        "fontFamily": "IBM Plex Mono",
+        "fontWeight": 500,
+        "fontStyle": "normal"
+      }
+    }
+  },
+  {
+    "type": "addAsset",
+    "asset": {
+      "id": "IBM Plex Mono:700",
+      "type": "font",
+      "name": "IBM Plex Mono 700",
+      "source": "static",
+      "src": "/fonts/ibm-plex-mono/ibm-plex-mono-latin-700-normal.woff2",
+      "mediaMetadata": {
+        "fontFamily": "IBM Plex Mono",
+        "fontWeight": 700,
+        "fontStyle": "normal"
+      }
+    }
+  },
+  {
+    "type": "addTrack",
+    "track": {
+      "id": "track:three",
+      "name": "Three.js scenes",
+      "kind": "visual",
+      "muted": false,
+      "hidden": false,
+      "locked": false
+    }
+  },
+  {
+    "type": "addItem",
+    "item": {
+      "id": "opening",
+      "trackId": "visual",
+      "name": "Original",
+      "node": {
+        "id": "opening",
+        "type": "div",
+        "from": 0,
+        "duration": 24,
+        "style": {
+          "position": "absolute",
+          "inset": 0,
+          "backgroundColor": "#142123"
+        },
+        "animations": [],
+        "children": [
+          {
+            "id": "imprint",
+            "type": "text",
+            "text": "F O R M   S T U D I O",
+            "from": 0,
+            "style": {
+              "width": 700,
+              "height": 70,
+              "position": "absolute",
+              "left": 84,
+              "top": 234,
+              "fontSize": 30,
+              "fontWeight": 600,
+              "color": "#e5b66b"
+            },
+            "animations": [],
+            "children": []
+          },
+          {
+            "id": "rule",
+            "type": "shape",
+            "shape": {
+              "kind": "rect"
+            },
+            "from": 0,
+            "style": {
+              "width": 52,
+              "height": 2,
+              "position": "absolute",
+              "left": 86,
+              "top": 224,
+              "fill": "#e5b66b"
+            },
+            "animations": [],
+            "children": []
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "addItem",
+    "item": {
+      "id": "instrument",
+      "trackId": "track:three",
+      "name": "Open Assembly",
+      "node": {
+        "id": "instrument",
+        "type": "div",
+        "from": 24,
+        "duration": 168,
+        "style": {
+          "width": 960,
+          "height": 540,
+          "position": "absolute",
+          "left": 0,
+          "top": 0,
+          "zIndex": 40
+        },
+        "animations": [],
+        "children": [
+          {
+            "id": "instrument-paper",
+            "type": "div",
+            "from": 0,
+            "style": {
+              "width": 960,
+              "height": 540,
+              "position": "absolute",
+              "left": 0,
+              "top": 0,
+              "backgroundColor": "#142123"
+            },
+            "animations": [],
+            "children": []
+          },
+          {
+            "id": "instrument-art",
+            "type": "div",
+            "from": 0,
+            "style": {
+              "width": 920,
+              "height": 530,
+              "position": "absolute",
+              "left": 460.8,
+              "top": 120.939130434783,
+              "transform": "scale(0.5217391304347826)",
+              "transformOrigin": "left top"
+            },
+            "animations": [],
+            "children": [
+              {
+                "id": "instrument-precision-instrument",
+                "type": "extension",
+                "extension": {
+                  "name": "dojo.three-scene",
+                  "version": "1.0.0",
+                  "params": {
+                    "camera": {
+                      "kind": "orthographic",
+                      "position": {
+                        "x": 4.1,
+                        "y": 5.7,
+                        "z": 8
+                      },
+                      "size": 5.45,
+                      "target": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      }
+                    },
+                    "lighting": {
+                      "ambient": 1.5,
+                      "intensity": 3,
+                      "position": {
+                        "x": -4,
+                        "y": 8,
+                        "z": 5
+                      }
+                    },
+                    "materials": {
+                      "amber": {
+                        "color": "#E9AB55",
+                        "metalness": 0.2,
+                        "roughness": 0.3
+                      },
+                      "case": {
+                        "color": "#434F52",
+                        "metalness": 0.26,
+                        "roughness": 0.27
+                      },
+                      "dial": {
+                        "color": "#151F22",
+                        "roughness": 0.5
+                      },
+                      "ivory": {
+                        "color": "#E9E6DD",
+                        "unlit": true
+                      },
+                      "plate": {
+                        "color": "#877756",
+                        "metalness": 0.16,
+                        "roughness": 0.48
+                      },
+                      "silver": {
+                        "color": "#D9E2DF",
+                        "metalness": 0.24,
+                        "roughness": 0.23
+                      }
+                    },
+                    "objects": {
+                      "balanceWheel": {
+                        "kind": "group",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": 0.45,
+                          "y": 0.11,
+                          "z": 0.27
+                        },
+                        "spin": {
+                          "x": 0,
+                          "y": -36,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheelhub": {
+                        "geometry": {
+                          "height": 0.13,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.0702,
+                          "radiusTop": 0.0702
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheelspoke0": {
+                        "geometry": {
+                          "depth": 0.0468,
+                          "height": 0.045,
+                          "kind": "box",
+                          "width": 0.663
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheelspoke1": {
+                        "geometry": {
+                          "depth": 0.0468,
+                          "height": 0.045,
+                          "kind": "box",
+                          "width": 0.663
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 60,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheelspoke2": {
+                        "geometry": {
+                          "depth": 0.0468,
+                          "height": 0.045,
+                          "kind": "box",
+                          "width": 0.663
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 120,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth0": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0.39
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth1": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0.195,
+                          "y": 0,
+                          "z": 0.337749907475931
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 30,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth10": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": -0.337749907475931,
+                          "y": 0,
+                          "z": 0.195
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 300,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth11": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": -0.195,
+                          "y": 0,
+                          "z": 0.337749907475931
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 330,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth2": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0.337749907475931,
+                          "y": 0,
+                          "z": 0.195
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 60,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth3": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0.39,
+                          "y": 0,
+                          "z": 2.38806125833734e-17
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 90,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth4": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0.337749907475931,
+                          "y": 0,
+                          "z": -0.195
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 120,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth5": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0.195,
+                          "y": 0,
+                          "z": -0.337749907475931
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 150,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth6": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 4.77612251667468e-17,
+                          "y": 0,
+                          "z": -0.39
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 180,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth7": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": -0.195,
+                          "y": 0,
+                          "z": -0.337749907475931
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 210,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth8": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": -0.337749907475931,
+                          "y": 0,
+                          "z": -0.195
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 240,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheeltooth9": {
+                        "geometry": {
+                          "depth": 0.0897,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0975
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": -0.39,
+                          "y": 0,
+                          "z": -7.16418377501202e-17
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 270,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheelwell": {
+                        "geometry": {
+                          "height": 0.06,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.2652,
+                          "radiusTop": 0.2652
+                        },
+                        "kind": "mesh",
+                        "materialId": "case",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.008,
+                          "z": 0
+                        }
+                      },
+                      "balanceWheelwheel": {
+                        "geometry": {
+                          "height": 0.055,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.39,
+                          "radiusTop": 0.39
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "balanceWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "bezel": {
+                        "keyframes": {
+                          "position.y": [
+                            {
+                              "time": 0,
+                              "value": 0.22
+                            },
+                            {
+                              "time": 2.75,
+                              "value": 0.22
+                            },
+                            {
+                              "time": 2.85,
+                              "value": 0.22
+                            },
+                            {
+                              "time": 3.0875,
+                              "value": 0.284702397365406
+                            },
+                            {
+                              "time": 3.325,
+                              "value": 0.468959235991435
+                            },
+                            {
+                              "time": 3.5625,
+                              "value": 0.744719082489674
+                            },
+                            {
+                              "time": 3.8,
+                              "value": 1.07
+                            },
+                            {
+                              "time": 4.0375,
+                              "value": 1.39528091751033
+                            },
+                            {
+                              "time": 4.275,
+                              "value": 1.67104076400857
+                            },
+                            {
+                              "time": 4.5125,
+                              "value": 1.85529760263459
+                            },
+                            {
+                              "time": 4.75,
+                              "value": 1.92
+                            },
+                            {
+                              "time": 8.1,
+                              "value": 1.92
+                            },
+                            {
+                              "time": 8.2,
+                              "value": 1.92
+                            },
+                            {
+                              "time": 8.46875,
+                              "value": 1.85529760263459
+                            },
+                            {
+                              "time": 8.7375,
+                              "value": 1.67104076400857
+                            },
+                            {
+                              "time": 9.00625,
+                              "value": 1.39528091751033
+                            },
+                            {
+                              "time": 9.275,
+                              "value": 1.07
+                            },
+                            {
+                              "time": 9.54375,
+                              "value": 0.744719082489674
+                            },
+                            {
+                              "time": 9.8125,
+                              "value": 0.468959235991435
+                            },
+                            {
+                              "time": 10.08125,
+                              "value": 0.284702397365406
+                            },
+                            {
+                              "time": 10.35,
+                              "value": 0.22
+                            },
+                            {
+                              "time": 12,
+                              "value": 0.22
+                            }
+                          ]
+                        },
+                        "kind": "group",
+                        "parentId": "instrument"
+                      },
+                      "bezelInner": {
+                        "geometry": {
+                          "kind": "torus",
+                          "radius": 1.245,
+                          "tube": 0.018
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "bezel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.012,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 90,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "bezelRing": {
+                        "geometry": {
+                          "kind": "torus",
+                          "radius": 1.34,
+                          "tube": 0.065
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "bezel",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 90,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "bridgeA": {
+                        "geometry": {
+                          "depth": 1.3,
+                          "height": 0.07,
+                          "kind": "box",
+                          "width": 0.12
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": -0.92,
+                          "y": 0.13,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": -14,
+                          "z": 0
+                        }
+                      },
+                      "bridgeB": {
+                        "geometry": {
+                          "depth": 0.95,
+                          "height": 0.07,
+                          "kind": "box",
+                          "width": 0.12
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": 0.91,
+                          "y": 0.13,
+                          "z": 0.05
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 14,
+                          "z": 0
+                        }
+                      },
+                      "bridgeScrew0": {
+                        "geometry": {
+                          "height": 0.1,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.052,
+                          "radiusTop": 0.052
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": -0.92,
+                          "y": 0.2,
+                          "z": -0.58
+                        }
+                      },
+                      "bridgeScrew1": {
+                        "geometry": {
+                          "height": 0.1,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.052,
+                          "radiusTop": 0.052
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": -0.92,
+                          "y": 0.2,
+                          "z": 0.58
+                        }
+                      },
+                      "bridgeScrew2": {
+                        "geometry": {
+                          "height": 0.1,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.052,
+                          "radiusTop": 0.052
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": 0.91,
+                          "y": 0.2,
+                          "z": -0.4
+                        }
+                      },
+                      "bridgeScrew3": {
+                        "geometry": {
+                          "height": 0.1,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.052,
+                          "radiusTop": 0.052
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": 0.91,
+                          "y": 0.2,
+                          "z": 0.47
+                        }
+                      },
+                      "caseBody": {
+                        "geometry": {
+                          "height": 0.38,
+                          "kind": "cylinder",
+                          "radiusBottom": 1.42,
+                          "radiusTop": 1.42
+                        },
+                        "kind": "mesh",
+                        "materialId": "case",
+                        "parentId": "caseLayer",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "caseLayer": {
+                        "keyframes": {
+                          "position.y": [
+                            {
+                              "time": 0,
+                              "value": -0.27
+                            },
+                            {
+                              "time": 2.4,
+                              "value": -0.27
+                            },
+                            {
+                              "time": 2.5,
+                              "value": -0.27
+                            },
+                            {
+                              "time": 2.7375,
+                              "value": -0.322523122567212
+                            },
+                            {
+                              "time": 2.975,
+                              "value": -0.472096320981282
+                            },
+                            {
+                              "time": 3.2125,
+                              "value": -0.695948431668088
+                            },
+                            {
+                              "time": 3.45,
+                              "value": -0.96
+                            },
+                            {
+                              "time": 3.6875,
+                              "value": -1.22405156833191
+                            },
+                            {
+                              "time": 3.925,
+                              "value": -1.44790367901872
+                            },
+                            {
+                              "time": 4.1625,
+                              "value": -1.59747687743279
+                            },
+                            {
+                              "time": 4.4,
+                              "value": -1.65
+                            },
+                            {
+                              "time": 8.1,
+                              "value": -1.65
+                            },
+                            {
+                              "time": 8.2,
+                              "value": -1.65
+                            },
+                            {
+                              "time": 8.46875,
+                              "value": -1.59747687743279
+                            },
+                            {
+                              "time": 8.7375,
+                              "value": -1.44790367901872
+                            },
+                            {
+                              "time": 9.00625,
+                              "value": -1.22405156833191
+                            },
+                            {
+                              "time": 9.275,
+                              "value": -0.96
+                            },
+                            {
+                              "time": 9.54375,
+                              "value": -0.695948431668088
+                            },
+                            {
+                              "time": 9.8125,
+                              "value": -0.472096320981282
+                            },
+                            {
+                              "time": 10.08125,
+                              "value": -0.322523122567212
+                            },
+                            {
+                              "time": 10.35,
+                              "value": -0.27
+                            },
+                            {
+                              "time": 12,
+                              "value": -0.27
+                            }
+                          ]
+                        },
+                        "kind": "group",
+                        "parentId": "instrument"
+                      },
+                      "caseLowerLip": {
+                        "geometry": {
+                          "height": 0.04,
+                          "kind": "cylinder",
+                          "radiusBottom": 1.39,
+                          "radiusTop": 1.39
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "caseLayer",
+                        "position": {
+                          "x": 0,
+                          "y": -0.2,
+                          "z": 0
+                        }
+                      },
+                      "caseRim": {
+                        "geometry": {
+                          "kind": "torus",
+                          "radius": 1.39,
+                          "tube": 0.045
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "caseLayer",
+                        "position": {
+                          "x": 0,
+                          "y": 0.2,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 90,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "crownCap": {
+                        "geometry": {
+                          "height": 0.025,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.17,
+                          "radiusTop": 0.17
+                        },
+                        "kind": "mesh",
+                        "materialId": "case",
+                        "parentId": "caseLayer",
+                        "position": {
+                          "x": 1.75,
+                          "y": 0,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 90
+                        }
+                      },
+                      "crownGrip": {
+                        "geometry": {
+                          "height": 0.18,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.23,
+                          "radiusTop": 0.23
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "caseLayer",
+                        "position": {
+                          "x": 1.65,
+                          "y": 0,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 90
+                        }
+                      },
+                      "crownStem": {
+                        "geometry": {
+                          "height": 0.25,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.13,
+                          "radiusTop": 0.13
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "caseLayer",
+                        "position": {
+                          "x": 1.47,
+                          "y": 0,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 90
+                        }
+                      },
+                      "dial": {
+                        "keyframes": {
+                          "position.y": [
+                            {
+                              "time": 0,
+                              "value": 0.12
+                            },
+                            {
+                              "time": 2.6,
+                              "value": 0.12
+                            },
+                            {
+                              "time": 2.7,
+                              "value": 0.12
+                            },
+                            {
+                              "time": 2.9375,
+                              "value": 0.150448186995485
+                            },
+                            {
+                              "time": 3.175,
+                              "value": 0.237157287525381
+                            },
+                            {
+                              "time": 3.4125,
+                              "value": 0.366926627053964
+                            },
+                            {
+                              "time": 3.65,
+                              "value": 0.52
+                            },
+                            {
+                              "time": 3.8875,
+                              "value": 0.673073372946036
+                            },
+                            {
+                              "time": 4.125,
+                              "value": 0.802842712474619
+                            },
+                            {
+                              "time": 4.3625,
+                              "value": 0.889551813004515
+                            },
+                            {
+                              "time": 4.6,
+                              "value": 0.92
+                            },
+                            {
+                              "time": 8.1,
+                              "value": 0.92
+                            },
+                            {
+                              "time": 8.2,
+                              "value": 0.92
+                            },
+                            {
+                              "time": 8.46875,
+                              "value": 0.889551813004515
+                            },
+                            {
+                              "time": 8.7375,
+                              "value": 0.802842712474619
+                            },
+                            {
+                              "time": 9.00625,
+                              "value": 0.673073372946036
+                            },
+                            {
+                              "time": 9.275,
+                              "value": 0.52
+                            },
+                            {
+                              "time": 9.54375,
+                              "value": 0.366926627053964
+                            },
+                            {
+                              "time": 9.8125,
+                              "value": 0.237157287525381
+                            },
+                            {
+                              "time": 10.08125,
+                              "value": 0.150448186995485
+                            },
+                            {
+                              "time": 10.35,
+                              "value": 0.12
+                            },
+                            {
+                              "time": 12,
+                              "value": 0.12
+                            }
+                          ]
+                        },
+                        "kind": "group",
+                        "parentId": "instrument"
+                      },
+                      "dialEdge": {
+                        "geometry": {
+                          "kind": "torus",
+                          "radius": 1.26,
+                          "tube": 0.02
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0,
+                          "y": 0.025,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 90,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "dialFace": {
+                        "geometry": {
+                          "height": 0.045,
+                          "kind": "cylinder",
+                          "radiusBottom": 1.29,
+                          "radiusTop": 1.29
+                        },
+                        "kind": "mesh",
+                        "materialId": "dial",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "driveWheel": {
+                        "kind": "group",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": -0.49,
+                          "y": 0.11,
+                          "z": 0.21
+                        },
+                        "spin": {
+                          "x": 0,
+                          "y": 30,
+                          "z": 0
+                        }
+                      },
+                      "driveWheelhub": {
+                        "geometry": {
+                          "height": 0.13,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.0774,
+                          "radiusTop": 0.0774
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        }
+                      },
+                      "driveWheelspoke0": {
+                        "geometry": {
+                          "depth": 0.0516,
+                          "height": 0.045,
+                          "kind": "box",
+                          "width": 0.731
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "driveWheelspoke1": {
+                        "geometry": {
+                          "depth": 0.0516,
+                          "height": 0.045,
+                          "kind": "box",
+                          "width": 0.731
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 60,
+                          "z": 0
+                        }
+                      },
+                      "driveWheelspoke2": {
+                        "geometry": {
+                          "depth": 0.0516,
+                          "height": 0.045,
+                          "kind": "box",
+                          "width": 0.731
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 120,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth0": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0.43
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth1": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0.215,
+                          "y": 0,
+                          "z": 0.372390923627309
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 30,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth10": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": -0.372390923627309,
+                          "y": 0,
+                          "z": 0.215
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 300,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth11": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": -0.215,
+                          "y": 0,
+                          "z": 0.372390923627308
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 330,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth2": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0.372390923627309,
+                          "y": 0,
+                          "z": 0.215
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 60,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth3": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0.43,
+                          "y": 0,
+                          "z": 2.63299061816681e-17
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 90,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth4": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0.372390923627309,
+                          "y": 0,
+                          "z": -0.215
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 120,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth5": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0.215,
+                          "y": 0,
+                          "z": -0.372390923627309
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 150,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth6": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 5.26598123633362e-17,
+                          "y": 0,
+                          "z": -0.43
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 180,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth7": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": -0.215,
+                          "y": 0,
+                          "z": -0.372390923627309
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 210,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth8": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": -0.372390923627309,
+                          "y": 0,
+                          "z": -0.215
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 240,
+                          "z": 0
+                        }
+                      },
+                      "driveWheeltooth9": {
+                        "geometry": {
+                          "depth": 0.0989,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.1075
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": -0.43,
+                          "y": 0,
+                          "z": -7.89897185450043e-17
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 270,
+                          "z": 0
+                        }
+                      },
+                      "driveWheelwell": {
+                        "geometry": {
+                          "height": 0.06,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.2924,
+                          "radiusTop": 0.2924
+                        },
+                        "kind": "mesh",
+                        "materialId": "case",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.008,
+                          "z": 0
+                        }
+                      },
+                      "driveWheelwheel": {
+                        "geometry": {
+                          "height": 0.055,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.43,
+                          "radiusTop": 0.43
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "driveWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheel": {
+                        "kind": "group",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": 0.08,
+                          "y": 0.11,
+                          "z": -0.58
+                        },
+                        "spin": {
+                          "x": 0,
+                          "y": 52,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheelhub": {
+                        "geometry": {
+                          "height": 0.13,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.0486,
+                          "radiusTop": 0.0486
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheelspoke0": {
+                        "geometry": {
+                          "depth": 0.0324,
+                          "height": 0.045,
+                          "kind": "box",
+                          "width": 0.459
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheelspoke1": {
+                        "geometry": {
+                          "depth": 0.0324,
+                          "height": 0.045,
+                          "kind": "box",
+                          "width": 0.459
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 60,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheelspoke2": {
+                        "geometry": {
+                          "depth": 0.0324,
+                          "height": 0.045,
+                          "kind": "box",
+                          "width": 0.459
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 120,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth0": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0.27
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth1": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0.135,
+                          "y": 0,
+                          "z": 0.233826859021798
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 30,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth10": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": -0.233826859021798,
+                          "y": 0,
+                          "z": 0.135
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 300,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth11": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": -0.135,
+                          "y": 0,
+                          "z": 0.233826859021798
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 330,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth2": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0.233826859021798,
+                          "y": 0,
+                          "z": 0.135
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 60,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth3": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0.27,
+                          "y": 0,
+                          "z": 1.65327317884893e-17
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 90,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth4": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0.233826859021798,
+                          "y": 0,
+                          "z": -0.135
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 120,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth5": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0.135,
+                          "y": 0,
+                          "z": -0.233826859021798
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 150,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth6": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 3.30654635769785e-17,
+                          "y": 0,
+                          "z": -0.27
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 180,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth7": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": -0.135,
+                          "y": 0,
+                          "z": -0.233826859021799
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 210,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth8": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": -0.233826859021798,
+                          "y": 0,
+                          "z": -0.135
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 240,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheeltooth9": {
+                        "geometry": {
+                          "depth": 0.0621,
+                          "height": 0.055,
+                          "kind": "box",
+                          "width": 0.0675
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": -0.27,
+                          "y": 0,
+                          "z": -4.95981953654678e-17
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 270,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheelwell": {
+                        "geometry": {
+                          "height": 0.06,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.1836,
+                          "radiusTop": 0.1836
+                        },
+                        "kind": "mesh",
+                        "materialId": "case",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0.008,
+                          "z": 0
+                        }
+                      },
+                      "escapeWheelwheel": {
+                        "geometry": {
+                          "height": 0.055,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.27,
+                          "radiusTop": 0.27
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "escapeWheel",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "handPin": {
+                        "geometry": {
+                          "height": 0.08,
+                          "kind": "cylinder",
+                          "radiusBottom": 0.074,
+                          "radiusTop": 0.074
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0,
+                          "y": 0.17,
+                          "z": 0
+                        }
+                      },
+                      "hourBlade": {
+                        "geometry": {
+                          "depth": 0.67,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.085
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "hourHand",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0.27
+                        }
+                      },
+                      "hourHand": {
+                        "kind": "group",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0,
+                          "y": 0.08,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": -50,
+                          "z": 0
+                        },
+                        "spin": {
+                          "x": 0,
+                          "y": 1.5,
+                          "z": 0
+                        }
+                      },
+                      "index0": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0,
+                          "y": 0.04,
+                          "z": 1.09
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "index1": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0.282112759161748,
+                          "y": 0.04,
+                          "z": 1.05285915065508
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 15,
+                          "z": 0
+                        }
+                      },
+                      "index10": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0.545,
+                          "y": 0.04,
+                          "z": -0.943967690125038
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 150,
+                          "z": 0
+                        }
+                      },
+                      "index11": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0.282112759161748,
+                          "y": 0.04,
+                          "z": -1.05285915065508
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 165,
+                          "z": 0
+                        }
+                      },
+                      "index12": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 1.33486501107061e-16,
+                          "y": 0.04,
+                          "z": -1.09
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 180,
+                          "z": 0
+                        }
+                      },
+                      "index13": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -0.282112759161748,
+                          "y": 0.04,
+                          "z": -1.05285915065508
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 195,
+                          "z": 0
+                        }
+                      },
+                      "index14": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -0.545,
+                          "y": 0.04,
+                          "z": -0.943967690125038
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 210,
+                          "z": 0
+                        }
+                      },
+                      "index15": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -0.770746391493336,
+                          "y": 0.04,
+                          "z": -0.770746391493337
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 225,
+                          "z": 0
+                        }
+                      },
+                      "index16": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -0.943967690125038,
+                          "y": 0.04,
+                          "z": -0.545
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 240,
+                          "z": 0
+                        }
+                      },
+                      "index17": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -1.05285915065508,
+                          "y": 0.04,
+                          "z": -0.282112759161747
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 255,
+                          "z": 0
+                        }
+                      },
+                      "index18": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -1.09,
+                          "y": 0.04,
+                          "z": -2.00229751660592e-16
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 270,
+                          "z": 0
+                        }
+                      },
+                      "index19": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -1.05285915065508,
+                          "y": 0.04,
+                          "z": 0.282112759161747
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 285,
+                          "z": 0
+                        }
+                      },
+                      "index2": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0.545,
+                          "y": 0.04,
+                          "z": 0.943967690125038
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 30,
+                          "z": 0
+                        }
+                      },
+                      "index20": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -0.943967690125038,
+                          "y": 0.04,
+                          "z": 0.545
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 300,
+                          "z": 0
+                        }
+                      },
+                      "index21": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -0.770746391493337,
+                          "y": 0.04,
+                          "z": 0.770746391493337
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 315,
+                          "z": 0
+                        }
+                      },
+                      "index22": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -0.545,
+                          "y": 0.04,
+                          "z": 0.943967690125038
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 330,
+                          "z": 0
+                        }
+                      },
+                      "index23": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": -0.282112759161749,
+                          "y": 0.04,
+                          "z": 1.05285915065508
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 345,
+                          "z": 0
+                        }
+                      },
+                      "index3": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0.770746391493337,
+                          "y": 0.04,
+                          "z": 0.770746391493337
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 45,
+                          "z": 0
+                        }
+                      },
+                      "index4": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0.943967690125038,
+                          "y": 0.04,
+                          "z": 0.545
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 60,
+                          "z": 0
+                        }
+                      },
+                      "index5": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 1.05285915065508,
+                          "y": 0.04,
+                          "z": 0.282112759161748
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 75,
+                          "z": 0
+                        }
+                      },
+                      "index6": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 1.09,
+                          "y": 0.04,
+                          "z": 6.67432505535307e-17
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 90,
+                          "z": 0
+                        }
+                      },
+                      "index7": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 1.05285915065508,
+                          "y": 0.04,
+                          "z": -0.282112759161747
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 105,
+                          "z": 0
+                        }
+                      },
+                      "index8": {
+                        "geometry": {
+                          "depth": 0.18,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.055
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0.943967690125038,
+                          "y": 0.04,
+                          "z": -0.545
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 120,
+                          "z": 0
+                        }
+                      },
+                      "index9": {
+                        "geometry": {
+                          "depth": 0.075,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0.770746391493337,
+                          "y": 0.04,
+                          "z": -0.770746391493337
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 135,
+                          "z": 0
+                        }
+                      },
+                      "instrument": {
+                        "keyframes": {
+                          "rotation.y": [
+                            {
+                              "time": 0,
+                              "value": -28
+                            },
+                            {
+                              "time": 4.8,
+                              "value": 4
+                            },
+                            {
+                              "time": 8,
+                              "value": 4
+                            },
+                            {
+                              "time": 12,
+                              "value": 42
+                            }
+                          ],
+                          "scale.x": [
+                            {
+                              "time": 0,
+                              "value": 1.15
+                            },
+                            {
+                              "time": 2.5,
+                              "value": 1.15
+                            },
+                            {
+                              "time": 4.5,
+                              "value": 0.95
+                            },
+                            {
+                              "time": 8,
+                              "value": 0.95
+                            },
+                            {
+                              "time": 10.5,
+                              "value": 1.15
+                            },
+                            {
+                              "time": 12,
+                              "value": 1.15
+                            }
+                          ],
+                          "scale.y": [
+                            {
+                              "time": 0,
+                              "value": 1.15
+                            },
+                            {
+                              "time": 2.5,
+                              "value": 1.15
+                            },
+                            {
+                              "time": 4.5,
+                              "value": 0.95
+                            },
+                            {
+                              "time": 8,
+                              "value": 0.95
+                            },
+                            {
+                              "time": 10.5,
+                              "value": 1.15
+                            },
+                            {
+                              "time": 12,
+                              "value": 1.15
+                            }
+                          ],
+                          "scale.z": [
+                            {
+                              "time": 0,
+                              "value": 1.15
+                            },
+                            {
+                              "time": 2.5,
+                              "value": 1.15
+                            },
+                            {
+                              "time": 4.5,
+                              "value": 0.95
+                            },
+                            {
+                              "time": 8,
+                              "value": 0.95
+                            },
+                            {
+                              "time": 10.5,
+                              "value": 1.15
+                            },
+                            {
+                              "time": 12,
+                              "value": 1.15
+                            }
+                          ]
+                        },
+                        "kind": "group"
+                      },
+                      "lugLB": {
+                        "geometry": {
+                          "depth": 0.62,
+                          "height": 0.28,
+                          "kind": "box",
+                          "width": 0.34
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "caseLayer",
+                        "position": {
+                          "x": -0.79,
+                          "y": 0,
+                          "z": -1.22
+                        }
+                      },
+                      "lugLF": {
+                        "geometry": {
+                          "depth": 0.62,
+                          "height": 0.28,
+                          "kind": "box",
+                          "width": 0.34
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "caseLayer",
+                        "position": {
+                          "x": -0.79,
+                          "y": 0,
+                          "z": 1.22
+                        }
+                      },
+                      "lugRB": {
+                        "geometry": {
+                          "depth": 0.62,
+                          "height": 0.28,
+                          "kind": "box",
+                          "width": 0.34
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "caseLayer",
+                        "position": {
+                          "x": 0.79,
+                          "y": 0,
+                          "z": -1.22
+                        }
+                      },
+                      "lugRF": {
+                        "geometry": {
+                          "depth": 0.62,
+                          "height": 0.28,
+                          "kind": "box",
+                          "width": 0.34
+                        },
+                        "kind": "mesh",
+                        "materialId": "silver",
+                        "parentId": "caseLayer",
+                        "position": {
+                          "x": 0.79,
+                          "y": 0,
+                          "z": 1.22
+                        }
+                      },
+                      "mechanism": {
+                        "keyframes": {
+                          "position.y": [
+                            {
+                              "time": 0,
+                              "value": -0.06
+                            },
+                            {
+                              "time": 2.5,
+                              "value": -0.06
+                            },
+                            {
+                              "time": 2.6,
+                              "value": -0.06
+                            },
+                            {
+                              "time": 2.8375,
+                              "value": -0.0710374677858634
+                            },
+                            {
+                              "time": 3.075,
+                              "value": -0.102469516727951
+                            },
+                            {
+                              "time": 3.3125,
+                              "value": -0.149510902307062
+                            },
+                            {
+                              "time": 3.55,
+                              "value": -0.205
+                            },
+                            {
+                              "time": 3.7875,
+                              "value": -0.260489097692938
+                            },
+                            {
+                              "time": 4.025,
+                              "value": -0.307530483272049
+                            },
+                            {
+                              "time": 4.2625,
+                              "value": -0.338962532214137
+                            },
+                            {
+                              "time": 4.5,
+                              "value": -0.35
+                            },
+                            {
+                              "time": 8.1,
+                              "value": -0.35
+                            },
+                            {
+                              "time": 8.2,
+                              "value": -0.35
+                            },
+                            {
+                              "time": 8.46875,
+                              "value": -0.338962532214137
+                            },
+                            {
+                              "time": 8.7375,
+                              "value": -0.307530483272049
+                            },
+                            {
+                              "time": 9.00625,
+                              "value": -0.260489097692938
+                            },
+                            {
+                              "time": 9.275,
+                              "value": -0.205
+                            },
+                            {
+                              "time": 9.54375,
+                              "value": -0.149510902307062
+                            },
+                            {
+                              "time": 9.8125,
+                              "value": -0.102469516727951
+                            },
+                            {
+                              "time": 10.08125,
+                              "value": -0.0710374677858634
+                            },
+                            {
+                              "time": 10.35,
+                              "value": -0.06
+                            },
+                            {
+                              "time": 12,
+                              "value": -0.06
+                            }
+                          ]
+                        },
+                        "kind": "group",
+                        "parentId": "instrument"
+                      },
+                      "minuteBlade": {
+                        "geometry": {
+                          "depth": 0.94,
+                          "height": 0.025,
+                          "kind": "box",
+                          "width": 0.045
+                        },
+                        "kind": "mesh",
+                        "materialId": "ivory",
+                        "parentId": "minuteHand",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0.37
+                        }
+                      },
+                      "minuteHand": {
+                        "kind": "group",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0,
+                          "y": 0.12,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 50,
+                          "z": 0
+                        },
+                        "spin": {
+                          "x": 0,
+                          "y": 7,
+                          "z": 0
+                        }
+                      },
+                      "movementPlate": {
+                        "geometry": {
+                          "height": 0.06,
+                          "kind": "cylinder",
+                          "radiusBottom": 1.25,
+                          "radiusTop": 1.25
+                        },
+                        "kind": "mesh",
+                        "materialId": "plate",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "movementRing": {
+                        "geometry": {
+                          "kind": "torus",
+                          "radius": 1.17,
+                          "tube": 0.025
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "mechanism",
+                        "position": {
+                          "x": 0,
+                          "y": 0.05,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 90,
+                          "y": 0,
+                          "z": 0
+                        }
+                      },
+                      "secondBlade": {
+                        "geometry": {
+                          "depth": 1.2,
+                          "height": 0.018,
+                          "kind": "box",
+                          "width": 0.018
+                        },
+                        "kind": "mesh",
+                        "materialId": "amber",
+                        "parentId": "secondHand",
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0.34
+                        }
+                      },
+                      "secondHand": {
+                        "kind": "group",
+                        "parentId": "dial",
+                        "position": {
+                          "x": 0,
+                          "y": 0.16,
+                          "z": 0
+                        },
+                        "rotation": {
+                          "x": 0,
+                          "y": 160,
+                          "z": 0
+                        },
+                        "spin": {
+                          "x": 0,
+                          "y": 36,
+                          "z": 0
+                        }
+                      }
+                    },
+                    "rate": 1.71976047904192
+                  }
+                },
+                "from": 0,
+                "duration": 168,
+                "style": {
+                  "width": 920,
+                  "height": 530,
+                  "position": "absolute",
+                  "left": 0,
+                  "top": 0
+                },
+                "animations": [],
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "instrument-headline",
+            "type": "text",
+            "text": "Open\nAssembly",
+            "from": 0,
+            "style": {
+              "width": 374.4,
+              "height": 151.2,
+              "position": "absolute",
+              "left": 67.2,
+              "top": 129.6,
+              "fontFamily": "Fraunces",
+              "fontSize": 60.48,
+              "fontWeight": 600,
+              "color": "#f0ead8",
+              "lineHeight": 1.06,
+              "maxLines": 3,
+              "minFontSize": 13.5,
+              "textFit": "shrink"
+            },
+            "animations": [
+              {
+                "kind": "keyframes",
+                "property": "opacity",
+                "frames": [
+                  {
+                    "frame": 0,
+                    "value": 0.12
+                  },
+                  {
+                    "frame": 31,
+                    "value": 1,
+                    "easing": "easeOut"
+                  }
+                ]
+              }
+            ],
+            "children": []
+          },
+          {
+            "id": "instrument-subhead",
+            "type": "text",
+            "text": "A study in moving parts.",
+            "from": 0,
+            "style": {
+              "width": 374.4,
+              "height": 64.8,
+              "position": "absolute",
+              "left": 67.2,
+              "top": 289.98,
+              "fontFamily": "Space Grotesk",
+              "fontSize": 21.06,
+              "fontWeight": 600,
+              "color": "#f0ead8",
+              "lineHeight": 1.06,
+              "maxLines": 3,
+              "minFontSize": 13.5,
+              "textFit": "shrink"
+            },
+            "animations": [],
+            "children": []
+          },
+          {
+            "id": "instrument-accent",
+            "type": "div",
+            "from": 0,
+            "style": {
+              "width": 825.6,
+              "height": 2.16,
+              "position": "absolute",
+              "left": 67.2,
+              "top": 487.62,
+              "backgroundColor": "#e5b66b"
+            },
+            "animations": [],
+            "children": []
+          },
+          {
+            "id": "instrument-url",
+            "type": "text",
+            "text": "form.studio",
+            "from": 0,
+            "style": {
+              "width": 825.6,
+              "height": 29.7,
+              "position": "absolute",
+              "left": 67.2,
+              "top": 495.72,
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 17.28,
+              "fontWeight": 600,
+              "color": "#f0ead8",
+              "lineHeight": 1.06,
+              "maxLines": 1,
+              "minFontSize": 13.5,
+              "textFit": "shrink"
+            },
+            "animations": [],
+            "children": []
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "reorderTracks",
+    "ids": [
+      "track:three",
+      "visual",
+      "audio"
+    ]
+  }
+]

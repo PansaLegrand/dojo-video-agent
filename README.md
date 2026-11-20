@@ -15,6 +15,12 @@
 
 [Watch Nocturne](docs/assets/showcase/night-garden/nocturne.mp4) · [Watch Ink Press](docs/assets/showcase/night-garden/press.mp4) · [Edit either film](examples/art-direction/README.md) · [Type and color guide](guides/type-and-color.md)
 
+### Open Assembly · editable 3D instrument study
+
+[![A watch separates into a dial, gears and case beside the editable Open Assembly title](docs/assets/showcase/open-assembly/poster.jpg)](docs/assets/showcase/open-assembly/preview.mp4)
+
+The eight-second cut opens with a studio imprint, then reveals the watch in layers. Open it in the running local editor with `node examples/art-direction/import.mjs examples/art-direction open-assembly`. The text, timing and 3D objects stay editable. [Download the MP4](docs/assets/showcase/open-assembly/preview.mp4)
+
 ### Creative directions
 
 https://github.com/user-attachments/assets/99fa44aa-1e46-4594-9938-7b8cfe312223

@@ -6,11 +6,11 @@ import path from "node:path";
 const [dir, direction, base = "http://127.0.0.1:4310"] = process.argv.slice(2);
 if (
   !dir ||
-  !["nocturne", "press"].includes(direction) ||
+  !["nocturne", "press", "open-assembly"].includes(direction) ||
   process.argv.length > 5
 )
   throw Error(
-    "Usage: node import.mjs COMMANDS_DIRECTORY nocturne|press [LOCAL_EDITOR_ORIGIN]",
+    "Usage: node import.mjs COMMANDS_DIRECTORY nocturne|press|open-assembly [LOCAL_EDITOR_ORIGIN]",
   );
 const origin = new URL(base);
 if (
@@ -26,7 +26,7 @@ assert.ok(
   Array.isArray(commands) &&
     commands.length > 0 &&
     commands.every((c) =>
-      ["addItem", "addAsset", "addTrack", "set", "moveItem"].includes(c.type),
+      ["addItem", "addAsset", "addTrack", "set", "moveItem", "reorderTracks"].includes(c.type),
     ),
   "Expected a reviewed specimen command batch.",
 );
@@ -47,13 +47,12 @@ async function request(endpoint, body) {
     throw Error(endpoint + ": " + (result.message ?? response.statusText));
   return result.data;
 }
-const project = await request("/api/projects", {
-  name:
-    "Night Garden · " + (direction === "nocturne" ? "Nocturne" : "Ink Press"),
-});
+const title = direction === "open-assembly" ? "Open Assembly"
+  : "Night Garden · " + (direction === "nocturne" ? "Nocturne" : "Ink Press");
+const project = await request("/api/projects", { name: title });
 const api = "/api/projects/" + encodeURIComponent(project.id);
 const snapshot = await request(api + "/document");
-const format = Object.entries({
+const format = Object.entries(direction === "open-assembly" ? {} : {
   width: 1280,
   height: 720,
   fps: 30,
@@ -68,7 +67,7 @@ const imported = await request(api + "/commands", {
   operationId: randomUUID(),
   baseRevision: snapshot.revision,
   baseHash: snapshot.documentHash,
-  summary: "Import the editable Night Garden specimen",
+  summary: "Import " + title,
   commands: [...format, ...commands],
 });
 console.log(
