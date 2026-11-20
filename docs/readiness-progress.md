@@ -427,3 +427,18 @@ portrait documents. The eight-second Cut Room export advances at frames
 64 and 128. The database-backed commercial browser check edited just the
 middle label, then exercised Undo, Redo, reload and export. Engine source
 is `c141423`. Publication and hosted-model qualification remain separate.
+
+## R29 · Multi-series comparisons (2026-11-20)
+
+The comparison catalog lets a new local-v14 run discover grouped bars and
+multi-line categorical charts using one explicit domain and unit. Named rows
+show the exact supplied values. Existing chart, kinetic, radial and walkthrough
+catalogs keep their menus and replay behavior.
+
+Both hosts produced identical project hashes for a landscape two-series line
+chart and a portrait three-series signed bar chart. A second reviewed edit
+changed the weekend noon value, polyline point and marker together. The result
+matched regeneration from the corrected numbers. The commercial web editor
+applied the correction, handled Undo and Redo, and exported all 192 frames of
+the original chart. Engine source is `d8e77a2`. Paid model selection and
+registry publication remain separate.

@@ -1,7 +1,7 @@
 import { macroDefinitions } from "@dojo-video-engine/presets/macros";
 
-import { chartMacroCatalog, kineticMacroCatalog, radialMacroCatalog, walkthroughMacroCatalog } from "./agent-authoring";
-export type NativeMacroCatalog = typeof chartMacroCatalog | typeof kineticMacroCatalog | typeof radialMacroCatalog | typeof walkthroughMacroCatalog;
+import { chartMacroCatalog, kineticMacroCatalog, radialMacroCatalog, walkthroughMacroCatalog, comparisonMacroCatalog } from "./agent-authoring";
+export type NativeMacroCatalog = typeof chartMacroCatalog | typeof kineticMacroCatalog | typeof radialMacroCatalog | typeof walkthroughMacroCatalog | typeof comparisonMacroCatalog;
 
 const legacyNames = Object.freeze([
   "effectOverlay", "cartoonBurst", "textEffect", "lowerThird", "titleCard",
@@ -15,6 +15,7 @@ const revisions = [
   { id: kineticMacroCatalog, name: "kineticSplit", label: "kinetic" },
   { id: radialMacroCatalog, name: "radialGroup", label: "radial" },
   { id: walkthroughMacroCatalog, name: "uiWalkthroughCard", label: "walkthrough" },
+  { id: comparisonMacroCatalog, name: "comparisonChart", label: "comparison" },
 ] as const;
 const menus = revisions.map((_, index) => Object.freeze([...legacyNames, ...revisions.slice(0, index + 1).map(r => r.name)]));
 

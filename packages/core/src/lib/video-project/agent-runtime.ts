@@ -661,7 +661,11 @@ export function buildNativeAgentPrompts(
   const spatialGuide = input.authoring?.spatialCanvas
     ? "\nFor a 3D scene, keep the existing canvas dimensions, fps and background. An empty starter with its default background may take an initial color. On an existing canvas place a full-size div at the scene start and duration, before the mesh in paint order. Use zIndex 0 for the backdrop and mesh; negative values can place the backdrop behind the project canvas. Declare a project-wide format property only when the user requests that change."
     : "";
-  const walkthrough = input.authoring?.macroCatalog === "engine-1.3.0-walkthrough-v1";
+  const comparison = input.authoring?.macroCatalog === "engine-1.3.0-comparison-v1";
+  const comparisonGuide = comparison
+    ? "\nFor multiple named series on a common unit, inspect comparisonChart. Use grouped bars to compare amounts or lines to compare trends. Preserve the category order and exact values. When revising a value, update its table cell and matching mark, including the polyline point or bar entrance keyframes. Keep unrelated series intact."
+    : "";
+  const walkthrough = comparison || input.authoring?.macroCatalog === "engine-1.3.0-walkthrough-v1";
   const walkthroughGuide = walkthrough
     ? "\nFor a product walkthrough inspect uiWalkthroughCard. Give each step a short action label and one useful detail. Leave the active index unset to advance in order; pin it for a specific screen. Aim the pointer at the action and revise the existing label or detail on follow-up edits."
     : "";
@@ -672,5 +676,5 @@ export function buildNativeAgentPrompts(
   const kineticGuide = radial || input.authoring?.macroCatalog === "engine-1.3.0-kinetic-v1"
     ? "\nFor a staggered title, inspect kineticSplit. Use maskSlide for a crisp editorial reveal, trackingExpand for an airy wordmark, elasticRise for a buoyant entrance, or cascadePop for short percussive beats. Split by word to keep phrases readable, by char for short display lettering, or by line for connected scripts. Preserve the supplied copy and line breaks. Reserve holdFrames for reading. Revise the existing native text layers on follow-up edits."
     : "";
-  return { systemPrompt: systemPrompt + spatialGuide + kineticGuide + radialGuide + walkthroughGuide, userPrompt };
+  return { systemPrompt: systemPrompt + spatialGuide + kineticGuide + radialGuide + walkthroughGuide + comparisonGuide, userPrompt };
 }
