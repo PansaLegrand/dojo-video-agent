@@ -650,6 +650,12 @@ it("binds the installed chart catalog only when starting a new v14 run", async (
     await settle(reopened, f.p.id);
     const latest = await reopened.read(f.p.id);
     expect(latest.runs.find(r => r.id === radial.run.id)?.request.authoring?.macroCatalog).toBe("engine-1.3.0-radial-v1");
+    installed.mockReturnValue("engine-1.3.0-walkthrough-v1");
+    const walk = await host.start(f.p.id, { ...f.input, operationId: "walkthrough-installed" });
+    await settle(reopened, f.p.id);
+    const saved = await reopened.read(f.p.id);
+    expect(saved.runs.find(r => r.id === walk.run.id)?.request.authoring?.macroCatalog).toBe("engine-1.3.0-walkthrough-v1");
+    expect(saved.runs.find(r => r.id === radial.run.id)?.request.authoring?.macroCatalog).toBe("engine-1.3.0-radial-v1");
     expect(latest.runs.find(r => r.id === stagger.run.id)?.request.authoring?.macroCatalog).toBe("engine-1.3.0-kinetic-v1");
     installed.mockReturnValue(undefined);
     await host.start(f.p.id, { ...f.input, operationId: "new-engine" });

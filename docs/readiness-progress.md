@@ -413,3 +413,17 @@ macro JSON. In the commercial editor, changing the width of the fourth petal
 preserved every other mark and Undo restored the original project. Engine
 source is `1a650b2`. The asset-free eight-second H.264 decoded through all
 192 frames. The hosted model and release remain outside this verification.
+
+## R29 · editable UI walkthroughs (2026-11-20)
+
+The walkthrough catalog adds `uiWalkthroughCard` on top of the radial catalog.
+It expands supplied steps into native labels, details, status marks and a
+pointer. A new session can revise step two through a normal reviewed edit,
+preserving the other rows and the cursor timing. Saved chart, kinetic and
+radial sessions keep their original macro menus and compilation behavior.
+
+The local and commercial hosts produced identical landscape and Chinese
+portrait documents. The eight-second Cut Room export advances at frames
+64 and 128. The database-backed commercial browser check edited just the
+middle label, then exercised Undo, Redo, reload and export. Engine source
+is `c141423`. Publication and hosted-model qualification remain separate.
