@@ -2,12 +2,7 @@ import { selectAgentKit, sourceRequirementValidation } from "./runtime-build";
 import { graphicsFeatureGrammar } from "../../core/src/lib/video-project/graphics-feature-grammar";
 import { sourceAudioTrackPresence } from "../../core/src/lib/video-project/source-audio";
 import { importSvgGraphic } from "@dojo-video-engine/interchange/svg";
-import {
-  parseThreeScene,
-  threeSceneSchema,
-  THREE_EXTENSION,
-} from "@dojo-video-engine/three/schema";
-import { zodToJsonSchema } from "zod-to-json-schema";
+import { parseThreeScene, THREE_EXTENSION } from "@dojo-video-engine/three/schema";
 import {
   type AgentTool as KitTool,
   type Skill,
@@ -32,7 +27,7 @@ import {
 } from "../../core/src/lib/video-project/agent-runtime";
 import {
   nativeCompletionTargetHints,
-  nativeAgentGraphicsSchema,
+  nativeAgentGraphicsSchema, nativeThreeGraphicsSchema,
   nativeAgentResponseSchema,
 } from "../../core/src/lib/video-project/agent-schema";
 import {
@@ -167,9 +162,7 @@ export function createVideoToolset(
                 ? { installedGrammar: true } : {}), macroCatalog: request.authoring?.macroCatalog },
             )
           : {
-              three: zodToJsonSchema(threeSceneSchema, {
-                $refStrategy: "none",
-              }),
+              three: nativeThreeGraphicsSchema(request.authoring?.macroCatalog),
               extension: THREE_EXTENSION,
             },
       inspectProject: (query) => ({

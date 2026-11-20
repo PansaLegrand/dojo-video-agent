@@ -1,3 +1,4 @@
+import { supportedReceiptEngines } from "./engine-version";
 import { z } from "zod/v3";
 import hash from "fast-sha256";
 import { canonicalSerialize } from "./document";
@@ -38,7 +39,7 @@ export function assertBrowserInspectionGrant(request: BrowserInspectionRequest, 
 }
 export const sourceInspectionFrameSchema = z.object({ requestedMs: z.number().finite().nonnegative(), actualMs: z.number().finite().min(-60_000), durationMs: z.number().finite().positive().nullable(),
   width: positive.max(1024), height: positive.max(1024), byteLength: positive.max(4 * 1024 * 1024), sha256: digest, mimeType: z.literal("image/jpeg") }).strict();
-export const sourceInspectionProvenanceSchema = z.object({ algorithm: z.literal("dojo-source-inspection-v1"), engineVersion: z.literal("1.2.3"), sourceKind: z.literal("original"), source: inspectionSourceSchema,
+export const sourceInspectionProvenanceSchema = z.object({ algorithm: z.literal("dojo-source-inspection-v1"), engineVersion: z.enum(supportedReceiptEngines), sourceKind: z.literal("original"), source: inspectionSourceSchema,
   displayWidth: positive.max(16_384), displayHeight: positive.max(16_384), orientation: z.literal("display-oriented"), rotationDegrees: z.union([z.literal(0), z.literal(90), z.literal(180), z.literal(270)]).nullable(),
   sourceMimeType: sourceInspectionMimeSchema, colorPolicy: z.literal("browser-sdr-to-srgb-v1"),
   colorMetadata: z.object({ primaries: z.string().max(80).nullable(), transfer: z.string().max(80).nullable(), matrix: z.string().max(80).nullable(), fullRange: z.boolean().nullable() }).strict().nullable(),

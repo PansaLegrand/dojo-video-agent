@@ -1,3 +1,4 @@
+import {installedNativeMacroCatalog} from "../packages/core/src/lib/video-project/native-macro-catalog";
 import { createHash } from "node:crypto";
 import Ajv from "ajv";
 import { expect, it } from "vitest";
@@ -19,10 +20,10 @@ function at(value: unknown, path: readonly string[]): Schema {
   for (const key of path) current = (current as Schema)[key];
   return current as Schema;
 }
-function graphics(installedGrammar = true) {
+function graphics(installedGrammar = true, current = false) {
   const value = nativeAgentGraphicsSchema(
     {},
-    installedGrammar ? { installedGrammar: true } : {},
+    { ...(installedGrammar ? { installedGrammar: true as const } : {}), ...(current ? {macroCatalog: installedNativeMacroCatalog()} : {}) },
   );
   if (!("node" in value) || !value.node || !value.examples || !value.animation)
     throw new Error("Native discovery required");
@@ -109,7 +110,7 @@ it("copies authoritative refined metadata including referenced siblings and nest
     "style",
     "properties",
   ]);
-  const actual = at(graphics().node, ["properties", "style", "properties"]);
+  const actual = at(graphics(true, true).node, ["properties", "style", "properties"]);
   for (const key of [
     "transformOrigin",
     "transform",

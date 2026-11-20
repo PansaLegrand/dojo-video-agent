@@ -1,3 +1,4 @@
+import type { ReceiptEngineVersion } from "./engine-version";
 import { z } from "zod/v3";
 
 export const SOURCE_INSPECTION_LIMITS = Object.freeze({ maxFrames: 8, maxDimension: 1024, maxFramePixels: 1_048_576,
@@ -17,7 +18,7 @@ export const sourceInspectionPlanSchema = z.object({ source: inspectionSourceSch
 export type InspectionSource = z.infer<typeof inspectionSourceSchema>;
 export type SourceInspectionPlan = z.infer<typeof sourceInspectionPlanSchema>;
 export type SourceInspectionFrame = Readonly<{ requestedMs: number; actualMs: number; durationMs: number | null; width: number; height: number; byteLength: number; sha256: string; mimeType: "image/jpeg" }>;
-export type SourceInspectionProvenance = Readonly<{ algorithm: "dojo-source-inspection-v1"; engineVersion: "1.2.3"; sourceKind: "original";
+export type SourceInspectionProvenance = Readonly<{ algorithm: "dojo-source-inspection-v1"; engineVersion: ReceiptEngineVersion; sourceKind: "original";
   source: InspectionSource; displayWidth: number; displayHeight: number; orientation: "display-oriented"; rotationDegrees: 0 | 90 | 180 | 270 | null;
   sourceMimeType: z.infer<typeof sourceInspectionMimeSchema>; colorMetadata: { primaries: string | null; transfer: string | null; matrix: string | null; fullRange: boolean | null } | null;
   colorPolicy: "browser-sdr-to-srgb-v1"; firstTimestampMs: number; sourceEndMs: number | null; coverage: "requested-moments-only" }>;

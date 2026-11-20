@@ -94,6 +94,10 @@ try {
       "Expected the complete 17-package engine release, including Three.js.",
     );
   await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+  await writeFile(path.join(checkout, "config/engine-release.json"), JSON.stringify({
+    version: 1, engineVersion: manifest.releaseVersion, sourceCommit: manifest.gitCommit,
+    source: "local-release-bundle", packages: manifest.packages,
+  }, null, 2) + "\n");
   const tsPath = path.join(checkout, "tsconfig.json"),
     ts = JSON.parse(await readFile(tsPath, "utf8"));
   for (const key of Object.keys(ts.compilerOptions.paths))
@@ -106,6 +110,13 @@ try {
   });
   const install = npmInvocation(["install"]);
   await run(install.command, install.args);
+  const lock = JSON.parse(await readFile(path.join(checkout, "package-lock.json"), "utf8"));
+  for (const item of manifest.packages) {
+    const installed = JSON.parse(await readFile(path.join(checkout, "node_modules", item.name, "package.json"), "utf8"));
+    const entry = lock.packages[`node_modules/${item.name}`];
+    if (installed.version !== item.version || entry?.integrity !== item.integrity)
+      throw Error(`Installed engine archive differs from the release: ${item.name}`);
+  }
   const check = npmInvocation(["run", "check"]);
   await run(check.command, check.args);
   // A focused browser mode or failed rerun cannot reuse an older success report.

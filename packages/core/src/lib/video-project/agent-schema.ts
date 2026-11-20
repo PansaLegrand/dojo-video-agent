@@ -1,3 +1,4 @@
+import { threeSceneSchema } from "@dojo-video-engine/three/schema";
 import { nativeInsertableMacros, type NativeMacroCatalog } from "./native-macro-catalog";
 import { z } from "zod/v3";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -728,6 +729,28 @@ function native2dGraphicsSchema(options: { installedGrammar?: true } = {}) {
   return node;
 }
 
+/** The pre-blueprint 3D vocabulary is also part of a saved tool session. */
+export function nativeThreeGraphicsSchema(catalog?: NativeMacroCatalog) {
+  const schema = zodToJsonSchema(threeSceneSchema, { $refStrategy: "none" });
+  if (catalog === "engine-1.3.0-blueprints-v1") return schema;
+  function retainOriginal(node: unknown) {
+    const record = schemaRecord(node);
+    if (!record) return;
+    const properties = schemaRecord(record.properties);
+    if (properties) {
+      delete properties.mapAssetId;
+      if (properties.time && properties.value) delete properties.easing;
+    }
+    if (Array.isArray(record.anyOf))
+      record.anyOf = record.anyOf.filter(branch => schemaRecord(schemaRecord(branch.properties)?.kind)?.const !== "plane");
+    for (const child of Object.values(record))
+      if (Array.isArray(child)) child.forEach(retainOriginal);
+      else retainOriginal(child);
+  }
+  retainOriginal(schema);
+  return schema;
+}
+
 /** Read-only discovery from the installed engine. No registry mutation or execution surface. */
 export function nativeAgentGraphicsSchema(
   query: { kind?: "native" | "macro"; macro?: string } = {},
@@ -770,13 +793,21 @@ export function nativeAgentGraphicsSchema(
     };
   }
   const node = native2dGraphicsSchema(options);
+  const properties = node.properties as Record<string, JsonSchema>;
+  const animation = properties.animations.items as JsonSchema;
+  if (options.macroCatalog !== "engine-1.3.0-blueprints-v1") {
+    const styles = properties.style.properties as Record<string, JsonSchema>;
+    const targets = (animation.properties as Record<string, JsonSchema>).property;
+    const added = ["trimStart", "trimEnd", "trimOffset", "backdropFilter"];
+    for (const name of added) delete styles[name];
+    targets.enum = (targets.enum as string[]).filter(name => !added.includes(name));
+    if (options.installedGrammar) styles.transform.description = "Expected none or a translate()/scale()/rotate() transform list.";
+  }
   const value = {
     version: 1,
     kind: "native",
     node,
-    animation: options.installedGrammar
-      ? (node.properties as Record<string, JsonSchema>).animations.items
-      : shallowSchema(animationSchema, -1),
+    animation,
     units: {
       from: "integer frames; nested nodes are parent-local",
       duration: "positive frame count",

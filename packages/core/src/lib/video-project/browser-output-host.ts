@@ -1,3 +1,4 @@
+import { receiptEngineVersion } from "./engine-version";
 import type {
   ExportVerificationExpectation,
   ExportVerificationResult,
@@ -111,7 +112,7 @@ async function fulfillProjectPreviewBound(
     authorizationId: authorization.id,
     snapshot: request.snapshot,
     renderHash: request.renderHash,
-    engineVersion: "1.2.3",
+    engineVersion: receiptEngineVersion(),
     frames,
     coverage: "requested-frames-only",
     semanticCoverage: "unknown",

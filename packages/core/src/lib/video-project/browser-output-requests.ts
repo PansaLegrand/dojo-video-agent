@@ -1,3 +1,4 @@
+import { supportedReceiptEngines } from "./engine-version";
 import { z } from "zod/v3";
 import hash from "fast-sha256";
 import { editorFormatSchema } from "@/lib/editor/document";
@@ -153,7 +154,7 @@ export const projectPreviewReceiptSchema = z
     authorizationId: id,
     snapshot: outputSnapshotSchema,
     renderHash: z.string().min(1).max(300),
-    engineVersion: z.literal("1.2.3"),
+    engineVersion: z.enum(supportedReceiptEngines),
     frames: z.array(previewFrameSchema).min(1).max(4),
     coverage: z.literal("requested-frames-only"),
     semanticCoverage: z.literal("unknown"),

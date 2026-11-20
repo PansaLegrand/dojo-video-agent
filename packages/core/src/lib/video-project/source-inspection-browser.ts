@@ -1,3 +1,4 @@
+import { receiptEngineVersion } from "./engine-version";
 import { disposeMediaInputSafely } from "@dojo-video-engine/renderer-canvas2d";
 import {
   MP4,
@@ -319,7 +320,7 @@ export async function sampleOriginalSource(
     return {
       provenance: {
         algorithm: "dojo-source-inspection-v1",
-        engineVersion: "1.2.3",
+        engineVersion: receiptEngineVersion(),
         sourceKind: "original",
         source: plan.source,
         displayWidth: width,
