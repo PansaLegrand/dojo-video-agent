@@ -62,7 +62,7 @@ try{
   const trial:any={caseId,runnerRevision:'priority-v4',cohort:'guided-v3',sourceCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),journey:journey.id,host:kind,repetition,status:'preparing',turns:[],startedAt:new Date().toISOString()};campaign.ledger.trials.push(trial);await campaign.persist();
   const blocked=campaign.ledger.requests.some((r:any)=>r.phase==='unknown'&&r.host===kind&&r.scenario===journey.id&&r.repetition===repetition);
   if(blocked){trial.status='not-retried-unknown';trial.reason='This preplanned journey already has an unresolved provider outcome. Its original reservation stays charged; no duplicate or dependent model turn is dispatched.';await campaign.persist();continue}
-  const dir=path.join(output,caseId+(campaign.ledger.trials.some((t:any)=>t.caseId===caseId&&t.status==='host-yielded-before-dispatch')?'-resumed':''));trial.directory=dir;await fs.mkdir(dir);let page:any;
+  const dir=path.join(output,caseId+'-priority-v4');trial.directory=dir;await fs.mkdir(dir);let page:any;
   try{
    const seeded=kind==='dojo'?await seedDojo(journey,caseId):await seedOpenMotion(journey,caseId);trial.projectId=seeded.projectId;await fs.writeFile(path.join(dir,'fixture.json'),JSON.stringify(seeded,null,2));const id=seeded.projectId;page=await browser.newPage();
    if(kind==='dojo'){await page.goto(`${base}/en/applications/editor/${id}?chat=1`);await page.getByTestId('dojo-video-engine-editor').waitFor()}
