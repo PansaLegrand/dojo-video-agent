@@ -67,3 +67,5 @@ Request an export intent through `dojo_request_export` with `args.destination` a
 ## Verification boundary
 
 The protocol tests exercise a real stdio client and the SDK wire contract. The local application browser proof covers Copy for Agent after an inspector edit, MCP review, browser preview consent and JPEG delivery, exact Apply, browser MP4 export/full decoding, and Undo preserving prior manual text. It uses synthetic provider configuration and verifies zero internal model/ASR calls. External client model quality is a separate qualification concern.
+
+The bridge advertises the native command schema and exact preview/export arguments. A preview accepts one to four individual frames, or an inclusive interval with four to sixteen tiles. Original-size MP4 export uses `args: { destination: "download", output: { container: "mp4", resolution: "source" } }`. Invalid shapes are rejected before reaching the local host; native review diagnostics retain the command and nested field path.
