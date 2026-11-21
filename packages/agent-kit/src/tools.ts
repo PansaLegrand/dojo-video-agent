@@ -138,6 +138,7 @@ export type EditorToolPorts<T> = {
   ) => MaybePromise<unknown>;
   validateRequirements?: (
     requirements: CompletionRequirement[],
+    edit?: unknown,
   ) => MaybePromise<void>;
   reviewEdit?: (
     input: { requirements: CompletionRequirement[]; edit: unknown },
@@ -679,7 +680,7 @@ export function createEditorToolset<T>(input: {
           throw new Error(
             "Declare all requested outcomes in requirements before the first review.",
           );
-        if (reviewReferences) await ports.validateRequirements?.(declared);
+        if (reviewReferences) await ports.validateRequirements?.(declared, value.edit);
         const requirementsHash = await completionHash(declared);
         state ??= {
           version: 1,

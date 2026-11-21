@@ -38,7 +38,7 @@ import { nativeClarificationSchema } from "../../core/src/lib/video-project/agen
 import { parseVideoProjectDocument } from "../../core/src/lib/video-project/document";
 import { prepareReadableOverlay } from "../../core/src/lib/video-project/readable-overlay";
 import {
-  validateNativeCompletionRequirements,
+  validateNativeReviewRequirements,
   reviewNativeCompletionEdit,
   compileNativeCompletionResponse,
 } from "../../core/src/lib/video-project/completion-preflight";
@@ -128,9 +128,8 @@ export function createVideoToolset(
         : {}),
       ...(usesReviewedEditReferences(options.profile ?? "local-editor-v1")
         ? {
-            validateRequirements: (raw: unknown) => {
-              validateNativeCompletionRequirements(raw, validateSourceRequirements ? document : undefined);
-            },
+            validateRequirements: (raw: unknown, edit?: unknown) => validateNativeReviewRequirements(request, raw, edit,
+              validateSourceRequirements ? document : undefined),
           }
         : {}),
       ...(usesStagedEditing(options.profile ?? "local-editor-v1")

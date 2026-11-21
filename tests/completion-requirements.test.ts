@@ -1,3 +1,4 @@
+import {createVideoToolset} from "../packages/agent/src/tools";
 import { describe, expect, it } from "vitest";
 import {
   validateNativeCompletionRequirements,
@@ -390,4 +391,21 @@ describe("native completion target paths before declaration", () => {
       ),
     ).toThrow(/wordIds resolve to "uh, computer science".*search_transcript/);
   });
+});
+
+it("allows native checks after rejecting an impossible macro-parameter requirement", async () => {
+
+  const document = createVideoProjectDocument({width:1280,height:720,fps:30,durationInFrames:180});
+  const request = {contract:"video-project-commands" as const,version:1 as const,baseRevision:0,
+    baseHash:await hashVideoProjectDocument(document),document,context:{selectedItemIds:[],playheadFrame:0},
+    authoring:{version:1 as const,scope:{kind:"project" as const},macroCatalog:"engine-1.3.0" as const}};
+  const unavailable = () => { throw Error("No external work in this review fixture"); };
+  const stages = {generalEditing:true,preparedCommands:false,planEditStages:unavailable,saveCaptionBatch:unavailable,readEditArtifact:unavailable,resolvePreparedEdit:async(value:unknown)=>value};
+  const session=await createVideoToolset(request,[],[],{profile:"local-editor-v14",agentKitVersion:"0.2.10",stages});
+  const invoke=(args:unknown)=>session.tools.find(t=>t.name==="review_edit")!.execute(args,new AbortController().signal);
+  const edit={outcome:"proposal",summary:"Plot supplied counts",commands:[{type:"insertGraphic",itemId:"chart",trackId:"visual",name:"Chart",
+    node:{macro:"dataChart",id:"chart",kind:"bar",domain:{min:0,max:35},unit:"attendees",data:[{label:"April",value:18},{label:"May",value:31}],duration:180}}]};
+  await expect(invoke({requirements:[{id:"invalid",kind:"property",target:{kind:"node",itemId:"chart",nodeId:"chart"},path:["params"],equals:{kind:"bar"}}],edit})).rejects.toThrow(/params.*div/);
+  const result:any=await invoke({requirements:[{id:"value",kind:"property",target:{kind:"node",itemId:"chart",nodeId:"chart-value-1"},path:["text"],equals:"18"}],edit});
+  expect(result.value.completionPreflight.status).toBe("passed");
 });

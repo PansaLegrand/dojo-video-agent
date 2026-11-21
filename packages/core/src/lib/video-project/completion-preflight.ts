@@ -819,6 +819,44 @@ export function checkNativeCompletionRequirements(
   }
   return checks;
 }
+/** Reject requirements that cannot apply to the compiled node type before freezing them. */
+export async function validateNativeReviewRequirements(
+  request: NativeAgentRequest, raw: unknown, edit: unknown, sourceDocument?: VideoProjectDocument,
+): Promise<void> {
+  let candidate: VideoProjectDocument | undefined;
+  if (edit !== undefined) {
+    try {
+      const compiled = await compileNativeAgentResult(request, edit);
+      if (compiled.proposal) candidate = executeVideoProjectCommands(parseVideoProjectDocument(request.document), compiled.proposal.commands).document;
+    } catch {
+      // Invalid command drafts still retain their otherwise valid requirements.
+    }
+  }
+  const textTargets: string[] = [];
+  const collectText = (node: SceneNodeInput) => {
+    if (textTargets.length >= 12) return;
+    if (node.type === "text") textTargets.push(`${node.id}=${JSON.stringify(node.text ?? "").slice(0,60)}`);
+    node.children?.forEach(collectText);
+  };
+  candidate?.items.forEach(item => collectText(item.node));
+  try {
+    validateNativeCompletionRequirements(raw, sourceDocument);
+    if (!candidate) return;
+    const requirements = parseCompletionRequirements(raw, {assetSequence:true,speechCallout:true});
+    const owners: Record<string,string> = {params:"effect",effect:"effect",shape:"shape",extension:"extension"};
+    for (const requirement of requirements) {
+      if (requirement.kind !== "property" || requirement.target.kind !== "node") continue;
+      const owner = owners[requirement.path[0]];
+      if (!owner) continue;
+      const node = readVideoProjectPath(candidate,propertyPath(requirement.target,[])) as SceneNodeInput | undefined;
+      if (node && node.type !== owner)
+        throw new Error(`Completion requirement ${requirement.id} targets ${requirement.path[0]} on a ${node.type} node. That field belongs to ${owner} nodes. Macro inputs are expanded into native nodes; check their rendered text, style or geometry.`);
+    }
+  } catch (error) {
+    throw new Error(`${error instanceof Error ? error.message : String(error)}${textTargets.length ? ` Some compiled text targets: ${textTargets.join("; ")}.` : ""}`);
+  }
+}
+
 export async function reviewNativeCompletionEdit(
   request: NativeAgentRequest,
   input: { requirements: unknown; edit: unknown },
