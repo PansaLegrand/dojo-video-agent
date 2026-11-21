@@ -136,7 +136,7 @@ describe("bounded portable skill references", () => {
       },
     });
   });
-  it("carries the selected pixels through the real local agent loop and Responses transport", async () => {
+  it.each(["0.2.10", "0.2.11"])("carries the selected pixels through the real local agent loop and Responses transport", async kitVersion => {
     const s = await skill(),
       document = createVideoProjectDocument({
         width: 1280,
@@ -196,7 +196,7 @@ describe("bounded portable skill references", () => {
           authoring: { version: 1, scope: { kind: "project" } },
         },
         profile: "local-editor-v14",
-        agentKitVersion: "0.2.10",
+        agentKitVersion: kitVersion,
         model,
         skills: [s],
         signal,
