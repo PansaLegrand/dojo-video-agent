@@ -37,6 +37,7 @@ export async function openCampaign(directory:string, frozenFiles:string[], live:
    ledger.freezeHistory??=[];for(const [f,digest]of Object.entries(frozen)){if(ledger.frozen[f])assert.equal(ledger.frozen[f],digest);else{ledger.frozen[f]=digest;ledger.freezeHistory.push({file:f,sha256:digest,beforeRequest:ledger.admissions.length+1})}}
    assert.equal(ledger.dryRun,!live)}
   catch(error:any){if(error.code!=='ENOENT')throw error;ledger={version:1,authorization,dryRun:!live,frozen,createdAt:new Date().toISOString(),requests:[],admissions:[],trials:[]};}
+  if(live)assert.equal(ledger.fallbackProbe?.accepted,true,'Fallback provider and billing probe has not passed; no cheap-rate dispatch is admitted.');
   let context:any={host:'setup',scenario:'setup',repetition:1,turn:1};
   const budget=new IndependentTrialBudget(ledger.requests,()=>context);
   assert(Array.isArray(ledger.admissions)&&ledger.admissions.length<=320);
