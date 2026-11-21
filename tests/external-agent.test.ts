@@ -36,3 +36,8 @@ it('prepares an installed blueprint as an editable native node without committin
  const result:any=await f.service.call('dojo_prepare_blueprint_graphic',{projectId:f.project.id,itemId:'ending',trackId:'visual',from:0,duration:90,params:{blueprint:'orbit',headline:'North Studio',subheadline:'A place to begin.'}},new AbortController().signal);
  expect(result.applied).toBe(false);expect(result.node.id).toBe('ending');expect(result.node.children.length).toBeGreaterThan(0);expect((await f.store.read(f.project.id)).documentHash).toBe(before);expect(f.complete).not.toHaveBeenCalled();
 });
+
+it('returns precise nested field diagnostics for a malformed native candidate without saving a review',async()=>{
+ const f=await fixture(),input:any=structuredClone(f.input);input.edit.commands=[{type:'addItem',item:{id:'new',name:'New',trackId:'visual',node:{id:'new',type:'div',from:0,duration:90,children:[{id:'child',type:'shape',shape:{kind:'circle'}}]}}}];
+ const result:any=await f.service.review(input);expect(result.status).toBe('failed');expect(result.saved).toBe(false);expect(result.diagnostic.issues.some((issue:any)=>issue.path.includes('shape') && issue.path.includes('kind'))).toBe(true);expect((await f.store.read(f.project.id)).runs).toHaveLength(0);
+});

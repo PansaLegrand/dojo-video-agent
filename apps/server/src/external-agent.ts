@@ -1,3 +1,4 @@
+import { NativeAgentDiagnosticError } from "../../../packages/core/src/lib/video-project/agent-diagnostics";
 import { randomUUID } from "node:crypto";
 import { z } from "zod/v3";
 import { AGENT_KIT_VERSION, builtInSkills, completionCanonical, completionHash, createEditStagePlan, parseCompletionRequirements, type Skill } from "../../../packages/agent-kit/src/index";
@@ -45,7 +46,7 @@ export class ExternalAgentService {
    const prior=project.runs.find(run=>run.operationId===input.operationId);
    if(prior){if(prior.requestHash!==requestHash||!prior.externalAgent)throw new HttpError("Operation ID already belongs to another edit.",409);return {reviewId:prior.id,candidateRef:prior.externalAgent.reviewRef,baseRevision:prior.baseRevision,baseHash:prior.baseHash,checks:(project.editStagePlans?.[prior.id]?.artifacts[prior.externalAgent.reviewRef.id]?.value as {checks?:unknown[]}|undefined)?.checks??[],replayed:true}}
    assertBasis(project,input);const request=requestFor(project,input.instruction,input.scope);
-   const review=await reviewNativeCompletionEdit(request,{requirements:input.requirements,edit:input.edit},options);
+   let review;try{review=await reviewNativeCompletionEdit(request,{requirements:input.requirements,edit:input.edit},options)}catch(error){if(error instanceof NativeAgentDiagnosticError)return {status:'failed' as const,saved:false,diagnostic:error.diagnostic,nextAction:'Use the reported command and full field path to correct the draft, then review again. No edit was saved or applied.'};throw error}
    if(!review.receipt)return {status:'failed' as const,checks:review.checks,saved:false};
    const result=await compileNativeCompletionResponse(request,{...(input.edit as object),completion:{requirements:input.requirements,receipt:review.receipt}},options);
    if(!result.proposal||result.outcome!=='proposal')throw new HttpError("Review requires an edit proposal.",400);
