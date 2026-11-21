@@ -41,6 +41,7 @@ export function parseCreativeOptions(args: readonly string[]) {
     "--output-usd-per-million",
     "--outputdir",
     "--scenarios",
+    "--hosts",
   ]);
   const values = new Map<string, string>();
   let live = false;
@@ -63,8 +64,11 @@ export function parseCreativeOptions(args: readonly string[]) {
   }
   if (live)
     for (const flag of allowed)
-      if (flag !== "--scenarios" && !values.has(flag))
+      if (!["--scenarios", "--hosts"].includes(flag) && !values.has(flag))
         throw new Error(`Live evaluation requires explicit ${flag}.`);
+  const hosts = values.has("--hosts") ? values.get("--hosts")!.split(",") : ["open-source", "commercial-web"];
+  if (!hosts.length || new Set(hosts).size !== hosts.length || hosts.some(host => !["open-source", "commercial-web"].includes(host)))
+    throw new Error("--hosts accepts open-source and commercial-web, each at most once.");
   const scenarioIds = values.has("--scenarios")
     ? values
         .get("--scenarios")!
@@ -117,6 +121,7 @@ export function parseCreativeOptions(args: readonly string[]) {
     maximumUsd,
     rates,
     scenarioIds,
+    hosts: hosts as CreativeHost[],
     webAdapter: values.get("--web-adapter")
       ? path.resolve(values.get("--web-adapter")!)
       : undefined,
@@ -129,7 +134,7 @@ export function parseCreativeOptions(args: readonly string[]) {
 export async function evaluateCreativeMain(args = process.argv.slice(2)) {
   const options = parseCreativeOptions(args);
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-  const hosts: CreativeHost[] = ["open-source", "commercial-web"];
+  const hosts = options.hosts;
   // Cover each skill family before variants; all cases and grading remain fixed.
   // A provider-uncertainty stop must not always leave the third family unseen.
   const order = [

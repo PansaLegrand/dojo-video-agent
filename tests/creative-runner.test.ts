@@ -338,6 +338,9 @@ describe("shared creative-evaluation admission and evidence", () => {
     }));
   it("requires explicit live caps and rejects renewed or malformed allowances", () => {
     expect(parseCreativeOptions([]).live).toBe(false);
+    expect(parseCreativeOptions(["--hosts", "commercial-web"]).hosts).toEqual(["commercial-web"]);
+    expect(() => parseCreativeOptions(["--hosts", "commercial-web,commercial-web"])).toThrow(/at most once/);
+    expect(() => parseCreativeOptions(["--hosts", "unknown"])).toThrow(/accepts/);
     expect(() => parseCreativeOptions(["--live"])).toThrow(/requires explicit/);
     expect(() => parseCreativeOptions(["--max-usd", "11"])).toThrow(/US\$10/);
     expect(() => parseCreativeOptions(["--max-requests", "257"])).toThrow(
