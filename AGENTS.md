@@ -26,7 +26,7 @@ Start with:
 Plans are not completed evidence. Verify source and reports before claiming a
 capability is accepted; mark plan items complete only with the required evidence.
 
-R33 development uses kit **0.2.11**, selected only by `DOJO_VISUAL_REVIEW=1` for new local runs. The default and retained 0.2.10 runs remain on their exact archive. See [visual review candidate](docs/visual-review-r33-2026-11-21.md). Actual-model qualification is pending.
+R33 development uses kit **0.2.11**, selected only by `DOJO_VISUAL_REVIEW=1` for new local runs. The default and retained 0.2.10 runs remain on their exact archive. See [visual review candidate](docs/visual-review-r33-2026-11-21.md). Two bounded actual-model comparison trials passed; live post-preview repair and default promotion remain pending.
 
 The current released creative-skill build is kit **0.2.10** under
 local v14/commercial v15. New local runs freeze their skill instructions; accepted
