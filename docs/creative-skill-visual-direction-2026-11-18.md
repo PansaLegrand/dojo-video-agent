@@ -210,3 +210,9 @@ The seven creative guides cover choosing the viewer's first change, the transiti
 ## Published Engine 1.3 adoption, November 21
 
 The local editor now installs the synchronized Engine 1.3.0 registry packages. The release manifest binds them to engine commit `3bd3685660d8f8b59e74e34b1b3b34491a1317bb` and the signed `v1.3.0` tag. Registry archive hashes match the hosted release bundle. A fresh installation verified all 32 available registry signatures and 22 attestations. New local runs can discover the nine remix blueprints and the new rendering grammar. Saved sessions retain their original catalogs and guidance snapshots.
+
+## Engine 1.3.1 chart palette and review completion
+
+The chart macro now has explicit palette controls. The guide applies background, text, mark and axis colors to the painted chart. Qualification also exposed checks against macro inputs after they had expanded into native nodes. Unsupported typed-node checks are rejected before the checklist freezes, with bounded hints for the compiled targets. Both native kernels reproduced the corrected reviewed document exactly.
+
+November 21 qualification exercised watch openers and their title revisions, portrait typography and supplied attendance figures. The initial chart failures and timed-out request remain in the original reports. Title revisions have a separate preservation grade. The palette edit's requirements were corrected through the actual model/review/proposal loop with its command content preserved. Decoded films and cross-host replay accompany the source checks. The signed 1.3.1 engine release carries the synchronized registry artifacts and provenance.
