@@ -26,14 +26,14 @@ Start with:
 Plans are not completed evidence. Verify source and reports before claiming a
 capability is accepted; mark plan items complete only with the required evidence.
 
-The creative-skill development candidate on this branch is kit **0.2.10** under
+The current creative-skill build on this branch is kit **0.2.10** under
 local v14/commercial v15. New local runs freeze their skill instructions; accepted
 0.2.9 runs use the retained exact archive. Folder-based `skills/<name>/SKILL.md`
-packs are supported alongside existing flat Markdown. This candidate is not a
-claim of publication or commercial deployment; see `docs/creative-skill-packs-2026-11-17.md`.
+packs are supported alongside existing flat Markdown. Source, registry publication and commercial deployment have separate evidence; see
+`docs/creative-skill-visual-direction-2026-11-18.md` and the commercial release ledger.
 
-The accepted baseline starts new runs with `local-editor-v14`, agent kit **0.2.9**
-and loop **0.2.0**, consuming published engine **1.2.3**. Earlier runs use their
+The current source starts new runs with `local-editor-v14`, agent kit **0.2.10**
+and loop **0.2.0**, consuming published engine **1.3.1**. Earlier runs use their
 retained profile/coordinator archives. The commercial counterpart is
 `commercial-editing-v15`. Check [the agent map](docs/agent-system.md) and
 [execution ledger](docs/readiness-progress.md) before describing acceptance.
