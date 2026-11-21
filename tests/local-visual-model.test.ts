@@ -63,13 +63,14 @@ function messages(ref: EditorVisualInputRef): ChatMessage[] {
     },
   ];
 }
-it("hydrates a copy of authorized pixels only after preparation, with exact cache and byte checks", async () => {
+it.each([false,true])("hydrates authorized pixels with exact cache, byte checks and coverage (sheet: %s)", async sheet => {
   const f = frame(),
     complete = vi.fn(async () => ({
       text: "Inspected",
       calls: [],
       usage: { inputTokens: 1, outputTokens: 1 },
     }));
+  if(sheet) Object.assign(f.resolved[0]!.label,{coverage:"sampled-interval-strip",contactSheet:{tiles:[{actualMs:0},{actualMs:33.333}]}});
   const model = withLocalVisualInputs(
     { identity: "local-test", complete },
     vi.fn(async () => f.resolved),
@@ -83,6 +84,7 @@ it("hydrates a copy of authorized pixels only after preparation, with exact cach
   await model.prepare!(input, [], signal);
   await model.complete(input, [], signal);
   expect(JSON.stringify(complete.mock.calls[0])).toContain("data:image/jpeg");
+  expect(JSON.stringify(complete.mock.calls[0])).toContain(sheet ? "timestamped tiles" : "labeled moment");
   expect(JSON.stringify(input)).toBe(original);
   expect(original).not.toContain("data:image");
   const broken = withLocalVisualInputs(
