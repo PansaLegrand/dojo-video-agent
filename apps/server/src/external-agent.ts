@@ -29,7 +29,7 @@ function externalRun(project:Project,id:string){const run=runOf(project,id);if(!
 /** Local authority shared by the stdio bridge and existing browser. No model calls. */
 export class ExternalAgentService {
  constructor(private store:ProjectStore,private agent:AgentService,private browser:LocalBrowserRequests,private skills:Skill[]=builtInSkills()){}
- async state(projectId:string){const project=await this.store.read(identifier.parse(projectId));return {enabled:true,stateKey:await completionHash({documentHash:project.documentHash,revision:project.revision,runs:project.runs.filter(run=>run.externalAgent).map(run=>({id:run.id,status:run.status,requests:Object.values(project.browserRequests?.[run.id]??{}).map(row=>({status:row.status,receipt:!!row.receipt,error:row.error}))}))})};}
+ async state(projectId:string){const project=await this.store.read(identifier.parse(projectId));return {enabled:true,stateKey:await completionHash({documentHash:project.documentHash,revision:project.revision,runs:project.runs.filter(run=>run.externalAgent).map(run=>({id:run.id,status:run.status,outputRequests:run.outputRequests,requests:Object.values(project.browserRequests?.[run.id]??{}).map(row=>({status:row.status,receipt:!!row.receipt,error:row.error}))}))})};}
  async list(){return {projects:await this.store.list(),coverage:"all-local-projects" as const}}
  async read(tool:typeof externalReadTools[number],raw:unknown,signal:AbortSignal){
   const input=readerInput.parse(raw),project=await this.store.read(input.projectId),request=requestFor(project);
