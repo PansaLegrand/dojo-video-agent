@@ -17,3 +17,5 @@ Two Kie GPT trials passed using kit 0.2.11: local reference matching (11 request
 Preflight found and fixed local skill-reference image delivery for 0.2.11 (`b2295e2`); retained 0.2.10 delivery remains covered. The local motion estimate stayed unresolved where its selected crop clipped early samples; the commercial reference/candidate motion estimates were measured.
 
 Default promotion remains pending. Neither model needed a `previewRepair` after its first successful native review, so this campaign does not qualify that autonomous branch. The conditional second-preview assertion is not a live repair pass. Actual loop/kernel/browser evidence uses in-memory owned host adapters; production auth, billing and durable waits are separate checks. The campaign's original requests, results and videos remain under `test-results/r33-qualification/campaign-1795251913016/`.
+
+The subsequent R34/R35 source candidate is 0.2.12. Retained 0.2.11 runs resolve their exact archive. Brand Kit documents and the explicit candidate flag select the new build; global stable defaults remain 0.2.10 until the combined qualification/release decision.

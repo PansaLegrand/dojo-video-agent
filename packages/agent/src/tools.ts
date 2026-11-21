@@ -165,6 +165,7 @@ export function createVideoToolset(
               extension: THREE_EXTENSION,
             },
       inspectProject: (query) => ({
+        ...(document.creativeContext.brandKit ? { brandKit: document.creativeContext.brandKit } : {}),
         ...(usesPreviewRepair(options.profile ?? "local-editor-v1")
           ? {
               sourceAudio: {

@@ -68,6 +68,7 @@ import { editorExportScene } from "@/lib/editor/export-resolution";
 import { EDITOR_VIDEO_ENCODING, requireEditorExportSupport } from "@/lib/editor/export-capability";
 import { createEditorVisualizerNode } from "./editor-visualizers";
 import type { MusicVisualizerLayerTemplateKey } from "@/types/music-visualizer";
+import { EditorBrandKit } from "./editor-brand-kit";
 import { EditorProjectName } from "./editor-project-name";
 import { type EditorStylePreview } from "./editor-style-preview";
 import { EditorTextToolbar } from "./editor-text-toolbar";
@@ -164,11 +165,13 @@ export default function DojoVideoEngineEditor({
   initialPanel,
   initialItemId,
   renderAgentExtensions,
+  renderProjectActions,
 }: {
   projectId: string;
   chatInitiallyOpen?: boolean;
   initialPanel?: "captions" | "graphics";
   initialItemId?: string;
+  renderProjectActions?: (context: { projectId: string; controller: VideoWorkspaceController }) => ReactNode;
   renderAgentExtensions?: (context: {
     projectId: string;
     controller: VideoWorkspaceController;
@@ -1007,6 +1010,19 @@ export default function DojoVideoEngineEditor({
           </button>
         </div>
         <div className="editor-header-actions">
+          {renderProjectActions?.({ projectId, controller })}
+          {workspace.document && <EditorBrandKit document={workspace.document} disabled={disabled} onSave={async (kit, expected) => {
+            await controller.flush();
+            const current = controller.getState().document;
+            if (!current) throw new Error(t("Wait for the project to load."));
+            const before = JSON.stringify(current.creativeContext.brandKit ?? null), after = JSON.stringify(kit ?? null);
+            if (before === after) return;
+            if (before !== JSON.stringify(expected ?? null)) throw new Error(t("The brand kit changed. Close and reopen it to use the latest version."));
+            const { brandKit: _old, ...context } = current.creativeContext;
+            controller.dispatch([{ type: "updateCreativeContext", context: { ...context, ...(kit ? { brandKit: kit } : {}) } }]);
+            await controller.flush();
+          }} />}
+
           <button className={buttonClass} aria-label="Toggle chat" aria-expanded={showChat} onClick={() => setShowChat(value => !value)}><MessageSquare size={15} /><span className="hidden sm:inline">{t("Chat")}</span></button>
           <button
             className={buttonClass}

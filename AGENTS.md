@@ -26,7 +26,7 @@ Start with:
 Plans are not completed evidence. Verify source and reports before claiming a
 capability is accepted; mark plan items complete only with the required evidence.
 
-R33 development uses kit **0.2.11**, selected only by `DOJO_VISUAL_REVIEW=1` for new local runs. The default and retained 0.2.10 runs remain on their exact archive. See [visual review candidate](docs/visual-review-r33-2026-11-21.md). Two bounded actual-model comparison trials passed; live post-preview repair and default promotion remain pending.
+R33–R35 development uses kit **0.2.12**, selected by `DOJO_VISUAL_REVIEW=1` or a saved Brand Kit for new local runs. The default and retained 0.2.10 runs remain on their exact archive; 0.2.11 runs retain their own archive. See [visual review candidate](docs/visual-review-r33-2026-11-21.md). Two bounded actual-model comparison trials passed; live post-preview repair and default promotion remain pending.
 
 The current released creative-skill build is kit **0.2.10** under
 local v14/commercial v15. New local runs freeze their skill instructions; accepted
@@ -34,7 +34,7 @@ local v14/commercial v15. New local runs freeze their skill instructions; accept
 packs are supported alongside existing flat Markdown. Source, registry publication and commercial deployment have separate evidence; see
 `docs/creative-skill-visual-direction-2026-11-18.md` and the commercial release ledger.
 
-The current source starts new runs with `local-editor-v14`, agent kit **0.2.10**
+The current stable source starts new unbranded runs with `local-editor-v14`, agent kit **0.2.10**
 and loop **0.2.0**, consuming published engine **1.3.1**. Earlier runs use their
 retained profile/coordinator archives. The commercial counterpart is
 `commercial-editing-v15`. Check [the agent map](docs/agent-system.md) and

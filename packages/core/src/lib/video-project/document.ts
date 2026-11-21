@@ -1,3 +1,4 @@
+import { videoBrandKitSchema } from "./brand-kit";
 import { assertNoUntimedWordGap } from "./speech-word-range";
 import { assertLinkedGroupBindings } from "./composition";
 import { z } from "zod/v3";
@@ -89,6 +90,7 @@ export const videoSourceBindingSchema = z
   );
 export const videoCreativeContextSchema = z
   .object({
+    brandKit: videoBrandKitSchema.optional(),
     decisions: z
       .array(
         z
@@ -235,6 +237,8 @@ export function parseVideoProjectDocument(
     }
   };
   inspectIds(document);
+  const logo = document.creativeContext.brandKit?.logoAssetId;
+  if (logo && document.assets[logo]?.type !== "image") throw new Error("The Brand Kit logo must reference an existing image. Choose another logo or clear it before removing this asset.");
   const itemsById = new Map(document.items.map((item) => [item.id, item]));
   for (const item of document.items) {
     if (

@@ -266,6 +266,7 @@ function visual(row: LocalBrowserRecord): EditorVisualInputRef {
   };
 }
 async function candidate(project: Project, run: StoredRun, raw: unknown) {
+  if (raw === undefined) return { document: run.request.document as Project["document"], renderHash: run.baseHash, ref: undefined };
   const ref = parseEditArtifactRef(raw),
     state = project.editStagePlans?.[run.id],
     saved = state?.artifacts[ref.id];

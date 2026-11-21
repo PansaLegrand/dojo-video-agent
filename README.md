@@ -254,3 +254,7 @@ Live provider probes are opt-in and incur your provider's charges; see [mileston
 ## License
 
 MIT for the agent and extracted editor code. Engine and third-party assets retain their notices. See [THIRD_PARTY.md](THIRD_PARTY.md).
+
+### External coding agents
+
+Use **Copy for Agent** and the opt-in local MCP bridge to continue the same project from another agent. See [setup, tools and browser consent](docs/external-agent-mcp.md).

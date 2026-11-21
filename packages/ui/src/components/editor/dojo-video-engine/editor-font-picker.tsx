@@ -91,3 +91,5 @@ export function EditorFontPicker({ value, onChange, onPreview, disabled, compact
     </Select.Root>
   </div>;
 }
+
+export { loadSpecimen as loadEditorFontSpecimen, specimenFamily as editorFontSpecimenFamily };

@@ -218,7 +218,7 @@ export async function runAgent(input: {
     checkpoint!.load = async () => saved;
   }
   const completed = await runToolLoop({
-    model: ["0.2.10", "0.2.11"].includes(kit.AGENT_KIT_VERSION) ? withSkillReferenceImages(model, toolset.skills) : model,
+    model: ["0.2.10", "0.2.11", "0.2.12"].includes(kit.AGENT_KIT_VERSION) ? withSkillReferenceImages(model, toolset.skills) : model,
     messages,
     tools,
     signal,

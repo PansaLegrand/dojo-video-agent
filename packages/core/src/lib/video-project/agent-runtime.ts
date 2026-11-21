@@ -1,3 +1,4 @@
+import { brandKitAuthoringGuide } from "./brand-kit";
 import { nativeMacroNames } from "./native-macro-catalog";
 import { requiresWordGroundedTiming } from "./agent-timing-intent";
 import { importSvgGraphic } from "@dojo-video-engine/interchange/svg";
@@ -678,5 +679,5 @@ export function buildNativeAgentPrompts(
   const kineticGuide = radial || input.authoring?.macroCatalog === "engine-1.3.0-kinetic-v1"
     ? "\nFor a staggered title, inspect kineticSplit. Use maskSlide for a crisp editorial reveal, trackingExpand for an airy wordmark, elasticRise for a buoyant entrance, or cascadePop for short percussive beats. Split by word to keep phrases readable, by char for short display lettering, or by line for connected scripts. Preserve the supplied copy and line breaks. Reserve holdFrames for reading. Revise the existing native text layers on follow-up edits."
     : "";
-  return { systemPrompt: systemPrompt + spatialGuide + kineticGuide + radialGuide + walkthroughGuide + comparisonGuide + remixGuide, userPrompt };
+  return { systemPrompt: systemPrompt + (input.document.creativeContext.brandKit ? "\n\n" + brandKitAuthoringGuide() : "") + spatialGuide + kineticGuide + radialGuide + walkthroughGuide + comparisonGuide + remixGuide, userPrompt };
 }

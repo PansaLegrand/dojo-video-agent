@@ -584,7 +584,7 @@ it.each([false,true])("persists the selected kit build and candidate policy acro
   const priorCalls = vi.mocked(model.complete).mock.calls.length;
   const repeated = await restarted.start(f.p.id, f.input);
   expect(repeated.run.id).toBe(started.run.id);
-  expect((await reopened.read(f.p.id)).runs[0].agentKitVersion).toBe(visualReview ? "0.2.11" : "0.2.10");
+  expect((await reopened.read(f.p.id)).runs[0].agentKitVersion).toBe(visualReview ? "0.2.12" : "0.2.10");
   expect((await reopened.read(f.p.id)).runs[0].skillSnapshot).toEqual([guide]);
   expect((await reopened.read(f.p.id)).runs[0].focusedGraphicsDiscovery).toBe(true);
   expect(model.complete).toHaveBeenCalledTimes(priorCalls);

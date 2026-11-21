@@ -590,6 +590,19 @@ export function planNativeAgentContext(
       },
     );
   };
+  if (document.creativeContext.brandKit) {
+    const kit = document.creativeContext.brandKit;
+    const logo = kit.logoAssetId ? document.assets[kit.logoAssetId] : undefined;
+    const source = kit.logoAssetId ? document.sources[kit.logoAssetId] : undefined;
+    const accepted = include({ brandKit: kit, logo, source }, () => {
+      plan.document.creativeContext.brandKit = structuredClone(kit);
+      if (logo && kit.logoAssetId) {
+        plan.document.assets[kit.logoAssetId] = logo;
+        if (source) plan.document.sources[kit.logoAssetId] = source;
+      }
+    });
+    Object.assign(plan.omitted, { brandKit: !accepted });
+  }
   for (const track of document.tracks)
     include(track, () => plan.document.tracks.push(track));
   for (const entry of ranked.filter((entry) => entry.priority >= 800))

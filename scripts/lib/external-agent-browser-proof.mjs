@@ -1,0 +1,36 @@
+import {execFileSync} from 'node:child_process';import assert from 'node:assert/strict';import fs from 'node:fs/promises';import path from 'node:path';
+import {Client} from '@modelcontextprotocol/client';import {StdioClientTransport} from '@modelcontextprotocol/client/stdio';
+export async function verifyExternalAgent({page,api,base,output,check,counts}){
+ const before=counts(),project=await api('/api/projects',{name:'External agent interoperability'}),id=project.id;
+ let state=await api(`/api/projects/${id}/document`);
+ await api(`/api/projects/${id}/commands`,{operationId:'external-fixture',baseRevision:state.revision,baseHash:state.documentHash,commands:[{type:'set',target:{kind:'format'},path:['width'],value:640},{type:'set',target:{kind:'format'},path:['height'],value:360},{type:'set',target:{kind:'format'},path:['durationInFrames'],value:90},{type:'addItem',item:{id:'mcp-title',name:'Editable title',trackId:'visual',node:{id:'mcp-title',type:'text',from:0,duration:90,text:'Keep the shared timeline',style:{left:40,top:120,width:560,height:80,fontSize:34,fontFamily:'system-ui',color:'#ffffff'}}}}]});
+ const transport=new StdioClientTransport({command:process.execPath,args:['--import','tsx',process.cwd()+'/apps/server/src/mcp.ts'],cwd:process.cwd(),env:{PATH:process.env.PATH??'',DOJO_MCP_URL:base},stderr:'pipe'}),client=new Client({name:'actual-editor-proof',version:'1.0.0'});
+ const call=async(name,args)=>{const result=await client.callTool({name,arguments:args});if(result.isError)throw Error(JSON.stringify(result));return JSON.parse(result.content.find(x=>x.type==='text').text)};
+ const until=async test=>{const deadline=Date.now()+30000;while(Date.now()<deadline){if(await test())return;await new Promise(r=>setTimeout(r,100))}throw Error('External editor state did not settle')};
+ try{
+  await client.connect(transport);await page.goto(`${base}/en/applications/editor/${id}?chat=1`);await page.getByTestId('dojo-video-engine-editor').waitFor();
+  await page.evaluate(()=>{window.__handoff='';Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{window.__handoff=text}}})});
+  const show=page.getByRole('button',{name:'Show inspector',exact:true});if(await show.isVisible())await show.click();await page.getByLabel('Editing layer',{exact:true}).selectOption('mcp-title');
+  await page.getByRole('textbox',{name:'Text',exact:true}).fill('Manual words stay');await page.getByRole('button',{name:'Copy for Agent',exact:true}).click();await until(()=>page.evaluate(()=>!!window.__handoff));
+  const text=await page.evaluate(()=>window.__handoff),handoff=JSON.parse(text.split('```json\n')[1].split('\n```')[0]);state=await api(`/api/projects/${id}/document`);
+  check('Copy for Agent waits for the actual pending inspector edit and copies its exact saved revision',state.document.items[0].node.text==='Manual words stay'&&handoff.documentHash===state.documentHash&&handoff.revision===state.revision);
+  await page.getByRole('status').filter({hasText:'Project context copied.'}).getByRole('button',{name:'Close',exact:true}).click();
+  const inspected=await call('dojo_inspect_project',{projectId:id,args:{itemIds:['mcp-title']}});check('a real stdio MCP client reads the live browser project identity',inspected.documentHash===state.documentHash);
+  const review=await call('dojo_review_edit',{projectId:id,expectedRevision:state.revision,documentHash:state.documentHash,operationId:'mcp-review',instruction:'Color the title coral and preserve its manual wording',edit:{outcome:'proposal',summary:'Coral title',commands:[{type:'set',target:{kind:'node',itemId:'mcp-title',nodeId:'mcp-title'},path:['style','color'],value:'#F18F6D'}]},requirements:[{id:'manual-text',kind:'property',target:{kind:'node',itemId:'mcp-title',nodeId:'mcp-title'},path:['text'],equals:'Manual words stay'}]});assert.equal(review.status,'reviewed');
+  const preview=await call('dojo_request_preview',{projectId:id,reviewId:review.reviewId,args:{frames:[0,60],analysis:{}}});assert.equal(preview.kind,'waiting');
+  await until(()=>page.locator('[data-output-request-id]').count());console.log('MCP preview identity',JSON.stringify({returned:preview.requestRef.id,displayed:await page.locator('[data-output-request-id]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-output-request-id')))}));const card=page.locator(`[data-output-request-id="${preview.requestRef.id}"]`);await card.waitFor({timeout:30000});check('MCP preview waits for explicit browser image consent',await card.getByRole('button',{name:'Send preview frames',exact:true}).isDisabled());await card.getByRole('checkbox').check();await card.getByRole('button',{name:'Send preview frames',exact:true}).click();await card.getByText('Preview frames saved for review',{exact:true}).waitFor();
+  const receipt=await client.callTool({name:'dojo_read_preview',arguments:{projectId:id,reviewId:review.reviewId,requestId:preview.requestRef.id}});check('saved authorized candidate JPEGs return as MCP image content',!receipt.isError&&receipt.content.filter(x=>x.type==='image').length===2);
+  const exportIntent=await call('dojo_request_export',{projectId:id,reviewId:review.reviewId,args:{destination:'download',output:{container:'mp4',resolution:'source'}}});
+  await call('dojo_apply_edit',{projectId:id,reviewId:review.reviewId,operationId:'mcp-apply',expectedRevision:state.revision,documentHash:state.documentHash});await until(async()=>{const current=await api(`/api/projects/${id}/document`);return current.document.items[0].node.style.color==='#F18F6D'});
+  await until(async()=>{const color=page.getByLabel('Text color',{exact:true});return(await color.inputValue()).toLowerCase()==='#f18f6d'});
+  const exportRef=exportIntent.value.projectExport.requestRef;
+  const outputCard=page.locator(`[data-output-request-id="${exportRef.id}"]`);
+  await outputCard.getByRole('button',{name:'Export and download',exact:true}).waitFor();
+  const download=page.waitForEvent('download');await outputCard.getByRole('button',{name:'Export and download',exact:true}).click();const file=path.join(output,'mcp-output.mp4');await(await download).saveAs(file);execFileSync('ffmpeg',['-v','error','-i',file,'-f','null','-']);
+  const outputReceipt=await call('dojo_read_output',{projectId:id,reviewId:review.reviewId,requestId:exportRef.id});
+  check('MCP export uses the applied revision and the browser produces a fully decoded MP4',outputReceipt.receipt?.kind==='project-export');
+  await page.getByRole('button',{name:'Undo',exact:true}).waitFor();await until(()=>page.getByRole('button',{name:'Undo',exact:true}).isEnabled());await page.getByRole('button',{name:'Undo',exact:true}).click();await until(async()=>{const current=await api(`/api/projects/${id}/document`);return current.document.items[0].node.style.color==='#ffffff'});
+  state=await api(`/api/projects/${id}/document`);check('the normal editor Undo reverses the external edit while preserving earlier manual text',state.document.items[0].node.text==='Manual words stay');
+  await page.screenshot({path:path.join(output,'external-agent-shared-editor.png'),fullPage:true});check('external inspection/review/preview/apply never calls the internal model or ASR provider',JSON.stringify(counts())===JSON.stringify(before));
+ }finally{await client.close();await transport.close()}
+}

@@ -13,6 +13,7 @@ import { editorMediaBatchCopy } from "./editor-media-batch-copy";
 import { editorAuthoringCopy } from "./editor-authoring-copy";
 import { editorAgentProgressCopy } from "./editor-agent-progress-copy";
 import { editorCaptionEditCopy } from "./editor-caption-edit-copy";
+import { editorBrandKitCopy } from "./editor-brand-kit-copy";
 import { editorOutputCopy } from "./editor-output-copy";
 import { editorStageProgressCopy } from "./editor-stage-progress-copy";
 import { editorGenerationCopy } from "./editor-generation-copy";
@@ -305,6 +306,7 @@ export function useNativeEditorText() {
   const { t: translate, locale } = useTranslation();
   return (text: string) => {
     if (locale === "en") return text;
+    if (editorBrandKitCopy[locale]?.[text]) return editorBrandKitCopy[locale][text];
     if (editorOutputCopy[locale]?.[text]) return editorOutputCopy[locale][text];
     if (editorStageProgressCopy[locale]?.[text]) return editorStageProgressCopy[locale][text];
     if (editorGenerationCopy[locale]?.[text]) return editorGenerationCopy[locale][text];

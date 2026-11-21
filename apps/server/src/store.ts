@@ -69,6 +69,7 @@ export const commitInput = z
   })
   .strict();
 export type StoredRun = VideoProjectAgentRun & {
+  externalAgent?: { version: 1; reviewRef: import("../../../packages/agent-kit/src/index").EditArtifactRef };
   /** Host policy frozen on new runs; absence preserves historical review/replay. */
   captionTranslationRebase?: true;
   focusedGraphicsDiscovery?: true;
@@ -372,6 +373,7 @@ export class ProjectStore {
       await this.transaction(id, (p) => {
         for (const run of p.runs)
           if (["queued", "running"].includes(run.status)) {
+            if (run.externalAgent) { run.status = "needs_evidence"; run.phase = "waiting_for_external_agent"; continue; }
             const stageState = p.editStagePlans?.[run.id];
             if (stageState) {
               const recovery = localEditStageRecovery(stageState);
@@ -479,6 +481,7 @@ export const runOf = (p: Project, id: string) => {
 };
 export function publicRun(
   {
+    externalAgent: _externalAgent,
     skillSnapshot: _skillSnapshot,
     captionTranslationRebase: _captionTranslationRebase,
     focusedGraphicsDiscovery: _focusedGraphicsDiscovery,

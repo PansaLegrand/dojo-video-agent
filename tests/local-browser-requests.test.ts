@@ -1039,3 +1039,18 @@ it('freezes candidate measurement scope, keeps legacy tools absent and caps tota
   const compare=tools.find(t=>t.name==='compare_preview_frames')!;
   await expect(compare.execute({reference:{kind:'source-inspection',requestId:rows[0]!.request!.id},candidate:{kind:'project-preview',requestId:'foreign'}},new AbortController().signal)).rejects.toThrow();
 });
+
+it("prepares and renders an approved current-timeline preview without inventing a candidate", async () => {
+ const f=await fixture();
+ const tool=f.service.tools(f.projectId,f.runId,f.run.request).find(t=>t.name==='request_project_preview')!;
+ await expect(tool.execute({frames:[0]},new AbortController().signal)).resolves.toMatchObject({kind:'waiting'});
+ const row=(await f.service.list(f.projectId,f.runId,'project-preview')).requests[0]!;
+ if(row.request?.kind!=='project-preview')throw Error('Expected preview');
+ expect(row.request.candidateRef).toBeUndefined();expect(row.request.renderHash).toBe(f.run.baseHash);
+ await f.service.authorize(f.projectId,f.runId,row.request.id,{operationId:'authorize-base-preview',scopeHash:row.request.scopeHash});
+ const result=await f.service.renderInput(f.projectId,f.runId,row.request.id);
+ expect(await hashVideoProjectDocument(result.document)).toBe(f.run.baseHash);
+ expect(result.ref).toBeUndefined();
+ await f.store.transaction(f.projectId,async project=>{project.document.format.durationInFrames+=30;project.documentHash=await hashVideoProjectDocument(project.document);project.revision++});
+ await expect(f.service.renderInput(f.projectId,f.runId,row.request.id)).rejects.toThrow();
+});

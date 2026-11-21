@@ -232,7 +232,7 @@ export class AgentService {
         reviewBasisRequired: true,
         captionTranslationRebase: true,
         agentProfile: this.agentProfile,
-        agentKitVersion: this.agentProfile === "local-editor-v14" && !this.stagedOptions.visualReview ? "0.2.10" : profileKitVersion(this.agentProfile),
+        agentKitVersion: this.agentProfile === "local-editor-v14" && !this.stagedOptions.visualReview && !p.document.creativeContext.brandKit ? "0.2.10" : profileKitVersion(this.agentProfile),
         ...(this.agentProfile === "local-editor-v14" ? { skillSnapshot: structuredClone(this.stagedOptions.newRunSkills ?? this.skills) } : {}),
         ...(this.agentProfile === "local-editor-v14" && this.stagedOptions.focusedGraphicsDiscovery ? { focusedGraphicsDiscovery: true } : {}),
         ...(this.stagedOptions.browser &&
@@ -250,7 +250,7 @@ export class AgentService {
           context: input.context,
           instruction: input.instruction,
           authoring: { version: 1, scope,
-            ...(this.agentProfile === "local-editor-v14" && this.stagedOptions.visualReview ? { visualReview: "sequence-v1" as const } : {}),
+            ...(this.agentProfile === "local-editor-v14" && (this.stagedOptions.visualReview || p.document.creativeContext.brandKit) ? { visualReview: "sequence-v1" as const } : {}),
             ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const, requiredTextLayout: "sampled-v1" as const, spatialCanvas: "scene-v1" as const } : {}),
             ...(macroCatalog ? { macroCatalog } : {}),
           },
@@ -675,6 +675,7 @@ export class AgentService {
       .parse(raw);
     const run = await this.store.transaction(projectId, async (p) => {
       const r = runOf(p, id);
+      if (r.externalAgent) throw new HttpError("Continue this review in the connected external agent.", 409, "EXTERNAL_AGENT_OWNED");
       if (r.reviewedEditRecovery)
         throw new HttpError(
           "This interrupted run's reviewed edit has already been recovered. Review or apply the recovered card instead.",

@@ -1,3 +1,4 @@
+import { ExternalAgentService } from "./external-agent";
 import { atomicReplace } from "./atomic-replace";
 import { type IncomingMessage, type ServerResponse } from "node:http";
 import { createReadStream } from "node:fs";
@@ -117,6 +118,7 @@ export async function createLocalApi() {
       },
     },
   );
+  const externalAgent = new ExternalAgentService(store, agent, browserRequests, newRunSkills ?? skills);
   type Task = {
     id: string;
     project_id: string;
@@ -382,6 +384,17 @@ export async function createLocalApi() {
     const url = new URL(req.url ?? "/", `http://${host}`),
       parts = url.pathname.split("/").filter(Boolean).map(decodeURIComponent),
       method = req.method;
+    if (parts[1] === "external-agent" && parts.length === 2) {
+      if (method === "GET") {
+        if (process.env.DOJO_MCP === "1" && url.searchParams.has("projectId")) return json(res, await externalAgent.state(identifier.parse(url.searchParams.get("projectId"))));
+        return json(res, { enabled: process.env.DOJO_MCP === "1", transport: "local-stdio", requiresBrowserForPixels: true });
+      }
+      if (method === "POST") {
+        if (process.env.DOJO_MCP !== "1") throw new HttpError("External agent access is off. Start this local editor with DOJO_MCP=1 to enable it.", 403, "EXTERNAL_AGENT_DISABLED");
+        const body = z.object({ tool: z.string().min(1).max(80), input: z.unknown() }).strict().parse(await input(req));
+        return json(res, await externalAgent.call(body.tool, body.input, new AbortController().signal));
+      }
+    }
     if (parts[1] === "config" && method === "GET")
       return json(res, {
         ...providers.public(),
