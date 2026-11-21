@@ -824,10 +824,14 @@ export async function validateNativeReviewRequirements(
   request: NativeAgentRequest, raw: unknown, edit: unknown, sourceDocument?: VideoProjectDocument,
 ): Promise<void> {
   let candidate: VideoProjectDocument | undefined;
+  let changedItemIds = new Set<string>();
   if (edit !== undefined) {
     try {
       const compiled = await compileNativeAgentResult(request, edit);
-      if (compiled.proposal) candidate = executeVideoProjectCommands(parseVideoProjectDocument(request.document), compiled.proposal.commands).document;
+      if (compiled.proposal) {
+        candidate = executeVideoProjectCommands(parseVideoProjectDocument(request.document), compiled.proposal.commands).document;
+        changedItemIds = new Set(compiled.proposal.changedItemIds);
+      }
     } catch {
       // Invalid command drafts still retain their otherwise valid requirements.
     }
@@ -838,7 +842,7 @@ export async function validateNativeReviewRequirements(
     if (node.type === "text") textTargets.push(`${node.id}=${JSON.stringify(node.text ?? "").slice(0,60)}`);
     node.children?.forEach(collectText);
   };
-  candidate?.items.forEach(item => collectText(item.node));
+  candidate?.items.filter(item => changedItemIds.has(item.id)).forEach(item => collectText(item.node));
   try {
     validateNativeCompletionRequirements(raw, sourceDocument);
     if (!candidate) return;
