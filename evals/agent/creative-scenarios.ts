@@ -299,6 +299,43 @@ export const creativeScenarios: readonly CreativeScenario[] = [
 /** Optional probes are explicitly selected; they do not change the original eight-case suite. */
 export const creativeScenarioVariants: readonly CreativeScenario[] = [
   {
+    id: "release13-watch-studio",
+    skill: "spatial-scenes",
+    document: creativeFixture(),
+    turns: [{
+      prompt: "Make an eight-second luxury watch studio opener. Show the watch coming apart in 3D, with the title MERIDIAN, the line A study in precision, and meridian.studio. Use warm ivory, dark green and a restrained gold accent. Give the final title a readable hold.",
+      expected: "edit",
+      contract: {kind: "graphic", requiredText: ["MERIDIAN", "A study in precision", "meridian.studio"], requireThreeMotion: true},
+    }, {
+      prompt: "Change only the title to MERIDIAN ATELIER. Preserve the watch, colors, timing and studio URL, and make the longer title fit cleanly.",
+      expected: "edit",
+      contract: {kind: "graphic", requiredText: ["MERIDIAN ATELIER", "A study in precision", "meridian.studio"], requireThreeMotion: true},
+    }],
+    visualReview: [...commonVisualReview, "Watch parts separate in depth, the final copy is readable and the longer title fits. Compare both outputs to verify that the requested revision preserves the watch, color, timing and URL."],
+  },
+  {
+    id: "release13-portrait-type",
+    skill: "kinetic-typography",
+    document: creativeFixture(true),
+    turns: [{
+      prompt: "Create a six-second portrait typography film for a print studio using the exact words TYPE TAKES SHAPE. Make the letters move with a clear sequence, use cobalt and warm cream, and let the whole phrase settle into a readable final composition.",
+      expected: "edit",
+      contract: {kind: "graphic", requiredText: ["TYPE TAKES SHAPE"]},
+    }],
+    visualReview: [...commonVisualReview, "Verify portrait composition, visible typographic choreography, exact word order, cobalt and cream, and a readable final hold."],
+  },
+  {
+    id: "release13-supplied-chart",
+    skill: "chart-storytelling",
+    document: creativeFixture(),
+    turns: [{
+      prompt: "Make an elegant animated bar chart of these workshop attendance figures: April 18, May 31, June 27. Use an ivory background, forest-green bars and a clear zero baseline. Keep the numbers exact and avoid adding business claims.",
+      expected: "edit",
+      contract: {kind: "chart", data: [{label:"April",value:18},{label:"May",value:31},{label:"June",value:27}], unit: "", plot: "bar-or-line"},
+    }],
+    visualReview: [...chartReview, "Compare bar lengths to 18, 31 and 27 and check the ivory and green palette."],
+  },
+  {
     id: "creative-festival-birthday-3d",
     skill: "spatial-scenes",
     document: creativeFixture(),
