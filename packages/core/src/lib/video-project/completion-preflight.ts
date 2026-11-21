@@ -823,6 +823,13 @@ export function checkNativeCompletionRequirements(
 export async function validateNativeReviewRequirements(
   request: NativeAgentRequest, raw: unknown, edit: unknown, sourceDocument?: VideoProjectDocument,
 ): Promise<void> {
+  const owners: Record<string,string> = {params:"effect",effect:"effect",shape:"shape",extension:"extension",runs:"text"};
+  let requirements: CompletionRequirement[] = [];
+  let declarationError: unknown;
+  try { requirements = validateNativeCompletionRequirements(raw, sourceDocument); }
+  catch (error) { declarationError = error; }
+  // Most reviews need only structural checks. Compile early only for a type-specific target or an invalid declaration's repair hints.
+  if (!declarationError && !requirements.some(requirement => requirement.kind === "property" && requirement.path.some(field => Object.hasOwn(owners,field)))) return;
   let candidate: VideoProjectDocument | undefined;
   let changedItemIds = new Set<string>();
   if (edit !== undefined) {
@@ -846,14 +853,12 @@ export async function validateNativeReviewRequirements(
   };
   candidate?.items.forEach(item => collectNode(item.node,changedItemIds.has(item.id)));
   try {
-    validateNativeCompletionRequirements(raw, sourceDocument);
+    if (declarationError) throw declarationError;
     if (!candidate) return;
-    const requirements = parseCompletionRequirements(raw, {assetSequence:true,speechCallout:true});
-    const owners: Record<string,string> = {params:"effect",effect:"effect",shape:"shape",extension:"extension",runs:"text"};
     for (const requirement of requirements) {
       if (requirement.kind !== "property") continue;
       for (let index=0; index<requirement.path.length; index++) {
-        const field = requirement.path[index], owner = owners[field];
+        const field = requirement.path[index], owner = Object.hasOwn(owners,field) ? owners[field] : undefined;
         if (!owner) continue;
         const node = readVideoProjectPath(candidate,propertyPath(requirement.target,requirement.path.slice(0,index))) as SceneNodeInput | undefined;
         if (node && nativeNodes.has(node) && node.type !== owner)
