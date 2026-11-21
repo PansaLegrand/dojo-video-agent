@@ -71,6 +71,20 @@ style, then use normalized data coordinates (including inverted y for a
 bottom-origin axis). Do not put canvas pixel coordinates in `shape.points`.
 An SVG path instead uses its explicit viewBox coordinate system.
 
+## Apply the requested palette to the painted chart
+
+Inspect the selected macro's parameters before choosing it for a colored chart.
+The installed `dataChart` macro has a fixed dark surface and blue marks. For a
+requested palette, prefer editable native shapes and text, or inspect a macro
+with explicit palette parameters. Changing the project background alone can be
+covered by an opaque chart surface. Give the chart surface, marks and labels
+explicit colors, and bind completion checks to those actual nodes.
+
+Keep the finished chart visible through the requested interval's final frame.
+When the user supplies no shorter interval, fill the available composition and
+reserve the ending for reading. Confirm the expanded result matches the summary,
+including its palette, mark geometry and final hold.
+
 ## Choreograph the explanation
 
 Choose an explanatory action: orient the viewer to the scale, reveal the data,
