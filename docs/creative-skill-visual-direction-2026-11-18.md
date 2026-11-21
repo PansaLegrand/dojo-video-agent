@@ -206,3 +206,7 @@ See [the skill-pack handoff](creative-skill-packs-2026-11-17.md) and
 When the installed engine advertises `remixBlueprint`, new local sessions bind the blueprint catalog. Read the index through `inspect_graphics_schema({kind:"macro",macro:"remixBlueprint"})`, then request one design by name (for example `remixBlueprint/precision`). Supply the requested copy, data and timing in an `insertGraphic` proposal. The result contains individually editable native layers.
 
 The seven creative guides cover choosing the viewer's first change, the transition and the final reading hold. Saved sessions retain their recorded skills and macro vocabulary. The repository's normal installation uses the published 1.2.3 engine. To exercise an exact 1.3 package bundle in an isolated checkout, run `npm run test:engine-packages -- --pack-dir /absolute/path/to/engine-release --keep`.
+
+## Published Engine 1.3 adoption, November 21
+
+The local editor now installs the synchronized Engine 1.3.0 registry packages. The release manifest binds them to engine commit `3bd3685660d8f8b59e74e34b1b3b34491a1317bb` and the signed `v1.3.0` tag. Registry archive hashes match the hosted release bundle. A fresh installation verified all 32 available registry signatures and 22 attestations. New local runs can discover the nine remix blueprints and the new rendering grammar. Saved sessions retain their original catalogs and guidance snapshots.
