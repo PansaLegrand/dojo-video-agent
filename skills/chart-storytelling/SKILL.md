@@ -78,7 +78,11 @@ The installed `dataChart` macro has a fixed dark surface and blue marks. For a
 requested palette, prefer editable native shapes and text, or inspect a macro
 with explicit palette parameters. Changing the project background alone can be
 covered by an opaque chart surface. Give the chart surface, marks and labels
-explicit colors, and bind completion checks to those actual nodes.
+explicit colors, and bind completion checks to those actual nodes. Rectangular
+bars can be native divs with `style.backgroundColor`. A shape uses `style.fill`
+for its painted color. For a bar growing upward to height H from baseline B,
+animate its top to B-H alongside its height, using identical frame boundaries
+and easing, so the bottom stays at B throughout the reveal.
 
 Keep the finished chart visible through the requested interval's final frame.
 When the user supplies no shorter interval, fill the available composition and
