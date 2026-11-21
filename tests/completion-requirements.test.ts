@@ -406,6 +406,7 @@ it("allows native checks after rejecting an impossible macro-parameter requireme
   const edit={outcome:"proposal",summary:"Plot supplied counts",commands:[{type:"insertGraphic",itemId:"chart",trackId:"visual",name:"Chart",
     node:{macro:"dataChart",id:"chart",kind:"bar",domain:{min:0,max:35},unit:"attendees",data:[{label:"April",value:18},{label:"May",value:31}],duration:180}}]};
   await expect(invoke({requirements:[{id:"invalid",kind:"property",target:{kind:"node",itemId:"chart",nodeId:"chart"},path:["params"],equals:{kind:"bar"}}],edit})).rejects.toThrow(/params.*div/);
+  await expect(invoke({requirements:[{id:"invalid-item",kind:"property",target:{kind:"item",itemId:"chart"},path:["node","params"],equals:{kind:"bar"}}],edit})).rejects.toThrow(/params.*div/);
   const result:any=await invoke({requirements:[{id:"value",kind:"property",target:{kind:"node",itemId:"chart",nodeId:"chart-value-1"},path:["text"],equals:"18"}],edit});
   expect(result.value.completionPreflight.status).toBe("passed");
 });

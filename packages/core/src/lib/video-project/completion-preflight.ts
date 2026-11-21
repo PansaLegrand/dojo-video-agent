@@ -837,24 +837,28 @@ export async function validateNativeReviewRequirements(
     }
   }
   const textTargets: string[] = [];
-  const collectText = (node: SceneNodeInput) => {
-    if (textTargets.length >= 12) return;
-    if (node.type === "text") textTargets.push(`${node.id}=${JSON.stringify(node.text ?? "").slice(0,60)}`);
-    node.children?.forEach(collectText);
+  const nativeNodes = new Set<SceneNodeInput>();
+  const collectNode = (node: SceneNodeInput, changed: boolean) => {
+    nativeNodes.add(node);
+    if (changed && textTargets.length < 12 && node.type === "text")
+      textTargets.push(`${node.id}=${JSON.stringify(node.text ?? "").slice(0,60)}`);
+    node.children?.forEach(child => collectNode(child,changed));
   };
-  candidate?.items.filter(item => changedItemIds.has(item.id)).forEach(item => collectText(item.node));
+  candidate?.items.forEach(item => collectNode(item.node,changedItemIds.has(item.id)));
   try {
     validateNativeCompletionRequirements(raw, sourceDocument);
     if (!candidate) return;
     const requirements = parseCompletionRequirements(raw, {assetSequence:true,speechCallout:true});
-    const owners: Record<string,string> = {params:"effect",effect:"effect",shape:"shape",extension:"extension"};
+    const owners: Record<string,string> = {params:"effect",effect:"effect",shape:"shape",extension:"extension",runs:"text"};
     for (const requirement of requirements) {
-      if (requirement.kind !== "property" || requirement.target.kind !== "node") continue;
-      const owner = owners[requirement.path[0]];
-      if (!owner) continue;
-      const node = readVideoProjectPath(candidate,propertyPath(requirement.target,[])) as SceneNodeInput | undefined;
-      if (node && node.type !== owner)
-        throw new Error(`Completion requirement ${requirement.id} targets ${requirement.path[0]} on a ${node.type} node. That field belongs to ${owner} nodes. Macro inputs are expanded into native nodes; check their rendered text, style or geometry.`);
+      if (requirement.kind !== "property") continue;
+      for (let index=0; index<requirement.path.length; index++) {
+        const field = requirement.path[index], owner = owners[field];
+        if (!owner) continue;
+        const node = readVideoProjectPath(candidate,propertyPath(requirement.target,requirement.path.slice(0,index))) as SceneNodeInput | undefined;
+        if (node && nativeNodes.has(node) && node.type !== owner)
+          throw new Error(`Completion requirement ${requirement.id} targets ${field} on a ${node.type} node. That field belongs to ${owner} nodes. Macro inputs are expanded into native nodes; check their rendered text, style or geometry.`);
+      }
     }
   } catch (error) {
     throw new Error(`${error instanceof Error ? error.message : String(error)}${textTargets.length ? ` Some compiled text targets: ${textTargets.join("; ")}.` : ""}`);
