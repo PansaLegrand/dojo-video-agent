@@ -40,6 +40,7 @@ export type CreativeContract =
       requiredText: readonly string[];
       requireThreeMotion?: true;
     }
+  | { kind: "title-revision"; previousText: string; text: string; requiredText: readonly string[] }
   | { kind: "missing-data" };
 export type CreativeTurn = {
   prompt: string;
@@ -309,7 +310,7 @@ export const creativeScenarioVariants: readonly CreativeScenario[] = [
     }, {
       prompt: "Change only the title to MERIDIAN ATELIER. Preserve the watch, colors, timing and studio URL, and make the longer title fit cleanly.",
       expected: "edit",
-      contract: {kind: "graphic", requiredText: ["MERIDIAN ATELIER", "A study in precision", "meridian.studio"], requireThreeMotion: true},
+      contract: {kind: "title-revision", previousText: "MERIDIAN", text: "MERIDIAN ATELIER", requiredText: ["A study in precision", "meridian.studio"]},
     }],
     visualReview: [...commonVisualReview, "Watch parts separate in depth, the final copy is readable and the longer title fits. Compare both outputs to verify that the requested revision preserves the watch, color, timing and URL."],
   },
@@ -688,6 +689,31 @@ export function gradeCreativeOutcome(
     checks: CreativeCheck[] = [];
   const check = (id: string, condition: boolean, detail: string) =>
     checks.push({ id, status: condition ? "passed" : "failed", detail });
+  if (contract.kind === "title-revision") {
+    const original = nodes(before.items.map(item => item.node)).filter(node => node.text === contract.previousText);
+    const revised = nodes(after.items.map(item => item.node)).filter(node => node.id === original[0]?.id);
+    check("title-identity", original.length === 1 && revised.length === 1 && revised[0].text === contract.text,
+      "The existing title node retains its identity and the exact requested replacement text.");
+    const normalized = structuredClone(after);
+    const restored = nodes(normalized.items.map(item => item.node)).find(node => node.id === original[0]?.id);
+    if (original.length === 1 && restored) {
+      restored.text = original[0].text;
+      for (const key of ["fontSize", "letterSpacing"] as const) {
+        const value = original[0].style?.[key];
+        if (value === undefined) { if (restored.style) delete restored.style[key]; }
+        else (restored.style ??= {})[key] = value;
+      }
+    }
+    check("preserve-unrelated-content", equal(before, normalized),
+      "Only the title text, font size and letter spacing may change. Art, colors, timing, URL and all other document state remain exact.");
+    const text = nodes(after.items.map(item => item.node)).map(textOf).join(" ");
+    for (const value of contract.requiredText)
+      check(`text:${value}`, containsToken(text, value), "The requested supporting copy is preserved.");
+    check("edit-outcome", !options.outcome || options.outcome === "edit", "The follow-up produces an applied edit.");
+    return {version: 1, automatedStatus: checks.every(c => c.status === "passed") ? "passed" : "failed", checks,
+      visualReviewRequired: true, visualReview: scenario.visualReview,
+      sampleFrames: [Math.floor(after.format.durationInFrames / 2), after.format.durationInFrames - 1]};
+  }
   if (contract.kind === "missing-data") {
     check(
       "essential-question",

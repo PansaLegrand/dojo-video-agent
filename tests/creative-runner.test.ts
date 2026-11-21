@@ -14,7 +14,7 @@ import {
   parseCreativeOptions,
   evaluateCreativeMain,
 } from "../scripts/evaluate-creative";
-import { creativeScenarios } from "../evals/agent/creative-scenarios";
+import { creativeScenarios, creativeScenarioVariants, gradeCreativeOutcome } from "../evals/agent/creative-scenarios";
 import type { LanguageModel } from "../packages/agent/src/types";
 
 async function workspace<T>(run: (directory: string) => Promise<T>) {
@@ -560,3 +560,22 @@ it(
     }),
   10000,
 );
+
+
+it("checks an in-place title revision while preserving the complete surrounding document", () => {
+  const scenario = creativeScenarioVariants.find(value => value.id === "release13-watch-studio")!;
+  const before = structuredClone(scenario.document);
+  before.items = [{id:"title",trackId:"visual",name:"Title",node:{id:"title",type:"text",text:"MERIDIAN",duration:180,style:{fontSize:58,letterSpacing:3}}},
+    {id:"support",trackId:"visual",name:"Support",node:{id:"support",type:"text",text:"A study in precision meridian.studio",duration:180}}];
+  const after = structuredClone(before);
+  after.items[0].node.text = "MERIDIAN ATELIER";
+  after.items[0].node.style!.fontSize = 36;
+  const grade = (document: typeof after) => gradeCreativeOutcome(scenario, before, document, 1, {outcome:"edit"});
+  expect(grade(after).automatedStatus).toBe("passed");
+  const drift = structuredClone(after);
+  drift.format.fps = 24;
+  expect(grade(drift).automatedStatus).toBe("failed");
+  const lostCopy = structuredClone(after);
+  lostCopy.items[1].node.text = "A different studio";
+  expect(grade(lostCopy).automatedStatus).toBe("failed");
+});
