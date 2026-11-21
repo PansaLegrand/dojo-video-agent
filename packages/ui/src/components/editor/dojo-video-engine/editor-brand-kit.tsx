@@ -25,7 +25,7 @@ export function EditorBrandKit({ document, disabled, onSave }: { document: Video
  <header><div><p>{t("Visual identity")}</p><h2 id="editor-brand-title">{t("Brand kit")}</h2></div><button type="button" aria-label={t("Close")} disabled={saving} onClick={close}><X size={20}/></button></header>
  <p className="editor-brand-intro">{t("Save your visual identity once. The agent uses it across edits.")}</p>
  <form onSubmit={e=>{e.preventDefault();void save()}} aria-busy={saving}>
- <fieldset disabled={saving}><legend className="sr-only">{t("Brand identity")}</legend>
+ <div className="editor-brand-scroll"><fieldset disabled={saving}><legend className="sr-only">{t("Brand identity")}</legend>
  <div className="editor-brand-presets" aria-label={t("Starting styles")}>{brandKitPresets.map(p=><button key={p.id} type="button" data-brand-preset={p.id} style={{background:p.kit.colors?.background,color:p.kit.colors?.foreground}} onClick={()=>setDraft(current=>({...current,name:current.name??p.name,colors:structuredClone(p.kit.colors),typography:structuredClone(p.kit.typography),cornerRadiusPx:p.kit.cornerRadiusPx,voice:current.voice??p.kit.voice,rules:current.rules??structuredClone(p.kit.rules)}))}><strong style={{fontFamily:JSON.stringify(editorFontSpecimenFamily(p.kit.typography!.headingFont!)),fontWeight:400}}>{p.name}</strong><span>{t(p.description)}</span><div>{Object.values(p.kit.colors!).map((color,i)=><i key={i} style={{background:color}}/>)}</div></button>)}</div>
  <div className="editor-brand-columns"><section className="editor-brand-fields">
  <label>{t("Brand name")}<input aria-label={t("Brand name")} value={draft.name??""} maxLength={100} onChange={e=>setDraft({...draft,name:e.target.value||undefined})}/></label>
@@ -36,7 +36,7 @@ export function EditorBrandKit({ document, disabled, onSave }: { document: Video
  </section><section className="editor-brand-notes"><div className="editor-brand-style-preview" data-font-revision={fonts} style={{background:colors.background??"#101820",color:colors.foreground??"#f4f1e8"}}><span>{t("Style preview")}</span><h3 style={{fontFamily:JSON.stringify(editorFontSpecimenFamily(family))}}>{draft.name||t("Your next story")}</h3><p style={{fontFamily:draft.typography?.bodyFont??"Inter"}}>{t("A clear idea, in your own voice.")}</p><div style={{background:draft.gradient??colors.primary??"#F18F6D",color:colors.onPrimary??"#101820",borderRadius:draft.cornerRadiusPx??18}}>{t("Make it yours")}</div></div>
  <label>{t("Brand voice")}<textarea aria-label={t("Brand voice")} rows={2} maxLength={500} value={draft.voice??""} onChange={e=>setDraft({...draft,voice:e.target.value||undefined})}/></label>
  {(["approvedFacts","rules"] as const).map(key=><label key={key}>{t(key==="approvedFacts"?"Approved facts":"Design rules")}<textarea aria-label={t(key==="approvedFacts"?"Approved facts":"Design rules")} rows={4} maxLength={10000} value={(draft[key]??[]).join("\n")} onChange={e=>setDraft({...draft,[key]:e.target.value.split("\n")})}/><small>{t("One per line. Up to 20 lines, 500 characters each.")}</small></label>)}
- </section></div></fieldset>
+ </section></div></fieldset></div>
  {error&&<p role="alert" className="editor-brand-error">{error}</p>}
  <footer><button type="button" disabled={saving||!baseline} onClick={()=>void save(true)}>{t("Clear brand kit")}</button><div><button type="button" disabled={saving} onClick={close}>{t("Cancel")}</button><button type="submit" className="editor-brand-save" disabled={saving}>{t(saving?"Saving…":"Save brand kit")}</button></div></footer></form>
  </dialog>}</>;

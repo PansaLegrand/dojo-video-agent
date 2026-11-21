@@ -1,0 +1,7 @@
+import {it,expect} from 'vitest';import {IndependentTrialBudget} from '../evals/creative-r36/campaign-continuation';
+it('keeps unknown cost reserved, blocks that journey and permits only independent planned work',()=>{
+ const records:any[]=[{ordinal:1,host:'dojo',scenario:'J2',repetition:1,turn:1}],context={host:'dojo',scenario:'J2',repetition:1,turn:2};const budget=new IndependentTrialBudget(records,()=>context);
+ budget.requests.push({ordinal:1,status:'unknown',reservedUsd:.64,actualUsd:null});expect(()=>budget.admit(100,100)).toThrow(/no retry/);context.repetition=2;const next=budget.admit(100,100);expect(budget.requests[0]!.status).toBe('unknown');expect(budget.accountedUsd).toBeCloseTo(.64+next.reservedUsd);expect(()=>budget.admit(1,1)).toThrow(/in-flight/);budget.settle(next,{inputTokens:100,outputTokens:10});expect(budget.accountedUsd).toBeGreaterThan(.64);
+ budget.requests[0]!.reservedUsd=29.99;expect(()=>budget.admit(10000,8192)).toThrow(/budget exhausted/);
+});
+it('stops after three distinct provider failures without zeroing their reservations',()=>{const records=[1,2,3].map(n=>({ordinal:n,host:'dojo',scenario:'J'+n,repetition:1})),budget=new IndependentTrialBudget(records,()=>({host:'openmotion',scenario:'J4',repetition:1}));for(let n=1;n<=3;n++)budget.requests.push({ordinal:n,status:'unknown',reservedUsd:.5,actualUsd:null});expect(()=>budget.admit(100,100)).toThrow(/Three independent/);expect(budget.accountedUsd).toBe(1.5)});
