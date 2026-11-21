@@ -74,9 +74,10 @@ An SVG path instead uses its explicit viewBox coordinate system.
 ## Apply the requested palette to the painted chart
 
 Inspect the selected macro's parameters before choosing it for a colored chart.
-The installed `dataChart` macro has a fixed dark surface and blue marks. For a
-requested palette, prefer editable native shapes and text, or inspect a macro
-with explicit palette parameters. Changing the project background alone can be
+When `dataChart` exposes `palette`, set its `background`, `text`, `marks` and
+`axis` colors to match the brief. This paints the chart surface and its data
+marks directly. Older versions have fixed dark and blue defaults, so use editable
+native shapes and text for custom colors when those palette fields are absent. Changing the project background alone can be
 covered by an opaque chart surface. Give the chart surface, marks and labels
 explicit colors, and bind completion checks to those actual nodes. Rectangular
 bars can be native divs with `style.backgroundColor`. A shape uses `style.fill`
