@@ -25,3 +25,15 @@ it('serves a real stdio client without non-protocol stdout and forwards only to 
  try{await client.connect(transport);expect((await client.listTools()).tools.some(t=>t.name==='dojo_apply_edit')).toBe(true);expect(JSON.stringify(await client.callTool({name:'dojo_list_projects',arguments:{}}))).toContain('all-local-projects');}
  finally{await client.close();await transport.close();await new Promise<void>(resolve=>server.close(()=>resolve()))}
 });
+
+it('advertises and enforces the real nested export and bounded preview contracts',async()=>{
+ const bodies:any[]=[],fetcher=vi.fn(async(_url:any,options:any)=>{bodies.push(JSON.parse(options.body));return new Response(JSON.stringify({success:true,data:{accepted:true}}),{headers:{'content-type':'application/json'}})}),server=createDojoMcpServer('http://127.0.0.1:4310',fetcher as typeof fetch),client=new Client({name:'output-contract-proof',version:'1.0.0'}),[s,c]=InMemoryTransport.createLinkedPair();
+ const ids={projectId:'a3321510-8c49-4a82-999c-d2cbdd4a2384',reviewId:'c9d7d389-574f-4e42-bdad-74caf9603c33'};
+ try{await server.connect(s);await client.connect(c);
+  expect((await client.callTool({name:'dojo_request_export',arguments:{...ids,args:{container:'mp4',resolution:'source',destination:'download'}}})).isError).toBe(true);
+  for(const args of [{frames:[0,1,2,3,4]},{frames:[0],intervalFrames:[0,30],tileCount:4},{frames:[0],candidateRef:{}}])expect((await client.callTool({name:'dojo_request_preview',arguments:{...ids,args}})).isError).toBe(true);
+  expect(fetcher).not.toHaveBeenCalled();
+  const args={destination:'download',output:{container:'mp4',resolution:'source'}};expect((await client.callTool({name:'dojo_request_export',arguments:{...ids,args}})).isError).not.toBe(true);expect(bodies[0].input.args).toEqual(args);
+  expect((await client.callTool({name:'dojo_request_preview',arguments:{...ids,args:{intervalFrames:[0,60],tileCount:16,analysis:{}}}})).isError).not.toBe(true);
+ }finally{await client.close();await server.close()}
+});
