@@ -1,7 +1,7 @@
 {
   "version": 1,
   "sourceRepository": "dojo-video-web",
-  "sourceCommit": "28bfe7f16d158fcc4031c79201635a2caffb2e49",
+  "sourceCommit": "449de7aa981a7577e76cce0b6de17b75cc2c8ed4",
   "transforms": [
     "engine namespace/path rename",
     "local user import boundary",
@@ -354,8 +354,8 @@
     {
       "source": "components/editor/motionforge/editor-output-copy.ts",
       "target": "packages/ui/src/components/editor/dojo-video-engine/editor-output-copy.ts",
-      "sourceHash": "814b2dc6b310a7eeb72c2d9f1d8dbf097a1dc277d5733849417389163f5104fb",
-      "outputHash": "814b2dc6b310a7eeb72c2d9f1d8dbf097a1dc277d5733849417389163f5104fb"
+      "sourceHash": "fb44b8d8f89a77dae49431b2fa4707a446c412940954dfd7e7e13ec0d5cb214f",
+      "outputHash": "fb44b8d8f89a77dae49431b2fa4707a446c412940954dfd7e7e13ec0d5cb214f"
     },
     {
       "source": "components/editor/motionforge/editor-output-files.ts",
@@ -366,8 +366,8 @@
     {
       "source": "components/editor/motionforge/editor-output-panel.tsx",
       "target": "packages/ui/src/components/editor/dojo-video-engine/editor-output-panel.tsx",
-      "sourceHash": "4135f1cf127066d2233ba4fc7bfe6c6bf5d1422885a3074a548b98595ffd1ab7",
-      "outputHash": "4135f1cf127066d2233ba4fc7bfe6c6bf5d1422885a3074a548b98595ffd1ab7"
+      "sourceHash": "87acac26de3879b491d5d5dde6d85b1199cb815f3eeabd13c7bbc3ba35c752ca",
+      "outputHash": "87acac26de3879b491d5d5dde6d85b1199cb815f3eeabd13c7bbc3ba35c752ca"
     },
     {
       "source": "components/editor/motionforge/editor-output-ports.ts",
@@ -462,8 +462,8 @@
     {
       "source": "components/editor/motionforge/editor-source-inspection-panel.tsx",
       "target": "packages/ui/src/components/editor/dojo-video-engine/editor-source-inspection-panel.tsx",
-      "sourceHash": "159478b5b3cd9e837830aaca8f4c413c0c0d6d245993b7787fe851ab3e4d249a",
-      "outputHash": "159478b5b3cd9e837830aaca8f4c413c0c0d6d245993b7787fe851ab3e4d249a"
+      "sourceHash": "2724bbf57c3c5ed1de3e367faf5f3dd3856331b4ceb9eeb19dfd5641de331b9f",
+      "outputHash": "2724bbf57c3c5ed1de3e367faf5f3dd3856331b4ceb9eeb19dfd5641de331b9f"
     },
     {
       "source": "components/editor/motionforge/editor-source-inspection.css",

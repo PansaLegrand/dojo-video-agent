@@ -553,7 +553,7 @@ it("new derived-caption profiles retain all earlier features and tools while mak
     ["commercial-editing-v14", "commercial-editing-v15"],
   ] as const) {
     expect(usesDerivedCaptionPlan(profile)).toBe(true);
-    expect(profileKitVersion(profile)).toBe("0.2.10");
+    expect(profileKitVersion(profile)).toBe("0.2.11");
     expect(profileSkills[profile]?.filter(name => !(CREATIVE_SKILL_NAMES as readonly string[]).includes(name)) ?? null).toEqual(profileSkills[previous]);
     for (const feature of [
       usesCompletionPreflight,
@@ -584,7 +584,7 @@ it("new derived-caption profiles retain all earlier features and tools while mak
       const current = make(profile),
         old = make(previous);
       expect(names(current.tools)).toEqual(names(old.tools));
-      expect(current.inventory.kitVersion).toBe("0.2.10");
+      expect(current.inventory.kitVersion).toBe("0.2.11");
       const prompt = composeToolAgentPrompt({
         profile,
         phase,

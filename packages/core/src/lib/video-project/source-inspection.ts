@@ -1,3 +1,4 @@
+import { visualAnalysisRequestSchema, type FrameMeasurements, type ContactSheet } from "./visual-measurements";
 import type { ReceiptEngineVersion } from "./engine-version";
 import { z } from "zod/v3";
 
@@ -10,18 +11,20 @@ export const inspectionSourceSchema = z.object({ sourceId: z.string().min(1).max
 export const sourceInspectionLimitsSchema = z.object({ maxFrames: positive.max(SOURCE_INSPECTION_LIMITS.maxFrames), maxDimension: positive.max(SOURCE_INSPECTION_LIMITS.maxDimension),
   maxFramePixels: positive.max(SOURCE_INSPECTION_LIMITS.maxFramePixels), maxTotalPixels: positive.max(SOURCE_INSPECTION_LIMITS.maxTotalPixels),
   maxOutputBytes: positive.max(SOURCE_INSPECTION_LIMITS.maxOutputBytes), timeoutMs: positive.max(SOURCE_INSPECTION_LIMITS.timeoutMs) }).strict();
-export const sourceInspectionPlanSchema = z.object({ source: inspectionSourceSchema, momentsMs: z.array(z.number().finite().min(0).max(86_400_000)).min(1).max(8),
+export const sourceInspectionPlanSchema = z.object({ source: inspectionSourceSchema, momentsMs: z.array(z.number().finite().min(0).max(86_400_000)).min(1).max(16),
+  contactSheet: z.literal(true).optional(), analysis: visualAnalysisRequestSchema.optional(),
   limits: sourceInspectionLimitsSchema }).strict().superRefine((value, context) => {
-  if (value.momentsMs.length > value.limits.maxFrames || value.momentsMs.some((time, index) => index > 0 && time <= value.momentsMs[index - 1]!)) context.addIssue({ code: "custom", message: "Source moments must be unique, ascending and within the frame allowance." });
+  if ((value.contactSheet ? 1 : value.momentsMs.length) > value.limits.maxFrames || value.momentsMs.some((time, index) => index > 0 && time <= value.momentsMs[index - 1]!)) context.addIssue({ code: "custom", message: "Source moments must be unique, ascending and within the frame allowance." });
+  if (value.contactSheet && (value.source.type !== "video" || value.momentsMs.length < 4 || value.limits.maxDimension < 64)) context.addIssue({code:"custom",message:"A contact sheet requires 4–16 video moments and at least 64 pixels."});
   if (value.source.type === "image" && (value.momentsMs.length !== 1 || value.momentsMs[0] !== 0)) context.addIssue({ code: "custom", message: "An image has one inspection moment at zero." });
 });
 export type InspectionSource = z.infer<typeof inspectionSourceSchema>;
 export type SourceInspectionPlan = z.infer<typeof sourceInspectionPlanSchema>;
-export type SourceInspectionFrame = Readonly<{ requestedMs: number; actualMs: number; durationMs: number | null; width: number; height: number; byteLength: number; sha256: string; mimeType: "image/jpeg" }>;
+export type SourceInspectionFrame = Readonly<{ requestedMs: number; actualMs: number; durationMs: number | null; width: number; height: number; byteLength: number; sha256: string; mimeType: "image/jpeg"; measurements?: FrameMeasurements; contactSheet?: ContactSheet }>;
 export type SourceInspectionProvenance = Readonly<{ algorithm: "dojo-source-inspection-v1"; engineVersion: ReceiptEngineVersion; sourceKind: "original";
   source: InspectionSource; displayWidth: number; displayHeight: number; orientation: "display-oriented"; rotationDegrees: 0 | 90 | 180 | 270 | null;
   sourceMimeType: z.infer<typeof sourceInspectionMimeSchema>; colorMetadata: { primaries: string | null; transfer: string | null; matrix: string | null; fullRange: boolean | null } | null;
-  colorPolicy: "browser-sdr-to-srgb-v1"; firstTimestampMs: number; sourceEndMs: number | null; coverage: "requested-moments-only" }>;
+  colorPolicy: "browser-sdr-to-srgb-v1"; firstTimestampMs: number; sourceEndMs: number | null; coverage: "requested-moments-only" | "sampled-interval-strip" }>;
 export type SourceInspectionResult = Readonly<{ provenance: SourceInspectionProvenance; frames: readonly SourceInspectionFrame[] }>;
 export class SourceInspectionError extends Error {
   constructor(readonly code: "SOURCE_CHANGED" | "UNSUPPORTED" | "HDR_UNSUPPORTED" | "LIMIT" | "MISSING_FRAME" | "TIMING", message: string) { super(message); this.name = "SourceInspectionError"; }

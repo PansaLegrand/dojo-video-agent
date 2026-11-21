@@ -203,6 +203,7 @@ export function EditorSourceInspectionPanel({
               .join(" · ")}{" "}
             · {record.request.limits.maxDimension}px
           </p>
+          {record.request.contactSheet && <p data-contact-sheet-scope>{editorText("These moments form one timestamped image; motion between them is not inspected.")}</p>}
           {record.hasReceipt ? (
             <p role="status" data-inspection-complete>
               {t("Inspection saved")}

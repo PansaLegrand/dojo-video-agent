@@ -60,6 +60,8 @@ import {
   updateLocalExportHint,
 } from "./local-agent-exports";
 
+import { inspectionImageCount, visualAnalysisRequestSchema, VISUAL_SEQUENCE_LIMITS } from "../../../packages/core/src/lib/video-project/visual-measurements";
+import { compareVisualReceipts, visualComparisonInputSchema, visualReceiptFrameFacts } from "../../../packages/core/src/lib/video-project/visual-receipt-comparison";
 // Bound model inputs before creating an authorized browser request.
 const MODEL_INSPECTION_DEFAULT_LIMITS = Object.freeze({
   maxFrames: EDITOR_HOST_TOOL_POLICY.framesPerRequest,
@@ -206,22 +208,12 @@ function validate(row: LocalBrowserRecord, raw: unknown) {
         raw,
       );
 }
-function budget(project: Project, runId: string, frames: number) {
-  const all = Object.values(entries(project, runId));
-  const used = all.reduce(
-    (sum, row) =>
-      sum +
-      (row.kind === "source-inspection"
-        ? (row.request as BrowserInspectionRequest).momentsMs.length
-        : (row.request as ProjectPreviewRequest).frames.length),
-    0,
-  );
-  if (all.length >= 64 || used + frames > EDITOR_HOST_TOOL_POLICY.framesPerRun)
-    throw new HttpError(
-      "This run has used its original visual frame allowance.",
-      409,
-      "BUDGET_EXHAUSTED",
-    );
+function budget(project: Project, runId: string, request: LocalBrowserRecord["request"]) {
+  const requests = Object.values(entries(project, runId)).map(row => row.request);
+  const images = requests.reduce((sum, row) => sum + inspectionImageCount(row), 0);
+  const decoded = requests.reduce((sum, row) => sum + (row.kind === "source-inspection" ? row.momentsMs.length : row.frames.length), 0);
+  if (requests.length >= 64 || images + inspectionImageCount(request) > EDITOR_HOST_TOOL_POLICY.framesPerRun || decoded + (request.kind === "source-inspection" ? request.momentsMs.length : request.frames.length) > VISUAL_SEQUENCE_LIMITS.decodedFramesPerRun)
+    throw new HttpError("This run has used its visual inspection allowance.", 409, "BUDGET_EXHAUSTED");
 }
 const requestRef = (row: LocalBrowserRecord) => ({
   kind: row.kind,
@@ -378,7 +370,7 @@ export class LocalBrowserRequests {
   tools(
     projectId: string,
     runId: string,
-    _request: NativeAgentRequest,
+    request: NativeAgentRequest,
   ): AgentTool[] {
     const prepare = async (
       kind: "source-inspection" | "project-preview",
@@ -402,16 +394,30 @@ export class LocalBrowserRequests {
     };
     return createEditorHostTools<NativeAgentResult>({
       profile: "local-editor-v10",
+      visualReview: request.authoring?.visualReview === "sequence-v1",
       ports: {
         inspect_image: (input) =>
           prepare("source-inspection", {
             sourceId: input.sourceId,
             momentsMs: [0],
             expectedType: "image",
+            ...(input.analysis ? { analysis: visualAnalysisRequestSchema.parse(input.analysis) } : {}),
           }),
         sample_video_frames: (input) =>
           prepare("source-inspection", { ...input, expectedType: "video" }),
         request_project_preview: (input) => prepare("project-preview", input),
+        compare_preview_frames: async (input, signal) => {
+          signal.throwIfAborted();
+          const selections = visualComparisonInputSchema.parse(input);
+          const project = await this.store.read(projectId), run = enabled(project, runId);
+          const read = (id: string) => {
+            const row = owned(project, runId, id);
+            current(project, run, row);
+            if (!row.receipt || !row.grant) throw new HttpError("The compared inspection is not ready.", 409);
+            return { request: row.request, grant: row.grant, receipt: row.receipt };
+          };
+          return { kind: "observation", value: compareVisualReceipts(read(selections.reference.requestId), read(selections.candidate.requestId), selections) };
+        },
         request_project_export: (input) =>
           prepareLocalAgentExport(this.store, projectId, runId, input),
       },
@@ -425,6 +431,8 @@ export class LocalBrowserRequests {
   ) {
     return this.store.transaction(projectId, async (project) => {
       const run = enabled(project, runId);
+      if ((input.contactSheet || input.analysis) && run.request.authoring?.visualReview !== "sequence-v1") throw new HttpError("Visual measurements are unavailable for this saved run.", 400);
+      const options = { ...(input.contactSheet ? { contactSheet: true as const } : {}), ...(input.analysis ? { analysis: visualAnalysisRequestSchema.parse(input.analysis) } : {}) };
       let request: LocalBrowserRecord["request"];
       if (kind === "source-inspection") {
         const id = String(input.sourceId),
@@ -479,6 +487,7 @@ export class LocalBrowserRequests {
             type: asset.type as "image" | "video",
           },
           momentsMs: input.momentsMs as number[],
+          ...options,
           limits: MODEL_INSPECTION_DEFAULT_LIMITS,
         };
         request = createBrowserInspectionRequest(
@@ -497,6 +506,7 @@ export class LocalBrowserRequests {
           candidateRef: rendered.ref,
           format: previewFormat(rendered.document),
           frames: input.frames as number[],
+          ...options,
           limits: OUTPUT_PREVIEW_LIMITS,
         };
         request = createProjectPreviewRequest(
@@ -511,13 +521,7 @@ export class LocalBrowserRequests {
           throw new HttpError("This request was cancelled.", 409);
         return previous;
       }
-      budget(
-        project,
-        runId,
-        kind === "source-inspection"
-          ? (request as BrowserInspectionRequest).momentsMs.length
-          : (request as ProjectPreviewRequest).frames.length,
-      );
+      budget(project, runId, request);
       const row: LocalBrowserRecord = {
         kind,
         request,
@@ -752,7 +756,7 @@ export class LocalBrowserRequests {
       dataUrl: frame.dataUrl,
       sha256: frame.sha256,
       byteLength: frame.byteLength,
-      label:
+      label: { ...visualReceiptFrameFacts(frame), ...(
         row.kind === "source-inspection"
           ? {
               source: (row.request as BrowserInspectionRequest).source,
@@ -764,7 +768,7 @@ export class LocalBrowserRequests {
           : {
               renderHash: (row.request as ProjectPreviewRequest).renderHash,
               frame: (frame as ProjectPreviewReceipt["frames"][number]).frame,
-            },
+            }) },
     }));
   }
   /** A fulfilled exact wait resumes through the existing guarded agent entry. */

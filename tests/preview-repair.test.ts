@@ -28,7 +28,7 @@ import type {
 } from "../packages/core/src/lib/video-project/agent-runtime";
 const signal = () => new AbortController().signal;
 async function fixture(
-  options: { preparedCaptions?: boolean; lockedAudio?: boolean } = {},
+  options: { preparedCaptions?: boolean; lockedAudio?: boolean; visualReview?: boolean } = {},
 ) {
   const document = createVideoProjectDocument({
     width: 640,
@@ -206,6 +206,7 @@ async function fixture(
   });
   const hostTools = createEditorHostTools<NativeAgentResult>({
     profile: "local-editor-v10",
+    visualReview: options.visualReview,
     ports: { request_project_preview: prepare },
   });
   const build = (
@@ -214,7 +215,7 @@ async function fixture(
       | "local-editor-v9"
       | "local-editor-v10"
       | "local-editor-v11"
-      | "local-editor-v12" = "local-editor-v10",
+      | "local-editor-v12" | "local-editor-v14" = options.visualReview ? "local-editor-v14" : "local-editor-v10",
     withPreviewEvidence = true,
   ) =>
     createVideoToolset(request, builtInSkills(), hostTools, {
@@ -959,3 +960,20 @@ it.each(["empty", "unknown-mode", "locked-source", "foreign-basis"] as const)(
     expect(f.claim()).toBeUndefined();
   },
 );
+
+// Synthetic receipt adapter exercises the actual review/repair coordinator; browser
+// receipt capture and per-tile evidence validation have their separate pixel proof.
+it("a contact-sheet correction still requires the second owned candidate preview", async () => {
+  const f=await fixture({visualReview:true}), invoke=tools(f.build());
+  await reviewed(f,invoke);
+  await invoke("request_project_preview",{reviewed:true,intervalFrames:[0,15],tileCount:16,analysis:{background:[0,0,0]}});
+  const before=[...f.evidence.values()].at(-1)!;
+  expect(before.frames).toEqual(Array.from({length:16},(_,i)=>i));
+  const repaired=await invoke("review_edit",{edit:f.edit("#0000ff"),previewRepair:{requestId:before.requestId,receiptHash:before.receiptHash,issues:[{frame:7,description:"Wrong accent color in the transition"}]}});
+  expect(repaired, JSON.stringify(repaired)).toMatchObject({kind:"observation",value:{completionPreflight:{status:"passed"}}});
+  await expect(invoke("propose_edit",{reviewed:true})).rejects.toThrow(/second preview/);
+  await invoke("request_project_preview",{reviewed:true,intervalFrames:[0,15],tileCount:16,analysis:{background:[0,0,0]}});
+  const after=[...f.evidence.values()].at(-1)!;
+  expect(after.candidateRef).not.toEqual(before.candidateRef);
+  await expect(invoke("propose_edit",{reviewed:true,previewReport:{requestId:after.requestId,receiptHash:after.receiptHash,issues:[]}})).resolves.toMatchObject({kind:"terminal"});
+});

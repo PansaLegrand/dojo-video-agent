@@ -143,6 +143,8 @@ export async function fulfillBrowserInspection(
     {
       source: request.source,
       momentsMs: request.momentsMs,
+      ...(request.contactSheet ? {contactSheet:true} : {}),
+      ...(request.analysis ? {analysis:request.analysis} : {}),
       limits: request.limits,
     },
     { signal },
@@ -196,7 +198,7 @@ export function browserInspectionApi(
   fetcher: typeof fetch = fetch,
 ) {
   const base = `/api/projects/${encodeURIComponent(projectId)}/agent-runs/${encodeURIComponent(runId)}/host-requests`;
-  const call = async <T,>(path: string, body?: unknown): Promise<T> => {
+  const call = async <T>(path: string, body?: unknown): Promise<T> => {
     const response = await fetcher(
       base + path,
       body === undefined

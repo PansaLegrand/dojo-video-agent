@@ -1,3 +1,4 @@
+import { visualAnalysisRequestSchema, frameMeasurementsSchema, contactSheetSchema, validateFrameMeasurements, validateContactSheet, inspectionImageCount } from "./visual-measurements";
 import { supportedReceiptEngines } from "./engine-version";
 import { z } from "zod/v3";
 import hash from "fast-sha256";
@@ -63,7 +64,9 @@ const previewScopeSchema = z
     renderHash: z.string().min(1).max(300),
     format: outputFormatSchema,
     candidateRef: preparedOutputCandidateRefSchema.optional(),
-    frames: z.array(z.number().int().nonnegative()).min(1).max(4),
+    frames: z.array(z.number().int().nonnegative()).min(1).max(16),
+    contactSheet: z.literal(true).optional(),
+    analysis: visualAnalysisRequestSchema.optional(),
     limits: z
       .object({
         maxFrames: z.number().int().min(1).max(4),
@@ -89,7 +92,8 @@ export const projectPreviewRequestSchema = previewScopeSchema
     const { id: _id, scopeHash, ...scope } = value;
     if (
       scopeHash !== projectPreviewScopeHash(scope) ||
-      value.frames.length > value.limits.maxFrames ||
+      inspectionImageCount(value) > value.limits.maxFrames ||
+      (!!value.contactSheet && (value.frames.length < 4 || value.limits.maxDimension < 64)) ||
       value.frames.some(
         (frame, index) =>
           frame >= value.format.durationInFrames ||
@@ -142,6 +146,8 @@ const previewFrameSchema = z
       .max(512 * 1024),
     sha256: digest,
     dataUrl: z.string().max(720000),
+    measurements: frameMeasurementsSchema.optional(),
+    contactSheet: contactSheetSchema.optional(),
   })
   .strict();
 export const projectPreviewReceiptSchema = z
@@ -156,7 +162,7 @@ export const projectPreviewReceiptSchema = z
     renderHash: z.string().min(1).max(300),
     engineVersion: z.enum(supportedReceiptEngines),
     frames: z.array(previewFrameSchema).min(1).max(4),
-    coverage: z.literal("requested-frames-only"),
+    coverage: z.enum(["requested-frames-only", "sampled-interval-strip"]),
     semanticCoverage: z.literal("unknown"),
     audio: z.literal("not-inspected"),
   })
@@ -226,15 +232,26 @@ export function validateProjectPreviewReceipt(
     browserHostValueHash(receipt.snapshot) !==
       browserHostValueHash(request.snapshot) ||
     receipt.renderHash !== request.renderHash ||
-    receipt.frames.length !== request.frames.length
+    receipt.frames.length !== inspectionImageCount(request)
   )
     throw new OutputHostError(
       "STALE_OUTPUT",
       "This preview belongs to another output revision or request.",
     );
+  if (receipt.coverage !== (request.contactSheet ? "sampled-interval-strip" : "requested-frames-only")) throw new OutputHostError("INVALID_OUTPUT","Preview coverage changed.");
   let total = 0;
   for (const [index, frame] of receipt.frames.entries()) {
     const image = parseOutputJpeg(frame.dataUrl);
+    if (request.contactSheet) {
+      if (!frame.contactSheet || frame.contactSheet.unit !== "timeline-frames" || frame.measurements) throw new OutputHostError("INVALID_OUTPUT","Preview sheet metadata is missing.");
+      validateContactSheet(frame.contactSheet,request.frames,frame.width,frame.height,request.analysis);
+      for (const tile of frame.contactSheet.tiles)
+        if (tile.actualMs !== tile.position*1000/request.format.fps || tile.durationMs !== 1000/request.format.fps)
+          throw new OutputHostError("INVALID_OUTPUT","Preview tile timestamps changed.");
+    } else {
+      if (frame.contactSheet || !!frame.measurements !== !!request.analysis) throw new OutputHostError("INVALID_OUTPUT","Preview measurement scope changed.");
+      if (frame.measurements) validateFrameMeasurements(frame.measurements,frame.width,frame.height,request.analysis);
+    }
     if (
       frame.frame !== request.frames[index] ||
       frame.sceneTimestampUs !==
@@ -244,12 +261,9 @@ export function validateProjectPreviewReceipt(
       image.byteLength !== frame.byteLength ||
       image.sha256 !== frame.sha256 ||
       Math.max(frame.width, frame.height) > request.limits.maxDimension ||
-      frame.width > request.format.width ||
+      (!request.contactSheet && (frame.width > request.format.width ||
       frame.height > request.format.height ||
-      Math.abs(
-        frame.width * request.format.height -
-          frame.height * request.format.width,
-      ) > Math.max(request.format.width, request.format.height)
+      Math.abs(frame.width * request.format.height - frame.height * request.format.width) > Math.max(request.format.width,request.format.height)))
     )
       throw new OutputHostError(
         "INVALID_OUTPUT",

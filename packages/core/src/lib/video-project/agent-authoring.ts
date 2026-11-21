@@ -135,6 +135,7 @@ export const kineticMacroCatalog = "engine-1.3.0-kinetic-v1" as const;
 export const chartMacroCatalog = "engine-1.3.0" as const;
 export const nativeAuthoringSchema = z
   .object({
+    visualReview: z.literal("sequence-v1").optional(),
     macroCatalog: z.enum([chartMacroCatalog, kineticMacroCatalog, radialMacroCatalog, walkthroughMacroCatalog, comparisonMacroCatalog, blueprintMacroCatalog]).optional(),
     version: z.literal(1),
     requiredTextLayout: z.literal("sampled-v1").optional(),

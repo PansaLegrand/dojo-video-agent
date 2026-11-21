@@ -387,7 +387,7 @@ export function createEditorToolset<T>(input: {
         completionCanonical(basis.ref) ||
       evidence.audio !== "not-inspected" ||
       !evidence.frames.length ||
-      evidence.frames.length > 4 ||
+      evidence.frames.length > (input.extraTools?.some(tool => tool.name === "request_project_preview" && (tool.parameters as {properties?:Record<string,unknown>}).properties?.intervalFrames) ? 16 : 4) ||
       inspection.issues.some((issue) => !evidence.frames.includes(issue.frame))
     )
       throw new Error(
@@ -1313,6 +1313,9 @@ export function createEditorToolset<T>(input: {
     tools = tools.map((tool) => {
       if (tool.name !== "request_project_preview") return tool;
       const execute = tool.execute;
+      const sampling = (tool.parameters as {properties?:Record<string,unknown>}).properties;
+      const sequence = !!sampling?.intervalFrames;
+      const {candidateRef:_candidate,...samplingFields} = sampling ?? {};
       return {
         ...tool,
         description:
@@ -1322,16 +1325,11 @@ export function createEditorToolset<T>(input: {
           oneOf: [
             tool.parameters,
             object(
-              {
-                frames: {
-                  type: "array",
-                  minItems: 1,
-                  maxItems: 4,
-                  items: { type: "integer", minimum: 0, maximum: 2592000 },
-                },
-                reviewed: { const: true },
+              sequence ? {...samplingFields,reviewed:{const:true}} : {
+                frames: {type:"array",minItems:1,maxItems:4,items:{type:"integer",minimum:0,maximum:2592000}},
+                reviewed: {const:true},
               },
-              ["frames", "reviewed"],
+              sequence ? ["reviewed"] : ["frames","reviewed"],
             ),
           ],
         },
@@ -1341,7 +1339,7 @@ export function createEditorToolset<T>(input: {
             typeof args === "object" &&
             Object.hasOwn(args, "reviewed")
           ) {
-            const value = record(args, ["frames", "reviewed"]);
+            const value = record(args, sequence ? ["frames","intervalFrames","tileCount","analysis","reviewed"] : ["frames","reviewed"]);
             await checkedState();
             if (
               value.reviewed !== true ||
@@ -1356,10 +1354,8 @@ export function createEditorToolset<T>(input: {
               { reviewRef: state.successfulReviewRef },
               signal,
             );
-            args = {
-              frames: value.frames,
-              candidateRef: state.successfulReviewRef,
-            };
+            const {reviewed:_reviewed,...sampleOptions}=value;
+            args = {...sampleOptions,candidateRef:state.successfulReviewRef};
           }
           return execute(args, signal);
         },

@@ -43,3 +43,30 @@ Verified file, download started and canonically stored publication are separate
 receipts. Reuse the verified saved file after reload or a failed upload rather
 than rendering or generating again; report only the publication actually verified.
 <!-- /requires-tool -->
+
+<!-- requires-tool:compare_preview_frames -->
+For a fast transition, inspect a short source interval with sample_video_frames
+({sourceId, intervalMs:[start,end], tileCount:4..16, analysis:{region:{x,y,width,height}}}).
+Region coordinates are normalized fractions of each frame. A uniform background
+can be estimated from its corners; specify analysis.background:[r,g,b] when known.
+The host returns one timestamp-labeled JPEG with exact decoded times, tile crop
+rectangles, everyNthFrame (null when not uniform) and sampled-interval-strip coverage.
+Only those samples were observed; motion between them and audio remain unknown.
+Small tiles cannot establish fine text quality: inspect a separate held full frame.
+
+Use request_project_preview({intervalFrames:[first,last],tileCount,analysis,reviewed:true})
+for the reviewed candidate's timeline sequence; individual {frames,analysis,reviewed:true}
+remains available. Compare saved samples with compare_preview_frames using
+reference/candidate:{kind:"source-inspection"|"project-preview",requestId,frameIndex:0,tileIndex}.
+Omit tileIndex for individual frames. The host verifies both receipts and reuses
+measurements without decoding or a new provider job. Numeric deltas include luma,
+edge density, chroma accents, normalized bounding-box size and clipping. Empty or
+ambiguous foreground is blocked. Motion estimates require an isolated, unclipped,
+stable-size translating subject; changing shape, camera motion and scene cuts can
+be unresolved. The closest easing is a bounded estimate, not recovered authoring.
+Use evidence to refine composition, scale and timing; numbers are not aesthetic scores.
+Cite actual timestamps and coverage. Save descriptions for selected requested
+moments with record_visual_evidence when available, even inside a sheet.
+After a valid previewRepair, inspect the corrected candidate in a second owned
+preview before finalizing. Preserve the exact first receipt and its observed issue.
+<!-- /requires-tool -->

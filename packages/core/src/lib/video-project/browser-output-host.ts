@@ -1,3 +1,5 @@
+import { createContactSheet, jpegMeasurements } from "./visual-contact-sheet";
+import { fingerprintLocalFile as fingerprintPreviewImage } from "./local-file-fingerprint";
 import { receiptEngineVersion } from "./engine-version";
 import type {
   ExportVerificationExpectation,
@@ -82,6 +84,7 @@ async function fulfillProjectPreviewBound(
       reused: true,
     };
   const frames: ProjectPreviewReceipt["frames"] = [];
+  let sheet: ReturnType<typeof createContactSheet> | undefined;
   for (const frame of request.frames) {
     current(true);
     const captured = await abortableLocalRead(
@@ -95,6 +98,20 @@ async function fulfillProjectPreviewBound(
         "The renderer returned another preview revision or frame.",
       );
     const image = parseOutputJpeg(captured.imageDataUrl);
+    if (Math.max(image.width,image.height)>request.limits.maxDimension || image.width*image.height>768*768)
+      throw new OutputHostError("OUTPUT_BYTES","The captured preview exceeds its approved dimensions.");
+    if (request.contactSheet || request.analysis) {
+      const blob=new Blob([Uint8Array.from(atob(captured.imageDataUrl.split(",")[1]!),c=>c.charCodeAt(0))],{type:"image/jpeg"});
+      if (request.contactSheet) {
+        sheet ??= createContactSheet(image.width,image.height,request.frames,"timeline-frames",request.limits.maxDimension,request.analysis);
+        const bitmap=await createImageBitmap(blob);
+        try {current();sheet.add(bitmap,frame,frame*1000/request.format.fps,1000/request.format.fps);} finally {bitmap.close();}
+        continue;
+      }
+      const measurements=await jpegMeasurements(blob,request.analysis,signal);
+      frames.push({...image,frame,sceneTimestampUs:Math.round(frame*1e6/request.format.fps),mimeType:"image/jpeg",dataUrl:captured.imageDataUrl,measurements});
+      continue;
+    }
     frames.push({
       ...image,
       frame,
@@ -102,6 +119,15 @@ async function fulfillProjectPreviewBound(
       mimeType: "image/jpeg",
       dataUrl: captured.imageDataUrl,
     });
+  }
+  if (sheet) {
+    const composite=await sheet.finish(request.limits.maxOutputBytes,signal);
+    current();
+    const bytes=new Uint8Array(await composite.blob.arrayBuffer());
+    let binary="";for(let index=0;index<bytes.length;index+=8192)binary+=String.fromCharCode(...bytes.subarray(index,index+8192));
+    frames.push({frame:request.frames[0]!,sceneTimestampUs:Math.round(request.frames[0]!*1e6/request.format.fps),
+      width:composite.width,height:composite.height,mimeType:"image/jpeg",byteLength:bytes.length,
+      sha256:await fingerprintPreviewImage(composite.blob,{signal}),dataUrl:"data:image/jpeg;base64,"+btoa(binary),contactSheet:composite.sheet});
   }
   const receipt = validateProjectPreviewReceipt(request, authorization, {
     version: 1,
@@ -114,7 +140,7 @@ async function fulfillProjectPreviewBound(
     renderHash: request.renderHash,
     engineVersion: receiptEngineVersion(),
     frames,
-    coverage: "requested-frames-only",
+    coverage: request.contactSheet ? "sampled-interval-strip" : "requested-frames-only",
     semanticCoverage: "unknown",
     audio: "not-inspected",
   });

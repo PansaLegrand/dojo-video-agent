@@ -1015,3 +1015,27 @@ it.each([
     ).rejects.toThrow();
   },
 );
+
+it('freezes candidate measurement scope, keeps legacy tools absent and caps total decoded samples', async () => {
+  const f=await fixture();
+  expect(f.service.tools(f.projectId,f.runId,f.run.request).some(t=>t.name==='compare_preview_frames')).toBe(false);
+  await f.store.transaction(f.projectId,async p=>{
+    p.document.assets[f.sourceId]!.type='video';p.sources[0]!.mimeType='video/mp4';
+    p.documentHash=await hashVideoProjectDocument(p.document);
+    const run=p.runs[0]!;run.baseHash=p.documentHash;run.request.baseHash=p.documentHash;run.request.document=structuredClone(p.document);
+    run.agentProfile='local-editor-v14';run.agentKitVersion='0.2.11';run.request.authoring!.visualReview='sequence-v1';
+    p.browserRequests={};
+  });
+  const run=(await f.store.read(f.projectId)).runs[0]!;
+  const tools=f.service.tools(f.projectId,f.runId,run.request), tool=tools.find(t=>t.name==='sample_video_frames')!;
+  expect(tools.some(t=>t.name==='compare_preview_frames')).toBe(true);
+  for(let i=0;i<4;i++) await tool.execute({sourceId:f.sourceId,intervalMs:[i*1000,i*1000+500],tileCount:16,analysis:{background:[0,0,0]}},new AbortController().signal);
+  const rows=(await f.service.list(f.projectId,f.runId,'source-inspection')).requests;
+  expect(rows).toHaveLength(4);
+  expect(rows[0]!.request).toMatchObject({contactSheet:true,analysis:{background:[0,0,0]},momentsMs:Array.from({length:16},(_,i)=>500*i/15)});
+  await expect(tool.execute({sourceId:f.sourceId,intervalMs:[4000,4500],tileCount:4},new AbortController().signal)).rejects.toThrow(/allowance/);
+  // The exact saved scope replays even after its sample allowance is exhausted.
+  await expect(tool.execute({sourceId:f.sourceId,intervalMs:[0,500],tileCount:16,analysis:{background:[0,0,0]}},new AbortController().signal)).resolves.toMatchObject({kind:'waiting'});
+  const compare=tools.find(t=>t.name==='compare_preview_frames')!;
+  await expect(compare.execute({reference:{kind:'source-inspection',requestId:rows[0]!.request!.id},candidate:{kind:'project-preview',requestId:'foreign'}},new AbortController().signal)).rejects.toThrow();
+});

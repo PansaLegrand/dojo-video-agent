@@ -563,15 +563,16 @@ it("cancelled direct edits cannot apply on a later browser poll", async () => {
   expect((await store.read(p.id)).documentHash).toBe(p.documentHash);
 });
 
-it("persists the new kit build on a local v14 run and keeps it across restart and duplicate start", async () => {
+it.each([false,true])("persists the selected kit build and candidate policy across restart (visual review: %s)", async visualReview => {
   const { profileKitVersion } = await import("../packages/agent-kit/src/index");
   const model: LanguageModel = { identity: "new-build-test", complete: vi.fn(async () => ({ text: "Nothing changed.", calls: [], usage: { inputTokens: 10, outputTokens: 5 } })) };
   const f = await fixture(model);
   const guide = { name: "branded-ending", description: "Original guide", instructions: "Keep the exact URL." };
-  const host = new AgentService(f.store, model, [guide], undefined, "review", undefined, "local-editor-v14", { focusedGraphicsDiscovery: true });
+  const host = new AgentService(f.store, model, [guide], undefined, "review", undefined, "local-editor-v14", { focusedGraphicsDiscovery: true, visualReview });
   const started = await host.start(f.p.id, f.input);
   const done = await settle(f.store, f.p.id);
-  expect(done.runs[0].agentKitVersion).toBe(profileKitVersion("local-editor-v14"));
+  expect(done.runs[0].agentKitVersion).toBe(visualReview ? profileKitVersion("local-editor-v14") : "0.2.10");
+  expect(done.runs[0].request.authoring?.visualReview).toBe(visualReview ? "sequence-v1" : undefined);
   expect(done.runs[0].request.authoring?.endingVisibility).toBe("final-frame-v1");
   expect(done.runs[0].skillSnapshot).toEqual([guide]);
   expect(done.runs[0].focusedGraphicsDiscovery).toBe(true);
@@ -583,7 +584,7 @@ it("persists the new kit build on a local v14 run and keeps it across restart an
   const priorCalls = vi.mocked(model.complete).mock.calls.length;
   const repeated = await restarted.start(f.p.id, f.input);
   expect(repeated.run.id).toBe(started.run.id);
-  expect((await reopened.read(f.p.id)).runs[0].agentKitVersion).toBe("0.2.10");
+  expect((await reopened.read(f.p.id)).runs[0].agentKitVersion).toBe(visualReview ? "0.2.11" : "0.2.10");
   expect((await reopened.read(f.p.id)).runs[0].skillSnapshot).toEqual([guide]);
   expect((await reopened.read(f.p.id)).runs[0].focusedGraphicsDiscovery).toBe(true);
   expect(model.complete).toHaveBeenCalledTimes(priorCalls);

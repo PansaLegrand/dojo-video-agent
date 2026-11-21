@@ -1,3 +1,4 @@
+import { createContactSheet, jpegMeasurements } from "./visual-contact-sheet";
 import { receiptEngineVersion } from "./engine-version";
 import { disposeMediaInputSafely } from "@dojo-video-engine/renderer-canvas2d";
 import {
@@ -83,6 +84,7 @@ export async function sampleOriginalSource(
     iterator: AsyncGenerator<VideoSample | null, void, unknown> | undefined,
     bitmap: ImageBitmap | undefined;
   const frames: BrowserSourceInspection["frames"] = [];
+  let sheet: ReturnType<typeof createContactSheet> | undefined;
   let bytes = 0;
   try {
     check(signal);
@@ -101,6 +103,11 @@ export async function sampleOriginalSource(
       actualMs: number,
       durationMs: number | null,
     ) => {
+      if (plan.contactSheet) {
+        sheet ??= createContactSheet(canvas.width,canvas.height,plan.momentsMs,"source-ms",plan.limits.maxDimension,plan.analysis);
+        sheet.add(canvas,requestedMs,actualMs,durationMs);
+        return;
+      }
       const encoded = await jpeg(canvas, signal);
       bytes += encoded.size;
       if (bytes > plan.limits.maxOutputBytes)
@@ -119,6 +126,7 @@ export async function sampleOriginalSource(
           byteLength: encoded.size,
           sha256: await fingerprintLocalFile(encoded, { signal }),
           mimeType: "image/jpeg",
+          ...(plan.analysis ? {measurements:await jpegMeasurements(encoded,plan.analysis,signal)} : {}),
         },
       });
     };
@@ -225,7 +233,7 @@ export async function sampleOriginalSource(
           width,
           height,
           plan.limits,
-          plan.momentsMs.length,
+          plan.contactSheet ? 1 : plan.momentsMs.length,
         );
         // One public sparse-access pipeline preserves the actual PTS and avoids
         // reopening a decoder for every far-forward inspection moment. Include
@@ -317,6 +325,12 @@ export async function sampleOriginalSource(
       }
     }
     check(signal);
+    if (sheet) {
+      const composite = await sheet.finish(plan.limits.maxOutputBytes,signal);
+      const first = composite.sheet.tiles[0]!;
+      frames.push({blob:composite.blob,metadata:{requestedMs:first.position,actualMs:first.actualMs,durationMs:first.durationMs,
+        width:composite.width,height:composite.height,byteLength:composite.blob.size,sha256:await fingerprintLocalFile(composite.blob,{signal}),mimeType:"image/jpeg",contactSheet:composite.sheet}});
+    }
     return {
       provenance: {
         algorithm: "dojo-source-inspection-v1",
@@ -332,7 +346,7 @@ export async function sampleOriginalSource(
         colorPolicy: "browser-sdr-to-srgb-v1",
         firstTimestampMs: firstMs,
         sourceEndMs: endMs,
-        coverage: "requested-moments-only",
+        coverage: plan.contactSheet ? "sampled-interval-strip" : "requested-moments-only",
       },
       frames,
     };

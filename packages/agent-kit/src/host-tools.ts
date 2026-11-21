@@ -192,7 +192,24 @@ export const EDITOR_HOST_TOOL_CATALOG = {
     ),
   },
 } as const;
-export type EditorHostToolName = keyof typeof EDITOR_HOST_TOOL_CATALOG;
+const fraction = {type:"number",minimum:0,maximum:1};
+const analysis = object({region:object({x:fraction,y:fraction,width:fraction,height:fraction},["x","y","width","height"]),
+  background:array({type:"integer",minimum:0,maximum:255},3,3)},[]);
+const selection = object({kind:{enum:["source-inspection","project-preview"]},requestId:id,
+  frameIndex:{type:"integer",minimum:0,maximum:3},tileIndex:{type:"integer",minimum:0,maximum:15}},["kind","requestId"]);
+export const VISUAL_REVIEW_HOST_TOOL_CATALOG = {
+  ...EDITOR_HOST_TOOL_CATALOG,
+  inspect_image: {...EDITOR_HOST_TOOL_CATALOG.inspect_image,parameters:object({sourceId:id,analysis},["sourceId"])},
+  sample_video_frames: {...EDITOR_HOST_TOOL_CATALOG.sample_video_frames,
+    description:EDITOR_HOST_TOOL_CATALOG.sample_video_frames.description+" For motion, choose intervalMs:[first,last] and tileCount:4..16 instead of momentsMs. Inclusive endpoints must lie inside the source. The browser returns one timestamped contact sheet with explicit sampled coverage. analysis can select a normalized region and optional RGB background for measurements.",
+    parameters:object({sourceId:id,momentsMs:array(ms,1,4),intervalMs:array(ms,2,2),tileCount:{type:"integer",minimum:4,maximum:16},analysis},["sourceId"])},
+  request_project_preview: {...EDITOR_HOST_TOOL_CATALOG.request_project_preview,
+    description:EDITOR_HOST_TOOL_CATALOG.request_project_preview.description+" For a motion sequence choose intervalFrames:[first,last] and tileCount:4..16 instead of frames. Include analysis to measure a normalized region. Use a separate full-size held frame to inspect fine text.",
+    parameters:object({frames:array(frame,1,4),intervalFrames:array(frame,2,2),tileCount:{type:"integer",minimum:4,maximum:16},candidateRef:candidate,analysis},[])},
+  compare_preview_frames:{effect:"read",description:"Compare measurements from two owned saved inspection/preview receipts. Choose tileIndex for contact sheets. Returns identities, sampled coverage, numeric differences and bounded motion estimates. Empty or ambiguous regions are blocked. Metrics guide visual review; they do not establish aesthetic quality or authorize edits.",parameters:object({reference:selection,candidate:selection},["reference","candidate"])},
+} as const;
+export type EditorHostToolName = keyof typeof VISUAL_REVIEW_HOST_TOOL_CATALOG;
+
 export const EDITOR_HOST_TOOL_POLICY = Object.freeze({
   version: 1,
   observationBytes: 32768,
@@ -272,14 +289,35 @@ function validate(schema: Schema, value: unknown, depth = 0): void {
 export function parseEditorHostToolInput(
   name: EditorHostToolName,
   raw: unknown,
+  visualReview = false,
 ): Record<string, unknown> {
-  validate(EDITOR_HOST_TOOL_CATALOG[name].parameters, raw);
+  const catalog: Partial<Record<EditorHostToolName,{parameters:Schema}>> = visualReview ? VISUAL_REVIEW_HOST_TOOL_CATALOG : EDITOR_HOST_TOOL_CATALOG;
+  const entry = catalog[name];
+  if (!entry) throw new Error("This host tool is unavailable for the saved run.");
+  validate(entry.parameters, raw);
   if (
     new TextEncoder().encode(JSON.stringify(raw)).length >
     EDITOR_HOST_TOOL_POLICY.inputBytes
   )
     throw new Error("Host tool input exceeds its byte allowance.");
-  const value = raw as Record<string, unknown>;
+  let value = raw as Record<string, unknown>;
+  if (visualReview && ["sample_video_frames","request_project_preview"].includes(name)) {
+    const field = name === "sample_video_frames" ? "momentsMs" : "frames";
+    const interval = name === "sample_video_frames" ? "intervalMs" : "intervalFrames";
+    if (!!value[field] === !!value[interval] || (!!value[interval] !== (value.tileCount !== undefined)))
+      throw new Error("Choose individual moments, or an interval with a tile count.");
+    if (value[interval]) {
+      const [start,end] = value[interval] as number[], count=value.tileCount as number;
+      if (end! <= start!) throw new Error("Choose an increasing sample interval.");
+      const points=Array.from({length:count},(_,i)=>start!+(end!-start!)*i/(count-1)).map(n=>name==="request_project_preview"?Math.round(n):n);
+      if (new Set(points).size!==points.length) throw new Error("Choose a longer interval or fewer tiles.");
+      const {[interval]:_interval,tileCount:_count,...rest}=value;
+      value={...rest,[field]:points,contactSheet:true};
+    }
+  }
+  const region=(value.analysis as {region?:{x:number;y:number;width:number;height:number}}|undefined)?.region;
+  if (region && (region.width<=0 || region.height<=0 || region.x+region.width>1 || region.y+region.height>1))
+    throw new Error("The measured region must fit within the frame.");
   if (
     name === "sample_video_frames" &&
     (value.momentsMs as number[]).some(
@@ -309,20 +347,22 @@ export function parseEditorHostToolInput(
 export function createEditorHostTools<T>(input: {
   profile: AgentProfile;
   ports: EditorHostToolPorts;
+  visualReview?: boolean;
 }): AgentTool<T>[] {
   if (!usesStagedEditing(input.profile))
     throw new Error(
       "Host inspection/generation/output tools require the frozen staged profile.",
     );
-  return (Object.keys(EDITOR_HOST_TOOL_CATALOG) as EditorHostToolName[])
+  const catalog: Partial<Record<EditorHostToolName,{effect:AgentTool<T>["effect"];description:string;parameters:Schema}>> = input.visualReview ? VISUAL_REVIEW_HOST_TOOL_CATALOG : EDITOR_HOST_TOOL_CATALOG;
+  return (Object.keys(catalog) as EditorHostToolName[])
     .filter((name) => input.ports[name])
     .map((name) => ({
       name,
-      ...EDITOR_HOST_TOOL_CATALOG[name],
+      ...catalog[name]!,
       execute: async (raw, signal) => {
         signal.throwIfAborted();
         const result = await input.ports[name]!(
-          parseEditorHostToolInput(name, raw),
+          parseEditorHostToolInput(name, raw, input.visualReview),
           signal,
         );
         if (result.kind === "observation") {

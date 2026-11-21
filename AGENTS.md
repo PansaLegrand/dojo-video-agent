@@ -26,7 +26,9 @@ Start with:
 Plans are not completed evidence. Verify source and reports before claiming a
 capability is accepted; mark plan items complete only with the required evidence.
 
-The current creative-skill build on this branch is kit **0.2.10** under
+R33 development uses kit **0.2.11**, selected only by `DOJO_VISUAL_REVIEW=1` for new local runs. The default and retained 0.2.10 runs remain on their exact archive. See [visual review candidate](docs/visual-review-r33-2026-11-21.md). Actual-model qualification is pending.
+
+The current released creative-skill build is kit **0.2.10** under
 local v14/commercial v15. New local runs freeze their skill instructions; accepted
 0.2.9 runs use the retained exact archive. Folder-based `skills/<name>/SKILL.md`
 packs are supported alongside existing flat Markdown. Source, registry publication and commercial deployment have separate evidence; see

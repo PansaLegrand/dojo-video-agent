@@ -1,5 +1,6 @@
 import * as currentKit from "../../agent-kit/src/index";
 import * as retainedDerivedKit from "@dojo-video/agent-kit-v28";
+import * as retainedV210Kit from "@dojo-video/agent-kit-v210";
 import * as retainedV29Kit from "@dojo-video/agent-kit-v29";
 import type { AgentProfile } from "../../agent-kit/src/index";
 import { isLocalSkillPack } from "./local-skill-origin";
@@ -27,6 +28,8 @@ export function selectAgentKit(
     return retainedDerivedKit;
   if (profile === "local-editor-v14" && version === "0.2.9")
     return retainedV29Kit;
+  if (profile === "local-editor-v14" && version === "0.2.10")
+    return retainedV210Kit;
   if (version !== currentKit.profileKitVersion(profile))
     throw Error("The saved editing runtime build is unavailable.");
   return currentKit;
@@ -43,7 +46,7 @@ export function skillsForSavedRun(
   if (run.skillSnapshot)
     return run.skillSnapshot.map((skill) => structuredClone(skill));
   const version = savedAgentKitVersion(run);
-  return version === "0.2.10"
+  return ["0.2.10", "0.2.11"].includes(version)
     ? loaded
     : loaded.filter((skill) => !isLocalSkillPack(skill));
 }

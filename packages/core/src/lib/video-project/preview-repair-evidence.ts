@@ -27,7 +27,7 @@ export function previewRepairEvidence(raw: {
     candidateRef: request.candidateRef,
     snapshotHash: request.snapshot.documentHash,
     renderHash: receipt.renderHash,
-    frames: receipt.frames.map((frame) => frame.frame),
+    frames: receipt.frames.flatMap((frame) => frame.contactSheet ? frame.contactSheet.tiles.map(tile => tile.position) : [frame.frame]),
     audio: receipt.audio,
   };
 }

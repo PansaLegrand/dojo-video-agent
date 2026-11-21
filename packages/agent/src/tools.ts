@@ -358,6 +358,7 @@ export function createVideoToolset(
           "inspect_image",
           "sample_video_frames",
           "request_project_preview",
+          "compare_preview_frames",
           "request_project_export",
         ].includes(tool.name)
           ? extraTools?.find((extra) => extra.name === tool.name)

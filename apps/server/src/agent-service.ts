@@ -142,6 +142,7 @@ export class AgentService {
       | "local-editor-v14" = "local-editor-v1",
     private stagedOptions: {
       newRunSkills?: Skill[];
+      visualReview?: boolean;
       focusedGraphicsDiscovery?: boolean;
       captionBatchSize?: number;
       onTransition?: (plan: EditStagePlan) => Promise<void>;
@@ -231,7 +232,7 @@ export class AgentService {
         reviewBasisRequired: true,
         captionTranslationRebase: true,
         agentProfile: this.agentProfile,
-        agentKitVersion: profileKitVersion(this.agentProfile),
+        agentKitVersion: this.agentProfile === "local-editor-v14" && !this.stagedOptions.visualReview ? "0.2.10" : profileKitVersion(this.agentProfile),
         ...(this.agentProfile === "local-editor-v14" ? { skillSnapshot: structuredClone(this.stagedOptions.newRunSkills ?? this.skills) } : {}),
         ...(this.agentProfile === "local-editor-v14" && this.stagedOptions.focusedGraphicsDiscovery ? { focusedGraphicsDiscovery: true } : {}),
         ...(this.stagedOptions.browser &&
@@ -249,6 +250,7 @@ export class AgentService {
           context: input.context,
           instruction: input.instruction,
           authoring: { version: 1, scope,
+            ...(this.agentProfile === "local-editor-v14" && this.stagedOptions.visualReview ? { visualReview: "sequence-v1" as const } : {}),
             ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const, requiredTextLayout: "sampled-v1" as const, spatialCanvas: "scene-v1" as const } : {}),
             ...(macroCatalog ? { macroCatalog } : {}),
           },

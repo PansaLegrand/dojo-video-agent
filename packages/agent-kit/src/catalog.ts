@@ -1,4 +1,4 @@
-export const AGENT_KIT_VERSION = "0.2.10" as const;
+export const AGENT_KIT_VERSION = "0.2.11" as const;
 export const BASE_CREATIVE_SKILL_NAMES = [
   "branded-ending",
   "chart-storytelling",
