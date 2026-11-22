@@ -28,9 +28,21 @@ export async function verifyExternalAgent({page,api,base,output,check,counts}){
   const exportRef=exportIntent.value.projectExport.requestRef;
   const outputCard=page.locator(`[data-output-request-id="${exportRef.id}"]`);
   await outputCard.getByRole('button',{name:'Export and download',exact:true}).waitFor();
-  const download=page.waitForEvent('download');await outputCard.getByRole('button',{name:'Export and download',exact:true}).click();const file=path.join(output,'mcp-output.mp4');await(await download).saveAs(file);execFileSync('ffmpeg',['-v','error','-i',file,'-f','null','-']);
-  const outputReceipt=await call('dojo_read_output',{projectId:id,reviewId:review.reviewId,requestId:exportRef.id});
-  check('MCP export uses the applied revision and the browser produces a fully decoded MP4',outputReceipt.receipt?.kind==='project-export');
+  // A download event precedes the durable receipt. Hold fulfillment to exercise
+  // that boundary deliberately, then wait for the exact saved-receipt response.
+  const fulfillmentUrl=`${base}/api/projects/${id}/agent-runs/${review.reviewId}/output-requests/${encodeURIComponent(exportRef.id)}/fulfill`;
+  let releaseReceipt;const receiptGate=new Promise(resolve=>{releaseReceipt=resolve});
+  const fulfillRoute=async route=>{await receiptGate;await route.continue()};
+  await page.route(fulfillmentUrl,fulfillRoute);
+  try{
+   const fulfilled=page.waitForResponse(response=>response.url()===fulfillmentUrl&&response.request().method()==='POST');
+   const download=page.waitForEvent('download');await outputCard.getByRole('button',{name:'Export and download',exact:true}).click();const file=path.join(output,'mcp-output.mp4');await(await download).saveAs(file);execFileSync('ffmpeg',['-v','error','-i',file,'-f','null','-']);
+   const pending=await client.callTool({name:'dojo_read_output',arguments:{projectId:id,reviewId:review.reviewId,requestId:exportRef.id}});
+   check('downloaded bytes alone do not claim a persisted export receipt',pending.isError===true&&JSON.stringify(pending).includes('no verified file receipt yet'));
+   releaseReceipt();assert.ok((await fulfilled).ok(),'The exact export receipt must persist successfully');
+   const outputReceipt=await call('dojo_read_output',{projectId:id,reviewId:review.reviewId,requestId:exportRef.id});
+   check('MCP export uses the applied revision and the browser produces a fully decoded MP4',outputReceipt.receipt?.kind==='project-export');
+  }finally{releaseReceipt();await page.unroute(fulfillmentUrl,fulfillRoute)}
   await page.getByRole('button',{name:'Undo',exact:true}).waitFor();await until(()=>page.getByRole('button',{name:'Undo',exact:true}).isEnabled());await page.getByRole('button',{name:'Undo',exact:true}).click();await until(async()=>{const current=await api(`/api/projects/${id}/document`);return current.document.items[0].node.style.color==='#ffffff'});
   state=await api(`/api/projects/${id}/document`);check('the normal editor Undo reverses the external edit while preserving earlier manual text',state.document.items[0].node.text==='Manual words stay');
   await page.screenshot({path:path.join(output,'external-agent-shared-editor.png'),fullPage:true});check('external inspection/review/preview/apply never calls the internal model or ASR provider',JSON.stringify(counts())===JSON.stringify(before));
