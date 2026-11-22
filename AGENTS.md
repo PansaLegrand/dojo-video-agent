@@ -264,3 +264,7 @@ outcomes, actual-model outcomes and real browser/media acceptance are distinct.
 Run `eval:basic:planner` / `eval:speech:semantics` in reference mode for fixture checks;
 `--live` is a separately budgeted provider gate. `test:live:music -- --live` creates
 one paid generation; read its flags and preserve failed reports before using it.
+
+## README demo galleries
+
+Keep the marked `dojo-demo-gallery` sections in the agent and engine READMEs aligned when adding or changing public demos. Mirror the approved showcase media with matching hashes, include every individual film in the expandable gallery, and adapt editing/source links to the owning repository. Preserve each demo's authored or recovered provenance; an attractive export does not establish autonomous model qualification.

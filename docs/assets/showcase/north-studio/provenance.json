@@ -1,0 +1,19 @@
+{
+  "title": "North Studio portrait chart",
+  "approvedForReadme": "2026-11-22",
+  "durationSeconds": 10,
+  "width": 540,
+  "height": 960,
+  "fps": 30,
+  "frames": 300,
+  "audio": false,
+  "engineVersion": "1.3.1",
+  "classification": "Model-authored layout with saved-result and command-syntax recovery; not an autonomous benchmark pass.",
+  "sourceFile": "portrait.mp4",
+  "sourceSha256": "113ad754153a261327e1bce461d03138c91ac80061ac97131d47682b74f5cbbc",
+  "preview": "preview.gif",
+  "previewTransform": "10 fps, 270x480, palette-quantized GIF; original MP4 unchanged.",
+  "poster": "poster.jpg",
+  "posterTimeSeconds": 7,
+  "notes": "https://github.com/PansaLegrand/dojo-video-agent/blob/main/docs/creative-qualification-r36-2026-11-22.md"
+}
