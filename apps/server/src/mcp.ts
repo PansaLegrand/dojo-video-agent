@@ -31,6 +31,17 @@ const definitions = [
  {name:'dojo_request_export',description:'Queue a revision-bound browser export through the existing export card. args must be {destination:"download",output:{container:"mp4",resolution:"source"}} for an original-size local MP4. The schema lists other supported destinations and resolutions. Export approval stays in the browser. Local download and stored output are separate facts.',schema:z.object({projectId,reviewId:z.string().uuid(),args}).strict(),read:false},
 ];
 function reviewWireSchema(schema:z.ZodType){const edit=nativeAgentResponseSchema({clarification:true,composition:true,anchorHold:true}),wire=z.toJSONSchema(schema);return JSON.parse(JSON.stringify({...wire,definitions:edit.definitions,properties:{...(wire as {properties:Record<string,unknown>}).properties,edit:{...edit,definitions:undefined},requirements:authoringCompletionRequirementsSchema}}))}
+// Advertise the complete grammar, while the owning native kernel remains the
+// domain validator. Duplicate AJV union validation hides its bounded,
+// command-specific diagnostics behind errors from every unrelated branch.
+function reviewInputSchema(schema:z.ZodType){
+ const complete=reviewWireSchema(schema),boundary=structuredClone(complete);
+ const commands=boundary.properties.edit.properties.commands;
+ const commandList=commands.$ref ? boundary.definitions[commands.$ref.split("/").at(-1)] : commands;
+ boundary.properties.edit.properties.commands={...commandList,items:{type:"object"}};
+ const advertised=fromJsonSchema(complete),envelope=fromJsonSchema(boundary);
+ return {"~standard":{...advertised["~standard"],validate:envelope["~standard"].validate}};
+}
 function outputWireSchema(name:string,schema:z.ZodType){
  const wire=z.toJSONSchema(schema),parameters=structuredClone(name==='dojo_request_preview'?VISUAL_REVIEW_HOST_TOOL_CATALOG.request_project_preview.parameters:VISUAL_REVIEW_HOST_TOOL_CATALOG.request_project_export.parameters) as Record<string,any>;
  if(name==='dojo_request_preview'){delete parameters.properties.candidateRef;parameters.oneOf=[{required:['frames'],not:{anyOf:[{required:['intervalFrames']},{required:['tileCount']}]}},{required:['intervalFrames','tileCount'],not:{required:['frames']}}];}
@@ -38,7 +49,7 @@ function outputWireSchema(name:string,schema:z.ZodType){
 }
 export function createDojoMcpServer(rawOrigin:string,fetcher:typeof fetch=fetch){
  const origin=localMcpOrigin(rawOrigin),server=new McpServer({name:'dojo-video-agent',version:'0.1.0'});
- for(const definition of definitions)server.registerTool(definition.name,{description:definition.description,inputSchema:definition.name==='dojo_review_edit' ? fromJsonSchema(reviewWireSchema(definition.schema)) : ['dojo_request_preview','dojo_request_export'].includes(definition.name) ? fromJsonSchema(outputWireSchema(definition.name,definition.schema)) : definition.schema,annotations:{readOnlyHint:definition.read,destructiveHint:false,idempotentHint:true,openWorldHint:false}},async(input,context)=>{
+ for(const definition of definitions)server.registerTool(definition.name,{description:definition.description,inputSchema:definition.name==='dojo_review_edit' ? reviewInputSchema(definition.schema) : ['dojo_request_preview','dojo_request_export'].includes(definition.name) ? fromJsonSchema(outputWireSchema(definition.name,definition.schema)) : definition.schema,annotations:{readOnlyHint:definition.read,destructiveHint:false,idempotentHint:true,openWorldHint:false}},async(input,context)=>{
   try{
    const body=JSON.stringify({tool:definition.name,input});if(Buffer.byteLength(body)>256*1024)throw Error('Tool input exceeds 256 KiB.');
    const response=await fetcher(origin+'/api/external-agent',{method:'POST',redirect:'error',headers:{'content-type':'application/json',origin},body,signal:context.mcpReq.signal});
