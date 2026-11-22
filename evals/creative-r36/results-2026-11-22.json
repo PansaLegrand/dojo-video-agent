@@ -1,0 +1,2686 @@
+{
+  "version": 1,
+  "date": "2026-11-22",
+  "decision": "No general default promotion; full paired benchmark and unassisted Brand Kit sequence remain unqualified.",
+  "scope": "R33 controlled repair; R34 Brand Kit supplements; R35 interoperability; bounded partial R36 comparison.",
+  "source": {
+    "openmotion": "671760041023af68334f31275566814146627ef3",
+    "webOutputRefresh": "e999647f",
+    "agentMcpDiagnostics": "2bde8b9",
+    "worker": "9119f71",
+    "kit": "0.2.12",
+    "stableUnbranded": "0.2.10",
+    "engine": "1.3.1",
+    "loop": "0.2.0"
+  },
+  "authorization": {
+    "maximumUsd": 30,
+    "maximumRequests": 320,
+    "includesUnknownReservations": true
+  },
+  "accounting": {
+    "requests": 182,
+    "modelRequests": 179,
+    "accountedUsd": 29.349589500000032,
+    "remainingUsd": 0.6504104999999676,
+    "unknownOrdinals": [
+      50,
+      85,
+      146,
+      174,
+      178
+    ],
+    "unknownReserveUsd": 4.5895885000000005
+  },
+  "rawLedgerSha256": "6959e7f7e2434ff88b3778b841ac2406b759491c41a6ada374155f1d2edb1140",
+  "fixtureManifestSha256": "e58f1d63cbdf6f8819593260278a642cc1275043ffa3298d46a58afe7bba0e9e",
+  "requests": [
+    {
+      "ordinal": 1,
+      "host": "commercial-web",
+      "scenario": "reference-match",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.452704,
+      "actualUsd": 0.0504385
+    },
+    {
+      "ordinal": 2,
+      "host": "commercial-web",
+      "scenario": "reference-match",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.4666235,
+      "actualUsd": 0.0522585
+    },
+    {
+      "ordinal": 3,
+      "host": "commercial-web",
+      "scenario": "reference-match",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.5463675,
+      "actualUsd": 0.056245
+    },
+    {
+      "ordinal": 4,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.2155615,
+      "actualUsd": 0.03654
+    },
+    {
+      "ordinal": 5,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.3002405,
+      "actualUsd": 0.054817
+    },
+    {
+      "ordinal": 6,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.7351645,
+      "actualUsd": 0.071372
+    },
+    {
+      "ordinal": 7,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.7473375,
+      "actualUsd": 0.106778
+    },
+    {
+      "ordinal": 8,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8097215,
+      "actualUsd": 0.10332
+    },
+    {
+      "ordinal": 9,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8543465,
+      "actualUsd": 0.0851585
+    },
+    {
+      "ordinal": 10,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8945685,
+      "actualUsd": 0.0906395
+    },
+    {
+      "ordinal": 11,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.207522,
+      "actualUsd": 0.0201215
+    },
+    {
+      "ordinal": 12,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.2504285,
+      "actualUsd": 0.0336455
+    },
+    {
+      "ordinal": 13,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.3004505,
+      "actualUsd": 0.045073
+    },
+    {
+      "ordinal": 14,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.3903375,
+      "actualUsd": 0.0625695
+    },
+    {
+      "ordinal": 15,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.418488,
+      "actualUsd": 0.069286
+    },
+    {
+      "ordinal": 16,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.425803,
+      "actualUsd": 0.070693
+    },
+    {
+      "ordinal": 17,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.476084,
+      "actualUsd": 0.0819735
+    },
+    {
+      "ordinal": 18,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.538307,
+      "actualUsd": 0.089747
+    },
+    {
+      "ordinal": 19,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.596155,
+      "actualUsd": 0.1015875
+    },
+    {
+      "ordinal": 20,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.602581,
+      "actualUsd": 0.140714
+    },
+    {
+      "ordinal": 21,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.694953,
+      "actualUsd": 0.1228255
+    },
+    {
+      "ordinal": 22,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.735854,
+      "actualUsd": 0.1217195
+    },
+    {
+      "ordinal": 23,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.207522,
+      "actualUsd": 0.019992
+    },
+    {
+      "ordinal": 24,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.2504285,
+      "actualUsd": 0.0335475
+    },
+    {
+      "ordinal": 25,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.3004505,
+      "actualUsd": 0.044975
+    },
+    {
+      "ordinal": 26,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.3903375,
+      "actualUsd": 0.0624715
+    },
+    {
+      "ordinal": 27,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.418488,
+      "actualUsd": 0.069188
+    },
+    {
+      "ordinal": 28,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.468769,
+      "actualUsd": 0.0795865
+    },
+    {
+      "ordinal": 29,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.476084,
+      "actualUsd": 0.0820715
+    },
+    {
+      "ordinal": 30,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.5641265,
+      "actualUsd": 0.098007
+    },
+    {
+      "ordinal": 31,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.6224085,
+      "actualUsd": 0.108997
+    },
+    {
+      "ordinal": 32,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.668983,
+      "actualUsd": 0.1174845
+    },
+    {
+      "ordinal": 33,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.7292005,
+      "actualUsd": 0.1331015
+    },
+    {
+      "ordinal": 34,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.7870485,
+      "actualUsd": 0.14462
+    },
+    {
+      "ordinal": 35,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.2155615,
+      "actualUsd": 0.036554
+    },
+    {
+      "ordinal": 36,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.300286,
+      "actualUsd": 0.054775
+    },
+    {
+      "ordinal": 37,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.73521,
+      "actualUsd": 0.071211
+    },
+    {
+      "ordinal": 38,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.764624,
+      "actualUsd": 0.076146
+    },
+    {
+      "ordinal": 39,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.777658,
+      "actualUsd": 0.0774375
+    },
+    {
+      "ordinal": 40,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.7894145,
+      "actualUsd": 0.0894285
+    },
+    {
+      "ordinal": 41,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8067395,
+      "actualUsd": 0.082796
+    },
+    {
+      "ordinal": 42,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8298115,
+      "actualUsd": 0.093205
+    },
+    {
+      "ordinal": 43,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.853741,
+      "actualUsd": 0.1011745
+    },
+    {
+      "ordinal": 44,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8880095,
+      "actualUsd": 0.104209
+    },
+    {
+      "ordinal": 45,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.9148335,
+      "actualUsd": 0.0952
+    },
+    {
+      "ordinal": 46,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0113845,
+      "actualUsd": 0.1157555
+    },
+    {
+      "ordinal": 47,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.4341995,
+      "actualUsd": 0.0660415
+    },
+    {
+      "ordinal": 48,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.5205095,
+      "actualUsd": 0.0838005
+    },
+    {
+      "ordinal": 49,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.6191885,
+      "actualUsd": 0.102228
+    },
+    {
+      "ordinal": 50,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "unknown",
+      "reservedUsd": 0.6421555,
+      "actualUsd": null
+    },
+    {
+      "ordinal": 51,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.7873495,
+      "actualUsd": 0.0542115
+    },
+    {
+      "ordinal": 52,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8720285,
+      "actualUsd": 0.0725025
+    },
+    {
+      "ordinal": 53,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.2748575,
+      "actualUsd": 0.0817635
+    },
+    {
+      "ordinal": 54,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.3736345,
+      "actualUsd": 0.10017
+    },
+    {
+      "ordinal": 55,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.3966015,
+      "actualUsd": 0.1054655
+    },
+    {
+      "ordinal": 56,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.436519,
+      "actualUsd": 0.1090285
+    },
+    {
+      "ordinal": 57,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.4502775,
+      "actualUsd": 0.1642725
+    },
+    {
+      "ordinal": 58,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.579508,
+      "actualUsd": 0.1774675
+    },
+    {
+      "ordinal": 59,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.698704,
+      "actualUsd": 0.1899275
+    },
+    {
+      "ordinal": 60,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.8181485,
+      "actualUsd": 0.19929
+    },
+    {
+      "ordinal": 61,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.931692,
+      "actualUsd": 0.1677165
+    },
+    {
+      "ordinal": 62,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.934863,
+      "actualUsd": 0.168105
+    },
+    {
+      "ordinal": 63,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.937985,
+      "actualUsd": 0.1686055
+    },
+    {
+      "ordinal": 64,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 2.3860795,
+      "actualUsd": 0.1783775
+    },
+    {
+      "ordinal": 65,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 2.408623,
+      "actualUsd": 0.177429
+    },
+    {
+      "ordinal": 66,
+      "host": "dojo",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 2.5004315,
+      "actualUsd": 0.207452
+    },
+    {
+      "ordinal": 67,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.931049,
+      "actualUsd": 0.18732
+    },
+    {
+      "ordinal": 68,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.9755025,
+      "actualUsd": 0.203714
+    },
+    {
+      "ordinal": 69,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.000811,
+      "actualUsd": 0.2555595
+    },
+    {
+      "ordinal": 70,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.1150055,
+      "actualUsd": 0.220493
+    },
+    {
+      "ordinal": 71,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.134203,
+      "actualUsd": 0.2221135
+    },
+    {
+      "ordinal": 72,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.1548565,
+      "actualUsd": 0.225211
+    },
+    {
+      "ordinal": 73,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.3756645,
+      "actualUsd": 0.233835
+    },
+    {
+      "ordinal": 74,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.408666,
+      "actualUsd": 0.232274
+    },
+    {
+      "ordinal": 75,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.201102,
+      "actualUsd": 0.28056
+    },
+    {
+      "ordinal": 76,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.283667,
+      "actualUsd": 0.2582755
+    },
+    {
+      "ordinal": 77,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.3743555,
+      "actualUsd": 0.284466
+    },
+    {
+      "ordinal": 78,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.4085855,
+      "actualUsd": 0.2925195
+    },
+    {
+      "ordinal": 79,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.4414785,
+      "actualUsd": 0.312487
+    },
+    {
+      "ordinal": 80,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.487052,
+      "actualUsd": 0.299824
+    },
+    {
+      "ordinal": 81,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.4932155,
+      "actualUsd": 0.3002545
+    },
+    {
+      "ordinal": 82,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.513995,
+      "actualUsd": 0.3036635
+    },
+    {
+      "ordinal": 83,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.522731,
+      "actualUsd": 0.30639
+    },
+    {
+      "ordinal": 84,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.646911,
+      "actualUsd": 0.3524815
+    },
+    {
+      "ordinal": 85,
+      "host": "openmotion",
+      "scenario": "J1",
+      "repetition": 1,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "unknown",
+      "reservedUsd": 1.678152,
+      "actualUsd": null
+    },
+    {
+      "ordinal": 86,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.9189075,
+      "actualUsd": 0.1847335
+    },
+    {
+      "ordinal": 87,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.9632455,
+      "actualUsd": 0.2003855
+    },
+    {
+      "ordinal": 88,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.985131,
+      "actualUsd": 0.235074
+    },
+    {
+      "ordinal": 89,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.069936,
+      "actualUsd": 0.213899
+    },
+    {
+      "ordinal": 90,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0760575,
+      "actualUsd": 0.215019
+    },
+    {
+      "ordinal": 91,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0967565,
+      "actualUsd": 0.217917
+    },
+    {
+      "ordinal": 92,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.286061,
+      "actualUsd": 0.227339
+    },
+    {
+      "ordinal": 93,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.313032,
+      "actualUsd": 0.2289665
+    },
+    {
+      "ordinal": 94,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.137703,
+      "actualUsd": 0.287784
+    },
+    {
+      "ordinal": 95,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.2418,
+      "actualUsd": 0.273896
+    },
+    {
+      "ordinal": 96,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.27603,
+      "actualUsd": 0.3385865
+    },
+    {
+      "ordinal": 97,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.30606,
+      "actualUsd": 0.319557
+    },
+    {
+      "ordinal": 98,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.369459,
+      "actualUsd": 0.35378
+    },
+    {
+      "ordinal": 99,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.375654,
+      "actualUsd": 0.292866
+    },
+    {
+      "ordinal": 100,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.396451,
+      "actualUsd": 0.2953755
+    },
+    {
+      "ordinal": 101,
+      "host": "openmotion",
+      "scenario": "J2",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.5861055,
+      "actualUsd": 0.303814
+    },
+    {
+      "ordinal": 102,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.829143,
+      "actualUsd": 0.055363
+    },
+    {
+      "ordinal": 103,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.913822,
+      "actualUsd": 0.073661
+    },
+    {
+      "ordinal": 104,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0124835,
+      "actualUsd": 0.1423205
+    },
+    {
+      "ordinal": 105,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.1304965,
+      "actualUsd": 0.1556555
+    },
+    {
+      "ordinal": 106,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.2441485,
+      "actualUsd": 0.167909
+    },
+    {
+      "ordinal": 107,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.3567995,
+      "actualUsd": 0.181636
+    },
+    {
+      "ordinal": 108,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.472065,
+      "actualUsd": 0.147511
+    },
+    {
+      "ordinal": 109,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.7588375,
+      "actualUsd": 0.1538705
+    },
+    {
+      "ordinal": 110,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.7635555,
+      "actualUsd": 0.1542205
+    },
+    {
+      "ordinal": 111,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.766961,
+      "actualUsd": 0.154623
+    },
+    {
+      "ordinal": 112,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.7703105,
+      "actualUsd": 0.154959
+    },
+    {
+      "ordinal": 113,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.7885035,
+      "actualUsd": 0.189273
+    },
+    {
+      "ordinal": 114,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.79137,
+      "actualUsd": 0.1565235
+    },
+    {
+      "ordinal": 115,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.814029,
+      "actualUsd": 0.156569
+    },
+    {
+      "ordinal": 116,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.8174065,
+      "actualUsd": 0.156051
+    },
+    {
+      "ordinal": 117,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.839516,
+      "actualUsd": 0.157976
+    },
+    {
+      "ordinal": 118,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.7978215,
+      "actualUsd": 0.051772
+    },
+    {
+      "ordinal": 119,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8825005,
+      "actualUsd": 0.070126
+    },
+    {
+      "ordinal": 120,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.9811655,
+      "actualUsd": 0.0885815
+    },
+    {
+      "ordinal": 121,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0032855,
+      "actualUsd": 0.092792
+    },
+    {
+      "ordinal": 122,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0269805,
+      "actualUsd": 0.097874
+    },
+    {
+      "ordinal": 123,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0552185,
+      "actualUsd": 0.133763
+    },
+    {
+      "ordinal": 124,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.1422705,
+      "actualUsd": 0.137018
+    },
+    {
+      "ordinal": 125,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.214976,
+      "actualUsd": 0.1437415
+    },
+    {
+      "ordinal": 126,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.28541,
+      "actualUsd": 0.1511125
+    },
+    {
+      "ordinal": 127,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8465835,
+      "actualUsd": 0.059255
+    },
+    {
+      "ordinal": 128,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.000363,
+      "actualUsd": 0.092799
+    },
+    {
+      "ordinal": 129,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0990245,
+      "actualUsd": 0.139559
+    },
+    {
+      "ordinal": 130,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.1763325,
+      "actualUsd": 0.120673
+    },
+    {
+      "ordinal": 131,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.579774,
+      "actualUsd": 0.1294895
+    },
+    {
+      "ordinal": 132,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.584506,
+      "actualUsd": 0.129871
+    },
+    {
+      "ordinal": 133,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.5886395,
+      "actualUsd": 0.130907
+    },
+    {
+      "ordinal": 134,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.592066,
+      "actualUsd": 0.1300215
+    },
+    {
+      "ordinal": 135,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8158745,
+      "actualUsd": 0.0558705
+    },
+    {
+      "ordinal": 136,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.921004,
+      "actualUsd": 0.0787885
+    },
+    {
+      "ordinal": 137,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.925512,
+      "actualUsd": 0.0798175
+    },
+    {
+      "ordinal": 138,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.024401,
+      "actualUsd": 0.1041355
+    },
+    {
+      "ordinal": 139,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.045156,
+      "actualUsd": 0.101717
+    },
+    {
+      "ordinal": 140,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.2076505,
+      "actualUsd": 0.1088325
+    },
+    {
+      "ordinal": 141,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.2124245,
+      "actualUsd": 0.1091755
+    },
+    {
+      "ordinal": 142,
+      "host": "dojo",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 2,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.216558,
+      "actualUsd": 0.110152
+    },
+    {
+      "ordinal": 143,
+      "host": "openmotion",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.9252915,
+      "actualUsd": 0.200333
+    },
+    {
+      "ordinal": 144,
+      "host": "openmotion",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.9698745,
+      "actualUsd": 0.214606
+    },
+    {
+      "ordinal": 145,
+      "host": "openmotion",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0048325,
+      "actualUsd": 0.2192155
+    },
+    {
+      "ordinal": 146,
+      "host": "openmotion",
+      "scenario": "J3",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "unknown",
+      "reservedUsd": 1.0113145,
+      "actualUsd": null
+    },
+    {
+      "ordinal": 147,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.4374265,
+      "actualUsd": 0.0713195
+    },
+    {
+      "ordinal": 148,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.531944,
+      "actualUsd": 0.090951
+    },
+    {
+      "ordinal": 149,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.63084,
+      "actualUsd": 0.109508
+    },
+    {
+      "ordinal": 150,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.846426,
+      "actualUsd": 0.059353
+    },
+    {
+      "ordinal": 151,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.000251,
+      "actualUsd": 0.092946
+    },
+    {
+      "ordinal": 152,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.3931995,
+      "actualUsd": 0.105028
+    },
+    {
+      "ordinal": 153,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.492099,
+      "actualUsd": 0.1385615
+    },
+    {
+      "ordinal": 154,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.5402555,
+      "actualUsd": 0.1420335
+    },
+    {
+      "ordinal": 155,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.587509,
+      "actualUsd": 0.1450715
+    },
+    {
+      "ordinal": 156,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.6331665,
+      "actualUsd": 0.149198
+    },
+    {
+      "ordinal": 157,
+      "host": "dojo",
+      "scenario": "J2",
+      "repetition": 2,
+      "turn": 3,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.6818165,
+      "actualUsd": 0.151606
+    },
+    {
+      "ordinal": 158,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.6315925,
+      "actualUsd": 0.1172185
+    },
+    {
+      "ordinal": 159,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.645134,
+      "actualUsd": 0.101591
+    },
+    {
+      "ordinal": 160,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.658147,
+      "actualUsd": 0.1044645
+    },
+    {
+      "ordinal": 161,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.6601595,
+      "actualUsd": 0.105
+    },
+    {
+      "ordinal": 162,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.677705,
+      "actualUsd": 0.104881
+    },
+    {
+      "ordinal": 163,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.68719,
+      "actualUsd": 0.1189965
+    },
+    {
+      "ordinal": 164,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.808717,
+      "actualUsd": 0.133462
+    },
+    {
+      "ordinal": 165,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.8255975,
+      "actualUsd": 0.139524
+    },
+    {
+      "ordinal": 166,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.900466,
+      "actualUsd": 0.143584
+    },
+    {
+      "ordinal": 167,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.917021,
+      "actualUsd": 0.154693
+    },
+    {
+      "ordinal": 168,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.9547685,
+      "actualUsd": 0.1837255
+    },
+    {
+      "ordinal": 169,
+      "host": "dojo",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.032486,
+      "actualUsd": 0.1555365
+    },
+    {
+      "ordinal": 170,
+      "host": "openmotion",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0181675,
+      "actualUsd": 0.214795
+    },
+    {
+      "ordinal": 171,
+      "host": "openmotion",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.0694425,
+      "actualUsd": 0.230062
+    },
+    {
+      "ordinal": 172,
+      "host": "openmotion",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.1036725,
+      "actualUsd": 0.237496
+    },
+    {
+      "ordinal": 173,
+      "host": "openmotion",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 1.201536,
+      "actualUsd": 0.2618385
+    },
+    {
+      "ordinal": 174,
+      "host": "openmotion",
+      "scenario": "J4",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "unknown",
+      "reservedUsd": 1.2333895,
+      "actualUsd": null
+    },
+    {
+      "ordinal": 175,
+      "host": "provider-discovery",
+      "scenario": "model-catalog",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model-discovery",
+      "model": null,
+      "status": "completed",
+      "reservedUsd": 0,
+      "actualUsd": 0
+    },
+    {
+      "ordinal": 176,
+      "host": "provider-discovery",
+      "scenario": "model-catalog",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model-discovery",
+      "model": null,
+      "status": "completed",
+      "reservedUsd": 0,
+      "actualUsd": 0
+    },
+    {
+      "ordinal": 177,
+      "host": "provider-discovery",
+      "scenario": "model-catalog",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model-discovery",
+      "model": null,
+      "status": "completed",
+      "reservedUsd": 0,
+      "actualUsd": 0
+    },
+    {
+      "ordinal": 178,
+      "host": "provider-qualification",
+      "scenario": "luna-tool-probe",
+      "repetition": 1,
+      "turn": 1,
+      "kind": "model",
+      "model": "gpt-6-luna",
+      "status": "unknown",
+      "reservedUsd": 0.024577,
+      "actualUsd": null
+    },
+    {
+      "ordinal": 179,
+      "host": "dojo",
+      "scenario": "R34-portrait-controlled",
+      "repetition": 1,
+      "turn": 4,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.2885085,
+      "actualUsd": 0.038024
+    },
+    {
+      "ordinal": 180,
+      "host": "dojo",
+      "scenario": "R34-portrait-controlled",
+      "repetition": 1,
+      "turn": 4,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.2953405,
+      "actualUsd": 0.069951
+    },
+    {
+      "ordinal": 181,
+      "host": "dojo",
+      "scenario": "R34-portrait-controlled",
+      "repetition": 1,
+      "turn": 4,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.379477,
+      "actualUsd": 0.0468475
+    },
+    {
+      "ordinal": 182,
+      "host": "dojo",
+      "scenario": "R34-portrait-pixel-review",
+      "repetition": 1,
+      "turn": 4,
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "reservedUsd": 0.275436,
+      "actualUsd": 0.008869
+    }
+  ],
+  "preservation": {
+    "classification": "Saved-output preservation checks, separate from autonomous completion",
+    "brandIdentityUnchanged": true,
+    "ownedAssetsUnchanged": true,
+    "chartItemUnchangedByEnding": true,
+    "portraitDurationAndFpsUnchanged": true,
+    "barHeightsBefore": [
+      72,
+      108,
+      186,
+      144
+    ],
+    "barHeightsAfter": [
+      72,
+      108,
+      186,
+      144
+    ],
+    "portraitFormat": {
+      "width": 540,
+      "height": 960,
+      "fps": 30,
+      "durationInFrames": 300,
+      "backgroundColor": "#101820"
+    },
+    "ledger": {
+      "requests": 182,
+      "modelRequests": 179,
+      "accountedUsd": 29.349589500000032,
+      "remainingUsd": 0.6504104999999676,
+      "unknownOrdinals": [
+        50,
+        85,
+        146,
+        174,
+        178
+      ],
+      "unknownReserveUsd": 4.5895885000000005
+    }
+  },
+  "media": {
+    "classification": "Offline decoded-media and automated real-time playback checks; not a human motion or audio preference judgment.",
+    "files": {
+      "portrait": {
+        "file": "portrait-syntax-recovery/portrait.mp4",
+        "sha256": "113ad754153a261327e1bce461d03138c91ac80061ac97131d47682b74f5cbbc",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "codec_type": "video",
+              "width": 540,
+              "height": 960,
+              "r_frame_rate": "30/1",
+              "nb_read_frames": "300"
+            }
+          ],
+          "format": {
+            "duration": "10.000000",
+            "size": "212269"
+          }
+        },
+        "decoded": true,
+        "playback": {
+          "ended": true,
+          "duration": 10,
+          "currentTime": 10,
+          "elapsedMs": 10005,
+          "playbackRate": 1,
+          "frames": 304,
+          "droppedFrames": 0,
+          "waiting": 1,
+          "errors": []
+        }
+      },
+      "ending": {
+        "file": "saved-ending-recovery/output.mp4",
+        "sha256": "8deebf972e4287dec36cc883e3e27a564a90e7e00ee740f3f2090862673433a2",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "codec_type": "video",
+              "width": 960,
+              "height": 540,
+              "r_frame_rate": "30/1",
+              "nb_read_frames": "300"
+            }
+          ],
+          "format": {
+            "duration": "10.000000",
+            "size": "200942"
+          }
+        },
+        "decoded": true,
+        "playback": {
+          "ended": true,
+          "duration": 10,
+          "currentTime": 10,
+          "elapsedMs": 10004.5,
+          "playbackRate": 1,
+          "frames": 304,
+          "droppedFrames": 0,
+          "waiting": 1,
+          "errors": []
+        }
+      },
+      "chart": {
+        "file": "output-refresh-J2-dojo-2-output-v6/source-recovery/output.mp4",
+        "sha256": "1d04344b07f886d17d2f31aa8acc40e6113abdef00f722b99fc4dc79baa92b34",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "codec_type": "video",
+              "width": 960,
+              "height": 540,
+              "r_frame_rate": "30/1",
+              "nb_read_frames": "240"
+            }
+          ],
+          "format": {
+            "duration": "8.000000",
+            "size": "187077"
+          }
+        },
+        "decoded": true,
+        "playback": {
+          "ended": true,
+          "duration": 8,
+          "currentTime": 8,
+          "elapsedMs": 8007.100000143051,
+          "playbackRate": 1,
+          "frames": 244,
+          "droppedFrames": 0,
+          "waiting": 1,
+          "errors": []
+        }
+      },
+      "walkthrough": {
+        "file": "recovered-J3-dojo-1-schema-v5/source-recovery/output.mp4",
+        "sha256": "e12c05ff8a4a6366bcf5d2439d807db53af7afc923b7757f099f9099977391a1",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "codec_type": "video",
+              "width": 960,
+              "height": 540,
+              "r_frame_rate": "30/1",
+              "nb_read_frames": "360"
+            }
+          ],
+          "format": {
+            "duration": "12.000000",
+            "size": "97345"
+          }
+        },
+        "decoded": true,
+        "playback": {
+          "ended": true,
+          "duration": 12,
+          "currentTime": 12,
+          "elapsedMs": 12007.399999856949,
+          "playbackRate": 1,
+          "frames": 364,
+          "droppedFrames": 0,
+          "waiting": 1,
+          "errors": []
+        }
+      },
+      "walkthroughRevised": {
+        "file": "output-refresh-J3-dojo-1-output-v6/source-recovery/output.mp4",
+        "sha256": "18562ef0f96eed03143b206825445d0c9f88f682e4a04e5da1cda778f156b72d",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "codec_type": "video",
+              "width": 960,
+              "height": 540,
+              "r_frame_rate": "30/1",
+              "nb_read_frames": "360"
+            }
+          ],
+          "format": {
+            "duration": "12.000000",
+            "size": "99430"
+          }
+        },
+        "decoded": true,
+        "playback": {
+          "ended": true,
+          "duration": 12,
+          "currentTime": 12,
+          "elapsedMs": 12010.200000047684,
+          "playbackRate": 1,
+          "frames": 364,
+          "droppedFrames": 0,
+          "waiting": 1,
+          "errors": []
+        }
+      },
+      "openmotionProduct": {
+        "file": "guided-v3-J1-openmotion-1/turn-1/export-1/output.mp4",
+        "sha256": "5227ff6d86cb67c98420efe167f6aea0933292f46775ddea34ddf8a9cddd297d",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "codec_type": "video",
+              "width": 960,
+              "height": 540,
+              "r_frame_rate": "30/1",
+              "nb_read_frames": "300"
+            }
+          ],
+          "format": {
+            "duration": "10.000000",
+            "size": "519882"
+          }
+        },
+        "decoded": true,
+        "playback": {
+          "ended": true,
+          "duration": 10,
+          "currentTime": 10,
+          "elapsedMs": 10005.899999856949,
+          "playbackRate": 1,
+          "frames": 304,
+          "droppedFrames": 0,
+          "waiting": 1,
+          "errors": []
+        }
+      },
+      "openmotionChart": {
+        "file": "guided-v3-J2-openmotion-1/turn-2/export-1/output.mp4",
+        "sha256": "568e760a3f0fcb4f754377f82a92aeec63cfc39092ade4fdd24a1d8a31755990",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "codec_type": "video",
+              "width": 960,
+              "height": 540,
+              "r_frame_rate": "30/1",
+              "nb_read_frames": "240"
+            }
+          ],
+          "format": {
+            "duration": "8.000000",
+            "size": "95006"
+          }
+        },
+        "decoded": true,
+        "playback": {
+          "ended": true,
+          "duration": 8,
+          "currentTime": 8,
+          "elapsedMs": 8004.799999952316,
+          "playbackRate": 1,
+          "frames": 244,
+          "droppedFrames": 0,
+          "waiting": 1,
+          "errors": []
+        }
+      }
+    }
+  },
+  "technicalGrades": {
+    "rubric": {
+      "version": "r36-v1",
+      "visual": [
+        {
+          "name": "hierarchy",
+          "question": "Is the main idea clear without reading everything?"
+        },
+        {
+          "name": "readability",
+          "question": "Is required copy legible, unclipped and held long enough?"
+        },
+        {
+          "name": "composition",
+          "question": "Do spacing, alignment, contrast and framing feel intentional?"
+        },
+        {
+          "name": "motion",
+          "question": "Does movement explain the story or relationships, with controlled pacing?"
+        },
+        {
+          "name": "continuity",
+          "question": "Do states and transitions connect without accidental jumps?"
+        },
+        {
+          "name": "ending",
+          "question": "Does the ending settle with a readable identity and URL where requested?"
+        }
+      ],
+      "rating": "Each criterion: 0 missing/broken, 1 weak, 2 usable, 3 polished. Report criterion evidence and limitations; no aggregate is an objective aesthetic measurement.",
+      "semantic": {
+        "J1": [
+          "Problem, product, three workflow proof, supplied logo/URL. No unsupported product claims.",
+          "Only headline changes; other story/copy/timing preserved.",
+          "Portrait recomposition preserves facts and prior headline.",
+          "Only final two seconds change; compare first eight seconds of consecutive exports."
+        ],
+        "J2": [
+          "Bar and line both represent 12,18,31,24 thousand correctly; readable W labels.",
+          "Manual Week one and mint retained; W3=31 peak, slower entrance, same eight-second duration."
+        ],
+        "J3": [
+          "Capture/Organize/Share supplied images, perspective card and motivated cursor actions; concept label.",
+          "Only step-two caption changes; other text, timing and actions preserved."
+        ],
+        "J4": [
+          "Original source picture/audio, source-clock uh cuts with closed gaps, remaining speech intact.",
+          "Genuine English and Spanish facts aligned per cue; phrase-bound Andrew Ng callout; no new paid media."
+        ]
+      }
+    },
+    "rows": [
+      {
+        "id": "portrait",
+        "checks": {
+          "dimensions": true,
+          "fps": true,
+          "duration": true,
+          "audio": true
+        },
+        "autonomous": false,
+        "classification": "Technical output check only; full semantic/visual acceptance is separate"
+      },
+      {
+        "id": "ending",
+        "checks": {
+          "dimensions": true,
+          "fps": true,
+          "duration": true,
+          "audio": true
+        },
+        "autonomous": false,
+        "classification": "Technical output check only; full semantic/visual acceptance is separate"
+      },
+      {
+        "id": "chart",
+        "checks": {
+          "dimensions": true,
+          "fps": true,
+          "duration": true,
+          "audio": true
+        },
+        "autonomous": false,
+        "classification": "Technical output check only; full semantic/visual acceptance is separate"
+      },
+      {
+        "id": "walkthrough",
+        "checks": {
+          "dimensions": true,
+          "fps": true,
+          "duration": true,
+          "audio": true
+        },
+        "autonomous": false,
+        "classification": "Technical output check only; full semantic/visual acceptance is separate"
+      },
+      {
+        "id": "walkthroughRevised",
+        "checks": {
+          "dimensions": true,
+          "fps": true,
+          "duration": true,
+          "audio": true
+        },
+        "autonomous": false,
+        "classification": "Technical output check only; full semantic/visual acceptance is separate"
+      },
+      {
+        "id": "openmotionProduct",
+        "checks": {
+          "dimensions": true,
+          "fps": true,
+          "duration": true,
+          "audio": true
+        },
+        "autonomous": true,
+        "classification": "Technical output check only; full semantic/visual acceptance is separate"
+      },
+      {
+        "id": "openmotionChart",
+        "checks": {
+          "dimensions": true,
+          "fps": true,
+          "duration": true,
+          "audio": true
+        },
+        "autonomous": true,
+        "classification": "Technical output check only; full semantic/visual acceptance is separate"
+      }
+    ],
+    "notes": [
+      "Original --report CLI could not iterate retained setup-only trials; this wrapper calls its unchanged technicalChecks on explicit completed output paths.",
+      "Portrait and ending are separately classified supplements."
+    ]
+  },
+  "portraitSampledAssessment": {
+    "kind": "saved-output-visual-assessment",
+    "graderRevision": "r34-portrait-pixels-v1",
+    "scope": "Three sampled owned frames; not continuous playback or a human preference study.",
+    "source": "portrait-syntax-recovery",
+    "status": "completed",
+    "startRequest": 181,
+    "verdict": {
+      "approved": true,
+      "continuousMotionAssessed": false,
+      "issues": [],
+      "summary": "These sampled frames are presentable. At 120, the bars and labels show 12, 18, 31 and 24 thousand with consistent heights; the missing line and subdued W4 value are consistent with an intermediate reveal, not evidence of a held-chart defect. At 210, the line meets the bar tops at all four values, W3 is the coral peak, and the manual Week one label remains mint. The title, axis labels, takeaway and footer are legible and comfortably spaced; the takeaway accurately states W3's 31-thousand peak and W4's 24 versus W1's 12. The dark ink, cream, coral and mint identity is coherent. At 299, the N mark, North Studio name and north.example are clearly visible with generous spacing and a strong centered hierarchy. Approval is limited to these still samples; continuous motion, reveal timing and the ending's settling behavior were not assessed."
+    }
+  },
+  "walkthroughDiff": {
+    "classification": "Saved model edits compared after actual native Apply",
+    "changes": [
+      [
+        "/items/4/node/children/1/text",
+        "Organize your next move",
+        "Bring the right ideas together"
+      ]
+    ]
+  },
+  "visualFailures": [
+    {
+      "case": "Dojo J1",
+      "failure": "Supplied logo hidden beneath the ending layer; unmodified diagnostic export is not a visual pass.",
+      "evidence": "web test-results/r36-pilot-source-review/logo-diagnostic.json"
+    },
+    {
+      "case": "Dojo J3",
+      "failure": "All three supplied screen images hidden beneath the opaque card background in parent chrome at zIndex 40. Cursor also mostly occluded. Authored tilt is a 2D skew, not verified Three.js perspective. Exact caption preservation and successful export do not establish visual acceptance.",
+      "evidenceSha256": "4310ba1b04665a1dbd63b7d324d10074dfc33b34ff8bc59fe23aa3c080ba7d01"
+    }
+  ],
+  "limitations": [
+    "Incomplete 16-initial/36-turn matrix; cohorts with different host guidance/caps must not be pooled.",
+    "Seven outputs passed technical decode and automated normal-speed playback, not human continuous-motion/audio review.",
+    "Portrait syntax normalization and host-completed previews/exports remain recovered results, not autonomous passes.",
+    "Frozen grade CLI failed on setup-only trial without turns; unchanged technicalChecks used through a separate explicit-output wrapper.",
+    "J4 genuine source opening So has zero-duration timing; model caption pairing and speech binding also failed.",
+    "W1 stable-id instrumentation constrains authoring style; future cohort should select the actual authored label.",
+    "Five unresolved provider requests retain full reservations; authenticated account view did not reconcile configured key usage."
+  ]
+}

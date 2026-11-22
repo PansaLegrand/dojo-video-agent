@@ -26,7 +26,7 @@ Start with:
 Plans are not completed evidence. Verify source and reports before claiming a
 capability is accepted; mark plan items complete only with the required evidence.
 
-R33–R35 development uses kit **0.2.12**, selected by `DOJO_VISUAL_REVIEW=1` or a saved Brand Kit for new local runs. The default and retained 0.2.10 runs remain on their exact archive; 0.2.11 runs retain their own archive. See [visual review candidate](docs/visual-review-r33-2026-11-21.md). Two bounded actual-model reference comparisons and the later controlled 0.2.12 post-preview repair passed. An unresolved Kie request remains fully reserved and its journey cannot retry. Independent Brand Kit/paired trials may continue within the same explicitly approved campaign ceiling; default promotion remains pending.
+R33–R35 development uses kit **0.2.12**, selected by `DOJO_VISUAL_REVIEW=1` or a saved Brand Kit for new local runs. The default and retained 0.2.10 runs remain on their exact archive; 0.2.11 runs retain their own archive. See [visual review candidate](docs/visual-review-r33-2026-11-21.md). Two bounded actual-model reference comparisons and the later controlled 0.2.12 post-preview repair passed. The R34/R36 campaign closed at 182 requests and US$29.3495895 used/reserved, retaining five unknown outcomes. Brand Kit outputs required saved-result/syntax recovery; the paired matrix remains incomplete. No further paid campaign or default promotion is accepted by that evidence.
 
 The current released creative-skill build is kit **0.2.10** under
 local v14/commercial v15. New local runs freeze their skill instructions; accepted
