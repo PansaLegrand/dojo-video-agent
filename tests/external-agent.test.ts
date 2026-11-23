@@ -41,3 +41,17 @@ it('returns precise nested field diagnostics for a malformed native candidate wi
  const f=await fixture(),input:any=structuredClone(f.input);input.edit.commands=[{type:'addItem',item:{id:'new',name:'New',trackId:'visual',node:{id:'new',type:'div',from:0,duration:90,children:[{id:'child',type:'shape',shape:{kind:'circle'}}]}}}];
  const result:any=await f.service.review(input);expect(result.status).toBe('failed');expect(result.saved).toBe(false);expect(result.diagnostic.issues.some((issue:any)=>issue.path.includes('shape') && issue.path.includes('kind'))).toBe(true);expect((await f.store.read(f.project.id)).runs).toHaveLength(0);
 });
+
+it('returns the covered-title diagnostic through MCP review without saving or applying a run',async()=>{
+ const f=await fixture(),input:any=structuredClone(f.input);
+ input.edit.commands.push({type:'insertGraphic',itemId:'card',name:'Card',trackId:'visual',node:{id:'card',type:'div',from:0,duration:90,style:{position:'absolute',left:20,top:100,width:600,height:120,backgroundColor:'#101010',zIndex:40}}});
+ const failed:any=await f.service.review(input);
+ expect(failed).toMatchObject({status:'failed',saved:false});
+ expect(failed.checks).toContainEqual(expect.objectContaining({id:'text-occluded',message:expect.stringMatching(/title.*card/)}));
+ expect((await f.store.read(f.project.id)).runs).toHaveLength(0);
+ input.edit.commands.push({type:'set',target:{kind:'node',itemId:'title',nodeId:'title'},path:['style','zIndex'],value:50});
+ const repaired:any=await f.service.review(input);expect(repaired.status).toBe('reviewed');
+ expect((await f.store.read(f.project.id)).runs[0].request.authoring?.requiredTextLayout).toBe('sampled-v2');
+ expect((await f.store.read(f.project.id)).documentHash).toBe(f.project.documentHash);
+ expect(f.complete).not.toHaveBeenCalled();
+});

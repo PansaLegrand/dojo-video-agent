@@ -574,6 +574,7 @@ it.each([false,true])("persists the selected kit build and candidate policy acro
   expect(done.runs[0].agentKitVersion).toBe(visualReview ? profileKitVersion("local-editor-v14") : "0.2.10");
   expect(done.runs[0].request.authoring?.visualReview).toBe(visualReview ? "sequence-v1" : undefined);
   expect(done.runs[0].request.authoring?.endingVisibility).toBe("final-frame-v1");
+  expect(done.runs[0].request.authoring?.requiredTextLayout).toBe("sampled-v2");
   expect(done.runs[0].skillSnapshot).toEqual([guide]);
   expect(done.runs[0].focusedGraphicsDiscovery).toBe(true);
   expect(started.run).not.toHaveProperty("focusedGraphicsDiscovery");

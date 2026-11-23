@@ -138,7 +138,7 @@ export const nativeAuthoringSchema = z
     visualReview: z.literal("sequence-v1").optional(),
     macroCatalog: z.enum([chartMacroCatalog, kineticMacroCatalog, radialMacroCatalog, walkthroughMacroCatalog, comparisonMacroCatalog, blueprintMacroCatalog]).optional(),
     version: z.literal(1),
-    requiredTextLayout: z.literal("sampled-v1").optional(),
+    requiredTextLayout: z.enum(["sampled-v1", "sampled-v2"]).optional(),
   spatialCanvas: z.literal("scene-v1").optional(),
   endingVisibility: z.literal("final-frame-v1").optional(),
     scope: nativeAgentScopeSchema.optional(),

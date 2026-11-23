@@ -7,10 +7,12 @@ import {
 import type { CompletionRequirement } from "@dojo-video/agent-kit";
 import { boundsText, solidCanvasBackground } from "./ending-frame-visibility";
 
+import { opaqueContentCovers } from "./opaque-content-cover";
+
 type Bounds = DisplayGroup["box"];
 type Clip = { id: string; bounds: Bounds; parent?: Clip };
 type Issue = {
-  code: "text-overflow" | "text-clipped" | "text-occluded";
+  code: "text-overflow" | "text-clipped" | "text-occluded" | "image-occluded";
   detail: string;
 };
 export class RequiredTextLayoutError extends Error {
@@ -157,6 +159,7 @@ export function requiredTextLayoutReview(
   requirements: CompletionRequirement[],
   canvas: Bounds,
   rootForItem: ReadonlyMap<string, string>,
+  policy: "sampled-v1" | "sampled-v2" = "sampled-v1",
 ) {
   const items = new Set<string>(),
     exactItems = new Set<string>();
@@ -215,6 +218,8 @@ export function requiredTextLayoutReview(
     ) {
       if (!items.size && !nodeTargets.size) return;
       const cover = lastCanvasCover(groups, canvas);
+      const contentCover =
+        policy === "sampled-v2" ? opaqueContentCovers(groups) : undefined;
       function visit(
         g: DisplayGroup,
         opacity: number,
@@ -238,6 +243,21 @@ export function requiredTextLayoutReview(
             };
         }
         const text = g.content;
+        if (target && item && g.nodeType === "img" && contentCover) {
+          const key = JSON.stringify([g.nodeId, "image", g.node.assetId]);
+          const imageCover = contentCover(g);
+          if (!imageCover) {
+            clear.add(key);
+            failures.delete(key);
+          } else if (!clear.has(key) && !failures.has(key))
+            failures.set(
+              key,
+              new RequiredTextLayoutError(
+                "image-occluded",
+                `Item "${item}", image "${g.nodeId}", frame ${frame}: opaque layer "${imageCover.nodeId}" paints later and covers the complete image. Move the image above it or shorten the cover’s interval.`,
+              ),
+            );
+        }
         if (
           target &&
           item &&
@@ -248,8 +268,13 @@ export function requiredTextLayoutReview(
           const key = JSON.stringify([g.nodeId, text.value]);
           const finalCopy = finalEndingFrame && endings.has(item);
           if (finalCopy || !clear.has(key)) {
-            const issue: Issue | undefined =
-              cover && cover.paintOrder > g.paintOrder
+            const localCover = contentCover?.(g);
+            const issue: Issue | undefined = localCover
+              ? {
+                  code: "text-occluded",
+                  detail: `opaque layer "${localCover.nodeId}" paints later and covers the complete text box. Move the text above it or shorten the cover’s interval.`,
+                }
+              : cover && cover.paintOrder > g.paintOrder
                 ? {
                     code: "text-occluded",
                     detail: `opaque full-canvas layer "${cover.nodeId}" paints later. Move the text above it or shorten the cover's interval.`,

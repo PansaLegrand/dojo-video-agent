@@ -526,7 +526,7 @@ function layoutChecks(
   after: VideoProjectDocument,
   requirements: CompletionRequirement[],
   endingVisibility?: "final-frame-v1",
-  requiredTextLayout?: "sampled-v1",
+  requiredTextLayout?: "sampled-v1" | "sampled-v2",
 ) {
   const required = declaredItems(requirements);
   const changed = new Set(
@@ -560,7 +560,7 @@ function layoutChecks(
           const from = start + (child.from ?? 0);
           const to = Math.min(end, from + (child.duration ?? end - from));
           if (to <= from) continue;
-          if (child.type === "text") frames.add(from + Math.floor((to - from) / 2));
+          if (child.type === "text" || (requiredTextLayout === "sampled-v2" && child.type === "img")) frames.add(from + Math.floor((to - from) / 2));
           addMidpoint(child, from, to);
         }
       };
@@ -622,7 +622,7 @@ function layoutChecks(
   const observed = new Set<string>();
   const textReview = requiredTextLayout ? requiredTextLayoutReview(requirements,
     { x: 0, y: 0, width: after.format.width, height: after.format.height },
-    new Map(after.items.map(item => [item.id, item.node.id]))) : undefined;
+    new Map(after.items.map(item => [item.id, item.node.id])), requiredTextLayout) : undefined;
   const checkEnding = (groups: DisplayGroup[]) => assertEndingFrame(groups, closingText, finalFrame,
     { x: 0, y: 0, width: after.format.width, height: after.format.height });
   for (const frame of selected) {
@@ -763,7 +763,7 @@ export function checkNativeCompletionRequirements(
   beforeInput: VideoProjectDocument,
   afterInput: VideoProjectDocument,
   raw: unknown,
-  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1"; requiredTextLayout?: "sampled-v1" } = {},
+  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1"; requiredTextLayout?: "sampled-v1" | "sampled-v2" } = {},
 ): CompletionCheck[] {
   const before = parseVideoProjectDocument(beforeInput),
     after = parseVideoProjectDocument(afterInput),
