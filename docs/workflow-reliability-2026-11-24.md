@@ -235,3 +235,24 @@ addition to the candidate samples. Walkthroughs retain their original screenshot
 references. This strengthens footage/asset comparison before the first autonomous
 speech result reaches review; it does not revise prior failures or alter the R36
 rubric. Reference ordering and hashes are recorded in the assessment.
+
+
+## Actual speech output and independent visual failure
+
+`staged-speech-v1` local speech variant 2 used durable planning on its sixth call,
+completed caption batches/assembly, passed native review and normal guarded Apply,
+and passed independent word/source/translation-pair coverage plus full export,
+decode and playback. Requests 68–91 are known. Review request 92 rejected the
+news composition: default captions overlap the original headline and ticker.
+Translation fidelity passed. The original MP4, reports and failed visual verdict
+remain unchanged; this workflow is not qualified by those partial successes.
+Total: 92 requests and US$9.521519 used/reserved, including the same two unknowns.
+
+The next guide (`caption-placement-v1` cohort) makes clear that prepared caption
+placement is generic and must be recomposed per source after inspection, avoiding
+faces and burned-in headlines/tickers/logos. It also tells the model to reuse
+known IDs/schema facts from context and owned artifacts rather than repeat broad
+reads. This preserves all budgets and review criteria; it changes no fixture,
+source pixels, original grader or previous result. The earlier corrected draft
+also passed a separate commercial SDK control with the same document hash as the
+file-backed local Review/Apply control; both controls made zero provider calls.
