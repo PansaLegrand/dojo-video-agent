@@ -1,3 +1,4 @@
+import { diagnosticDisplayList } from "./diagnostic-display-list";
 import {
   compileDisplayList,
   evaluateScene,
@@ -270,9 +271,7 @@ export function reviewVisualCompletion(
     height: document.format.height,
   };
   for (const frame of sorted) {
-    const groups = compileDisplayList(
-      layoutScene(evaluateScene(scene, frame)),
-    ).groups;
+    const groups = diagnosticDisplayList(scene, frame).groups;
     const found = new Map<
         string,
         {

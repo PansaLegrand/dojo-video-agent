@@ -1,5 +1,5 @@
 /** New runs opt in. Guidance never changes native validation or saved receipts. */
-export const completeAuthoringGuide = `Native authoring checklist: use command.type (never op). Discover the native or selected macro schema before authoring unfamiliar nodes. applyCapability.target is {itemId,nodeId}; its parameters are specific to the named capability. Capability percentages use 0–100; native opacity and volume use 0–1. Timeline positions/durations are integer frames; media source offsets are seconds and caption cue times are milliseconds. Preserve item/node IDs, supplied facts and manual edits on follow-ups. Use true Three.js perspective when requested, not a 2D skew. Put supplied screen/logo imagery above opaque card backgrounds. Read genuine transcript word IDs and timing coverage before speech cuts; never invent or repair ASR timestamps. Caption display text is separate from speech evidence. Keep reciprocal caption-pair metadata and source bindings consistent. Native macro parameters compile into ordinary nodes: completion property checks must address compiled fields, not discarded params. Fix the reported command/field while retaining every frozen requirement; then review the complete edit again. Successful review is not visual or audio acceptance.`;
+export const completeAuthoringGuide = `Native authoring checklist: use command.type (never op). Discover the native or selected macro schema before authoring unfamiliar nodes. applyCapability.target is {itemId,nodeId}; its parameters are specific to the named capability. Capability percentages use 0–100; native opacity and volume use 0–1. lineHeight is a unitless font-size multiplier (for example 1.1), never a pixel count such as 48. CSS lengths such as fontSize are pixels for numbers. 3D object rotations use degrees and 3D keyframe time uses seconds. Timeline positions/durations are integer frames; media source offsets are seconds and caption cue times are milliseconds. Preserve item/node IDs, supplied facts and manual edits on follow-ups. Use true Three.js perspective when requested, not a 2D skew. Put supplied screen/logo imagery above opaque card backgrounds. Read genuine transcript word IDs and timing coverage before speech cuts; never invent or repair ASR timestamps. Caption display text is separate from speech evidence. Keep reciprocal caption-pair metadata and source bindings consistent. Native macro parameters compile into ordinary nodes: completion property checks must address compiled fields, not discarded params. Fix the reported command/field while retaining every frozen requirement; then review the complete edit again. Successful review is not visual or audio acceptance.`;
 
 function object(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === "object" && !Array.isArray(value);
@@ -7,7 +7,14 @@ function object(value: unknown): value is Record<string, unknown> {
 /** Compact only the model-facing failure observation after its full review has
  * been persisted. Never rewrite the full checks or receipt stored by the kit. */
 export function compactAuthoringFeedback(value: unknown): unknown {
-  if (!object(value) || !Array.isArray(value.checks)) return value;
+  if (!object(value)) return value;
+  if (object(value.completionPreflight)) {
+    const review=compactAuthoringFeedback(value.completionPreflight);
+    const bounded = object(review) ? Object.fromEntries(Object.entries(review).filter(([key])=>key!=="nextAction")) : review;
+    return review===value.completionPreflight ? value : { ...value, completionPreflight: bounded,
+      nextAction: value.completionPreflight.previewRepair ? value.nextAction : "No edit was applied. Keep every frozen requirement. Correct the reported fields and review the complete edit again." };
+  }
+  if (!Array.isArray(value.checks)) return value;
   const checks = value.checks.filter(object);
   const failures = checks.filter(check => check.passed === false);
   if (!failures.length) return value;
@@ -20,4 +27,18 @@ export function compactAuthoringFeedback(value: unknown): unknown {
     omittedPassingChecks: checks.length - failures.length,
     nextAction: "No edit was applied. Keep the frozen requirements and unchanged snapshot. Correct the reported commands/fields and review the complete edit again. Omitted failures remain failures.",
   };
+}
+
+export const completeAuthoringUnits = Object.freeze({
+  lineHeight: "Unitless font-size multiplier; 1.1 means 1.1 × fontSize, not 1.1 pixels.",
+  lengths: "Numeric style widths/heights/offsets/fontSize are composition pixels.",
+  timeline: "Integer frames; nested from/duration and animation frames are parent/node-local.",
+  sourceOffsets: "videoStartTime/audioStartTime are source seconds.",
+  captions: "Cue startMs/endMs are milliseconds relative to their caption item.",
+  three: "Object rotations are degrees; object.keyframes channel times are seconds.",
+  ratios: "Native opacity/volume use 0–1; applyCapability percent uses 0–100.",
+});
+export function completeAuthoringObservation(name: string, value: unknown): unknown {
+  return name === "review_edit" ? compactAuthoringFeedback(value)
+    : name === "inspect_graphics_schema" && object(value) ? { ...value, authoringUnits: completeAuthoringUnits } : value;
 }

@@ -70,6 +70,7 @@ export const commitInput = z
   })
   .strict();
 export type StoredRun = VideoProjectAgentRun & {
+  deadlinePolicy?: "progress-v1";
   externalAgent?: { version: 1; reviewRef: import("../../../packages/agent-kit/src/index").EditArtifactRef };
   /** Host policy frozen on new runs; absence preserves historical review/replay. */
   captionTranslationRebase?: true;
@@ -512,6 +513,7 @@ export function publicRun(
   {
     externalAgent: _externalAgent,
     skillSnapshot: _skillSnapshot,
+    deadlinePolicy: _deadlinePolicy,
     captionTranslationRebase: _captionTranslationRebase,
     focusedGraphicsDiscovery: _focusedGraphicsDiscovery,
     browserToolsEnabled: _browserTools,

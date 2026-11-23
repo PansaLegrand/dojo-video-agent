@@ -24,3 +24,10 @@ describe("complete authoring guide",()=>{
   const success={checks:[{id:"ok",passed:true,message:"Passed"}],receipt:{hash:"same"}};expect(compactAuthoringFeedback(success)).toBe(success);
  });
 });
+
+it("compacts the real nested preflight envelope without changing frozen requirements or repair claims",()=>{
+ const requirements=[{id:"title",kind:"item_present",itemId:"title"}],checks=[{id:"title",passed:true,message:"Present"},{id:"layout",passed:false,message:"Bad fit"}];
+ const original={nextAction:"old",completionPreflight:{status:"failed",requirements,checks,snapshotHash:"same"}};
+ const result=compactAuthoringFeedback(original)as any;expect(result.completionPreflight.checks).toEqual([checks[1]]);expect(result.completionPreflight.omittedPassingChecks).toBe(1);expect(result.completionPreflight.requirements).toBe(requirements);expect(original.completionPreflight.checks).toHaveLength(2);
+ const claimed={...original,nextAction:"The single repair is consumed",completionPreflight:{...original.completionPreflight,previewRepair:{id:"claim"}}};expect((compactAuthoringFeedback(claimed)as any).nextAction).toBe(claimed.nextAction);
+});

@@ -1,4 +1,4 @@
-import { compactAuthoringFeedback } from "../../core/src/lib/video-project/authoring-feedback";
+import { completeAuthoringObservation } from "../../core/src/lib/video-project/authoring-feedback";
 import { selectAgentKit, sourceRequirementValidation } from "./runtime-build";
 import { graphicsFeatureGrammar } from "../../core/src/lib/video-project/graphics-feature-grammar";
 import { sourceAudioTrackPresence } from "../../core/src/lib/video-project/source-audio";
@@ -368,10 +368,10 @@ export function createVideoToolset(
           : undefined;
       return {
         ...tool,
-        ...(request.authoring?.authoringGuide === "complete-v1" && tool.name === "review_edit" ? {
+        ...(request.authoring?.authoringGuide === "complete-v1" && ["review_edit", "inspect_graphics_schema"].includes(tool.name) ? {
           execute: async (args: unknown, signal: AbortSignal) => {
             const result = await tool.execute(args, signal);
-            return result.kind === "observation" ? { ...result, value: compactAuthoringFeedback(result.value) } : result;
+            return result.kind === "observation" ? { ...result, value: completeAuthoringObservation(tool.name, result.value) } : result;
           },
         } : {}),
         replaySafe:

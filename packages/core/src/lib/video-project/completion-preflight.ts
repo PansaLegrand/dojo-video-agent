@@ -1,3 +1,4 @@
+import { diagnosticDisplayList } from "./diagnostic-display-list";
 import { reviewVisualCompletion } from "./visual-completion";
 import {
   evaluateScene,
@@ -678,7 +679,7 @@ function layoutChecks(
       }
       group.children.forEach((child) => visit(child, opacity));
     };
-    const groups = compileDisplayList(layoutScene(evaluateScene(scene, frame))).groups;
+    const groups = (requiredTextLayout === "sampled-v3" ? diagnosticDisplayList(scene, frame) : compileDisplayList(layoutScene(evaluateScene(scene, frame)))).groups;
     if (closingText.size && frame === finalFrame) checkEnding(groups);
     textReview?.sample(groups, frame, itemFor, closingText.size > 0 && frame === finalFrame);
     groups.forEach(group => visit(group));
@@ -710,7 +711,7 @@ function layoutChecks(
       }
   }
   if (closingText.size && !selected.includes(finalFrame)) {
-    const groups = compileDisplayList(layoutScene(evaluateScene(scene, finalFrame))).groups;
+    const groups = (requiredTextLayout === "sampled-v3" ? diagnosticDisplayList(scene, finalFrame) : compileDisplayList(layoutScene(evaluateScene(scene, finalFrame)))).groups;
     checkEnding(groups);
     textReview?.sample(groups, finalFrame, itemFor, true);
     selected.push(finalFrame);

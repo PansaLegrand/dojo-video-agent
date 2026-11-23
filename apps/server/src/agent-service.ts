@@ -1,3 +1,4 @@
+import { createAgentDeadline } from "./agent-deadline";
 import { installedNativeMacroCatalog } from "../../../packages/core/src/lib/video-project/native-macro-catalog";
 import { savedAgentKitVersion, sourceRequirementValidation, skillsForSavedRun } from "../../../packages/agent/src/runtime-build";
 import { EditStageError as RetainedV29EditStageError } from "@dojo-video/agent-kit-v29";
@@ -112,7 +113,7 @@ const isStageError = (
   cause instanceof RetainedV29EditStageError;
 export class AgentService {
   private active = new Map<string, AbortController>();
-  private deadlines = new Map<string, ReturnType<typeof setTimeout>>();
+  private deadlines = new Map<string, ReturnType<typeof createAgentDeadline>>();
   private recovery?: Promise<void>;
   constructor(
     private store: ProjectStore,
@@ -233,7 +234,7 @@ export class AgentService {
         captionTranslationRebase: true,
         agentProfile: this.agentProfile,
         agentKitVersion: this.agentProfile === "local-editor-v14" && !this.stagedOptions.visualReview && !p.document.creativeContext.brandKit ? "0.2.10" : profileKitVersion(this.agentProfile),
-        ...(this.agentProfile === "local-editor-v14" ? { skillSnapshot: structuredClone(this.stagedOptions.newRunSkills ?? this.skills) } : {}),
+        ...(this.agentProfile === "local-editor-v14" ? { deadlinePolicy: "progress-v1" as const, skillSnapshot: structuredClone(this.stagedOptions.newRunSkills ?? this.skills) } : {}),
         ...(this.agentProfile === "local-editor-v14" && this.stagedOptions.focusedGraphicsDiscovery ? { focusedGraphicsDiscovery: true } : {}),
         ...(this.stagedOptions.browser &&
         ["local-editor-v10", "local-editor-v11", "local-editor-v12", "local-editor-v13", "local-editor-v14"].includes(this.agentProfile)
@@ -286,13 +287,13 @@ export class AgentService {
     if (this.active.has(id)) return;
     const controller = new AbortController();
     this.active.set(id, controller);
-    this.armDeadline(id, controller);
     void (async () => {
       const configuredModel =
         typeof this.model === "function" ? this.model() : this.model;
       const stored = (await this.store.read(projectId)).runs.find(
         (run) => run.id === id,
       )!;
+      this.deadlines.set(id, createAgentDeadline(controller, stored.deadlinePolicy));
       const model =
         stored.browserToolsEnabled && this.stagedOptions.browser
           ? this.stagedOptions.browser.model(projectId, id, configuredModel)
@@ -367,7 +368,7 @@ export class AgentService {
           .catch(() => {});
       })
       .finally(async () => {
-        clearTimeout(this.deadlines.get(id));
+        this.deadlines.get(id)?.dispose();
         this.deadlines.delete(id);
         this.active.delete(id);
         try {
@@ -386,14 +387,7 @@ export class AgentService {
   }
   private armDeadline(id: string, controller: AbortController) {
     if (controller.signal.aborted) return;
-    clearTimeout(this.deadlines.get(id));
-    this.deadlines.set(
-      id,
-      setTimeout(
-        () => controller.abort(new Error("Agent deadline reached.")),
-        180_000,
-      ),
-    );
+    this.deadlines.get(id)?.progress();
   }
   private async execute(
     projectId: string,
@@ -532,6 +526,9 @@ export class AgentService {
             r.events.push(event);
             r.updatedAt = new Date().toISOString();
             r.phase = event.name ?? event.type;
+          }).then(() => {
+            const deadline=this.deadlines.get(id);
+            if(deadline?.policy === "progress-v1" && ["tool.completed", "model.started"].includes(received.type)) deadline.progress();
           }),
         ...(invocation
           ? {

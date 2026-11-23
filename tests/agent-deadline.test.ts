@@ -1,0 +1,6 @@
+import {afterEach,it,expect,vi} from 'vitest';
+import {createAgentDeadline} from '../apps/server/src/agent-deadline';
+afterEach(()=>vi.useRealTimers());
+it('allows a progressing multi-call run beyond three minutes but retains a finite overall ceiling',()=>{vi.useFakeTimers();const c=new AbortController(),clock=createAgentDeadline(c,'progress-v1');for(let i=0;i<7;i++){vi.advanceTimersByTime(120000);expect(c.signal.aborted).toBe(false);clock.progress()}vi.advanceTimersByTime(60000);expect(c.signal.aborted).toBe(true);expect(c.signal.reason.message).toMatch(/15 minutes/);clock.dispose()});
+it('still stops a stalled provider call without retrying it',()=>{vi.useFakeTimers();const c=new AbortController(),clock=createAgentDeadline(c,'progress-v1');vi.advanceTimersByTime(180000);expect(c.signal.aborted).toBe(true);expect(c.signal.reason.message).toMatch(/no progress/);clock.dispose()});
+it('keeps legacy deadlines and releases timers when work ends',()=>{vi.useFakeTimers();const old=new AbortController(),clock=createAgentDeadline(old);vi.advanceTimersByTime(180000);expect(old.signal.reason.message).toBe('Agent deadline reached.');clock.dispose();const done=new AbortController(),active=createAgentDeadline(done,'progress-v1');active.dispose();vi.advanceTimersByTime(900000);expect(done.signal.aborted).toBe(false)});
