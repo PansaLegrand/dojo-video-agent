@@ -105,6 +105,8 @@ retained. Current accounted usage is US$2.144044: US$1.0003595 known and the
 unchanged US$1.1436845 unknown reservation from the initial pilot.
 
 The next candidate freezes `propertyValues: document-canonical-v1` in new runs.
+The new guide/visibility/property policies select only the local 0.2.12 candidate;
+unbranded 0.2.10 starts retain their previous sampled-v2 host policy.
 Both sides use the existing document normalizer; this adds no epsilon, type
 coercion or requirement rewriting. Review, Apply and recovery carry the flag.
 Absent flags preserve old behavior; commercial dispatch requires the new worker

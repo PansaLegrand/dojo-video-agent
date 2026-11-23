@@ -213,6 +213,7 @@ export class AgentService {
           input.scope ?? { kind: "project" },
         ),
         now = new Date().toISOString();
+      const candidateAuthoring = this.agentProfile === "local-editor-v14" && !!(this.stagedOptions.visualReview || p.document.creativeContext.brandKit);
       const macroCatalog = this.agentProfile === "local-editor-v14" ? installedNativeMacroCatalog() : undefined;
       const run: StoredRun = {
         id: randomUUID(),
@@ -252,7 +253,7 @@ export class AgentService {
           instruction: input.instruction,
           authoring: { version: 1, scope,
             ...(this.agentProfile === "local-editor-v14" && (this.stagedOptions.visualReview || p.document.creativeContext.brandKit) ? { visualReview: "sequence-v1" as const } : {}),
-            ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const, requiredTextLayout: "sampled-v3" as const, authoringGuide: "complete-v1" as const, propertyValues: "document-canonical-v1" as const, spatialCanvas: "scene-v1" as const } : {}),
+            ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const, requiredTextLayout: candidateAuthoring ? "sampled-v3" as const : "sampled-v2" as const, ...(candidateAuthoring ? { authoringGuide: "complete-v1" as const, propertyValues: "document-canonical-v1" as const } : {}), spatialCanvas: "scene-v1" as const } : {}),
             ...(macroCatalog ? { macroCatalog } : {}),
           },
         },
