@@ -742,6 +742,7 @@ function removeTimelineRange(
   input: VideoProjectDocument,
   from: number,
   duration: number,
+  trace?: VideoProjectExecutionTrace,
 ): VideoProjectDocument {
   const end = from + duration,
     originalDuration = input.format.durationInFrames;
@@ -755,7 +756,7 @@ function removeTimelineRange(
       (binding) => binding.itemId === item.id,
     );
   const apply = (command: VideoProjectCommand) => {
-    document = executeVideoProjectCommands(document, [command]).document;
+    document = executeVideoProjectCommands(document, [command], trace).document;
   };
   for (const boundary of [from, end]) {
     const crossing = document.items.filter(
@@ -873,7 +874,10 @@ function independentMoves(
     creativeContext: _context,
     ...native
   } = document;
-  let bytes = JSON.stringify({ ...native, kind: "dojo-video-engine-editor" }).length;
+  let bytes = JSON.stringify({
+    ...native,
+    kind: "dojo-video-engine-editor",
+  }).length;
   return (command: Extract<VideoProjectCommand, { type: "moveItem" }>) => {
     const previous = items.get(command.id)!;
     const item = document.items[previous.index]!;
@@ -909,9 +913,14 @@ function independentMoves(
   };
 }
 
+/** Host-only execution observations; never supplied through command JSON. */
+export type VideoProjectExecutionTrace = {
+  onSplit?: (sourceId: string, childId: string) => void;
+};
 export function executeVideoProjectCommands(
   input: VideoProjectDocument,
   raw: readonly VideoProjectCommand[],
+  trace?: VideoProjectExecutionTrace,
 ): VideoProjectCommandResult {
   const original = parseVideoProjectDocument(input);
   const commands = videoProjectCommandsSchema.parse(raw);
@@ -1124,6 +1133,7 @@ export function executeVideoProjectCommands(
             document,
             command.from,
             command.duration,
+            trace,
           );
           impact = "review";
           break;
@@ -1292,6 +1302,8 @@ export function executeVideoProjectCommands(
           nativeApply(document, command);
           if (command.type === "splitItem" || command.type === "duplicateItem")
             addBoundSplit(document, before, command);
+          if (command.type === "splitItem")
+            trace?.onSplit?.(command.id, command.newId);
           if (command.type === "removeItem") {
             const removed = new Set([command.id]);
             for (const binding of Object.values(document.bindings))

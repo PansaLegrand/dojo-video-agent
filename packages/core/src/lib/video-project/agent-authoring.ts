@@ -138,6 +138,8 @@ export const nativeAuthoringSchema = z
     visualReview: z.literal("sequence-v1").optional(),
   authoringGuide: z.literal("complete-v1").optional(),
   propertyValues: z.literal("document-canonical-v1").optional(),
+  speechRemovalScope: z.literal("clause-v1").optional(),
+  speechCompletion: z.literal("source-fragments-v1").optional(),
     macroCatalog: z.enum([chartMacroCatalog, kineticMacroCatalog, radialMacroCatalog, walkthroughMacroCatalog, comparisonMacroCatalog, blueprintMacroCatalog]).optional(),
     version: z.literal(1),
     requiredTextLayout: z.enum(["sampled-v1", "sampled-v2", "sampled-v3"]).optional(),

@@ -1,3 +1,4 @@
+import {completionSourceFamilies,assertFragmentCaptionPair,type CompletionSourceFamilies} from "./completion-source-families";
 import { diagnosticDisplayList } from "./diagnostic-display-list";
 import { reviewVisualCompletion } from "./visual-completion";
 import {
@@ -27,6 +28,7 @@ import {
   executeVideoProjectCommands,
   readVideoProjectPath,
   type VideoProjectTarget,
+  type VideoProjectCommand,
 } from "./commands";
 import {
   canonicalSerialize,
@@ -38,7 +40,7 @@ import {
 } from "./document";
 import { generatedTrackCommands } from "./agent-tracks";
 import { captionSourceCommands } from "./semantic";
-import { resolveSpeechAnchor, projectSourceRange } from "./source-clock";
+import { resolveSpeechAnchor, projectSourceRange, sourceWindow } from "./source-clock";
 import { compileVideoProjectDocument } from "./compilation";
 import { normalizeCompletionNumber } from "./completion-number";
 import { captionTimingDiagnostics } from "./caption-source-range";
@@ -261,6 +263,7 @@ function assertRequirement(
   preciseSpeechDiagnostics = false,
   validateSourceRequirements = false,
   canonicalPropertyValues = false,
+  sourceFamilies?: CompletionSourceFamilies,
 ) {
   const item = (id: string) => {
     const found = after.items.find((item) => item.id === id);
@@ -339,6 +342,7 @@ function assertRequirement(
     return;
   }
   if (requirement.kind === "caption_pair") {
+    if (sourceFamilies && assertFragmentCaptionPair(before,after,requirement,sourceFamilies)) return;
     const evidence = after.evidence[requirement.evidenceId];
     if (
       evidence &&
@@ -413,10 +417,16 @@ function assertRequirement(
   ) {
     const candidate = item(requirement.itemId),
       binding = after.bindings[requirement.bindingId];
+    if (sourceFamilies?.splitRoots.has(requirement.sourceItemId) && canonicalSerialize(before.evidence[requirement.evidenceId]) !== canonicalSerialize(after.evidence[requirement.evidenceId]))
+      throw new Error("Edited speech must retain its original immutable transcript evidence.");
+    const actualSourceId = sourceFamilies?.splitRoots.has(requirement.sourceItemId) && binding
+      ? binding.sourceItemId : requirement.sourceItemId;
+    if (actualSourceId !== requirement.sourceItemId && !sourceFamilies?.bySource.get(requirement.sourceItemId)?.some(source=>source.id===actualSourceId))
+      throw new Error("The speech anchor does not belong to a proven surviving fragment of its declared source.");
     const expected = resolveSpeechAnchor(after, {
       id: requirement.bindingId,
       itemId: candidate.id,
-      sourceItemId: requirement.sourceItemId,
+      sourceItemId: actualSourceId,
       evidenceId: requirement.evidenceId,
       wordIds: requirement.wordIds,
     });
@@ -436,8 +446,13 @@ function assertRequirement(
       throw new Error(
         "Highlight must bind the declared genuine contiguous source words without fabricated timing.",
       );
-    const source = item(requirement.sourceItemId),
-      projected = projectSourceRange(
+    const source = item(actualSourceId);
+    if (sourceFamilies?.splitRoots.has(requirement.sourceItemId)) {
+      const window=sourceWindow(source,after.format.fps);
+      if(binding.sourceStartMs<window.startMs-1e-6||binding.sourceEndMs>window.endMs+1e-6)
+        throw new Error("The declared genuine phrase is not completely retained in its speech fragment.");
+    }
+    const projected = projectSourceRange(
         source,
         after.format.fps,
         binding.sourceStartMs,
@@ -763,7 +778,7 @@ export function checkNativeCompletionRequirements(
   beforeInput: VideoProjectDocument,
   afterInput: VideoProjectDocument,
   raw: unknown,
-  options: { propertyValues?: "document-canonical-v1"; preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1"; requiredTextLayout?: "sampled-v1" | "sampled-v2" | "sampled-v3" } = {},
+  options: { speechCompletion?: "source-fragments-v1"; commands?: readonly VideoProjectCommand[]; propertyValues?: "document-canonical-v1"; preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1"; requiredTextLayout?: "sampled-v1" | "sampled-v2" | "sampled-v3" } = {},
 ): CompletionCheck[] {
   const before = parseVideoProjectDocument(beforeInput),
     after = parseVideoProjectDocument(afterInput),
@@ -771,6 +786,11 @@ export function checkNativeCompletionRequirements(
       assetSequence: true,
       speechCallout: true,
     });
+  let sourceFamilies: CompletionSourceFamilies | undefined;
+  if (options.speechCompletion === "source-fragments-v1" && requirements.some(r=>["caption_pair","speech_callout","speech_highlight"].includes(r.kind))) {
+    try { sourceFamilies=completionSourceFamilies(before,after,options.commands); }
+    catch(error) { return [{id:"speech-source-lineage",passed:false,message:error instanceof Error?error.message:"Speech source lineage failed"}]; }
+  }
   const checks = requirements.map((requirement) => {
     try {
       assertRequirement(
@@ -781,6 +801,7 @@ export function checkNativeCompletionRequirements(
         options.preciseSpeechDiagnostics === true,
         options.validateSourceRequirements === true,
         options.propertyValues === "document-canonical-v1",
+        sourceFamilies,
       );
       return {
         id: requirement.id,
@@ -908,7 +929,7 @@ export async function reviewNativeCompletionEdit(
     base,
     executed.document,
     requirements,
-    { ...options, endingVisibility: request.authoring?.endingVisibility, spatialCanvas: request.authoring?.spatialCanvas, requiredTextLayout: request.authoring?.requiredTextLayout, propertyValues: request.authoring?.propertyValues },
+    { ...options, endingVisibility: request.authoring?.endingVisibility, spatialCanvas: request.authoring?.spatialCanvas, requiredTextLayout: request.authoring?.requiredTextLayout, propertyValues: request.authoring?.propertyValues, speechCompletion: request.authoring?.speechCompletion, commands },
   );
   const receipt = checks.every((check) => check.passed)
     ? await createCompletionReceipt({

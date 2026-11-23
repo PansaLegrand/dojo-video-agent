@@ -163,6 +163,7 @@ export function captionSourceCommands(
     trackId: string;
     preset?: string;
     phraseSafe?: boolean;
+    sourceCoverage?: { startMs: number; endMs: number };
   },
 ): VideoProjectCommand[] {
   const source = document.items.find((item) => item.id === input.sourceItemId);
@@ -173,7 +174,8 @@ export function captionSourceCommands(
   if (!preset) throw new Error("Unknown caption treatment.");
   const window = sourceWindow(source, document.format.fps);
   const words = evidence.words.filter(
-    (word) => word.endMs > window.startMs && word.startMs < window.endMs,
+    (word) => word.endMs > window.startMs && word.startMs < window.endMs &&
+      (!input.sourceCoverage || (Math.max(word.startMs,input.sourceCoverage.startMs) >= window.startMs-1e-6 && Math.min(word.endMs,input.sourceCoverage.endMs) <= window.endMs+1e-6)),
   );
   if (!words.length)
     throw new Error(

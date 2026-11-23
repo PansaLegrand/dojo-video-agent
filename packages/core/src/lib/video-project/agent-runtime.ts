@@ -1,3 +1,4 @@
+import {createSpeechSourceTrace} from "./completion-source-families";
 import { completeAuthoringGuide } from "./authoring-feedback";
 import { brandKitAuthoringGuide } from "./brand-kit";
 import { nativeMacroNames } from "./native-macro-catalog";
@@ -331,6 +332,7 @@ export async function compileNativeAgentResult(
       ...(clarification ? { clarification } : {}),
     };
   let document = base;
+  const speechTrace = request.authoring?.speechCompletion === "source-fragments-v1" ? createSpeechSourceTrace(base) : undefined;
   const commands: VideoProjectCommand[] = [];
   for (const [commandIndex, candidate] of parsed.commands.entries()) {
     try {
@@ -444,7 +446,7 @@ export async function compileNativeAgentResult(
           : candidate.type === "insertGraphic"
             ? graphicCommands(document, candidate, allowedMacroNames)
             : candidate.type === "captionSource"
-              ? captionSourceCommands(document, candidate)
+              ? captionSourceCommands(document, {...candidate, ...(speechTrace?.coverage(candidate.sourceItemId) ? {sourceCoverage:speechTrace.coverage(candidate.sourceItemId)} : {})})
               : candidate.type === "cutSpeech"
                 ? speechCutCommands(document, candidate)
                 : candidate.type === "anchorSpeech"
@@ -452,7 +454,7 @@ export async function compileNativeAgentResult(
                   : candidate.type === "applyCapability"
                     ? buildEditorCapabilityCommands(document, candidate.action)
                     : [candidate as VideoProjectCommand];
-      const execution = executeVideoProjectCommands(document, next);
+      const execution = executeVideoProjectCommands(document, next, speechTrace);
       scope.check(candidate, document, execution);
       document = execution.document;
       commands.push(...next);

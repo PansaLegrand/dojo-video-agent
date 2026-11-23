@@ -33,6 +33,7 @@ export type NativeTranscriptSnapshot = {
   instruction?: string;
   context: { selectedItemIds: string[] };
   authoring?: {
+    speechRemovalScope?: "clause-v1";
     scope?:
       | { kind: "project" }
       | { kind: "selection"; itemIds: string[] }
@@ -122,6 +123,7 @@ export function nativeTranscriptQuotedPhrases(instruction: string): string[] {
 
 export function nativeTranscriptWholeRemovalQueries(
   instruction: string,
+  policy?: "clause-v1",
 ): string[] {
   const outsideQuotes = withoutQuotes(instruction);
   const all =
@@ -134,9 +136,16 @@ export function nativeTranscriptWholeRemovalQueries(
   const speech =
     /\b(spoken|speech|says?|said|speaks?|fillers?|utterances?|prononc\w*|parol\w*|gesproch\w*)\b|说到|说出|口播|口癖|発言|話した|말한|발화/iu;
   if (visual.test(outsideQuotes) && !speech.test(outsideQuotes)) return [];
-  return all.test(outsideQuotes) && remove.test(outsideQuotes)
-    ? nativeTranscriptQuotedPhrases(instruction)
-    : [];
+  // A preservation sentence such as "keep all picture" must not supply the
+  // quantifier for a separate, explicitly bounded filler-removal sentence.
+  // Keep existing qualification/exception checks on the complete instruction.
+  const completeRemoval =
+    policy === "clause-v1"
+      ? outsideQuotes
+          .split(/[.!?。！？]+/u)
+          .some((clause) => all.test(clause) && remove.test(clause))
+      : all.test(outsideQuotes) && remove.test(outsideQuotes);
+  return completeRemoval ? nativeTranscriptQuotedPhrases(instruction) : [];
 }
 
 function qualifiedRemovalScope(snapshot: NativeTranscriptSnapshot): boolean {
@@ -232,7 +241,10 @@ function separatedQuotes(snapshot: NativeTranscriptSnapshot): {
 }
 
 function wholeRemovalQueries(snapshot: NativeTranscriptSnapshot): string[] {
-  return nativeTranscriptWholeRemovalQueries(snapshot.instruction ?? "").length
+  return nativeTranscriptWholeRemovalQueries(
+    snapshot.instruction ?? "",
+    snapshot.authoring?.speechRemovalScope,
+  ).length
     ? separatedQuotes(snapshot).phrases.slice(0, 4)
     : [];
 }
@@ -573,7 +585,10 @@ export async function searchNativeTranscript(
   if (next < found.totalMatches && page.matches.length)
     page.coverage.nextCursor = `v1:${next}:${token}`;
   if (
-    nativeTranscriptWholeRemovalQueries(snapshot.instruction ?? "").length &&
+    nativeTranscriptWholeRemovalQueries(
+      snapshot.instruction ?? "",
+      snapshot.authoring?.speechRemovalScope,
+    ).length &&
     qualifiedRemovalScope(snapshot)
   ) {
     page.coverage.complete = false;
@@ -618,8 +633,10 @@ export function nativeTranscriptSearchOverview(
         matches.push(match);
       }
       const scopeNeedsClarification =
-        nativeTranscriptWholeRemovalQueries(snapshot.instruction ?? "").length >
-          0 && qualifiedRemovalScope(snapshot);
+        nativeTranscriptWholeRemovalQueries(
+          snapshot.instruction ?? "",
+          snapshot.authoring?.speechRemovalScope,
+        ).length > 0 && qualifiedRemovalScope(snapshot);
       return {
         query,
         totalMatches: found.totalMatches,
@@ -650,7 +667,12 @@ export function assertNativeTranscriptCoverage(
     (result.outcome !== undefined && result.outcome !== "proposal")
   )
     return;
-  if (!nativeTranscriptWholeRemovalQueries(snapshot.instruction ?? "").length)
+  if (
+    !nativeTranscriptWholeRemovalQueries(
+      snapshot.instruction ?? "",
+      snapshot.authoring?.speechRemovalScope,
+    ).length
+  )
     return;
   if (qualifiedRemovalScope(snapshot))
     throw new Error(

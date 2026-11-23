@@ -125,7 +125,7 @@ function completionOptionsForRun(run: StoredRun) {
       profile,
     ),
     endingVisibility: run.request.authoring?.endingVisibility,
-    requiredTextLayout: run.request.authoring?.requiredTextLayout, propertyValues: run.request.authoring?.propertyValues, spatialCanvas: run.request.authoring?.spatialCanvas,
+    requiredTextLayout: run.request.authoring?.requiredTextLayout, propertyValues: run.request.authoring?.propertyValues, speechCompletion: run.request.authoring?.speechCompletion, spatialCanvas: run.request.authoring?.spatialCanvas,
   };
 }
 
@@ -856,7 +856,7 @@ export async function recoverReviewedEditInTransactionLocal(
     comparison.beforeDocument,
     comparison.afterDocument,
     completion.requirements,
-    options,
+    { ...options, commands: comparison.review.commands },
   ).filter((check) => !check.passed);
   if (failedChecks.length)
     throw new HttpError(
