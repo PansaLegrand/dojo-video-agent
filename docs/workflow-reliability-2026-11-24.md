@@ -207,3 +207,31 @@ run completes under the qualification wait while the legacy wait expires, and
 that cancellation and bounded waits still stop. The next `bounded-driver-v1`
 cohort uses variants 2 and 3 for local speech/chart, and 1 and 2 elsewhere, under
 the same US$30 / 320-request ledger. All earlier cohorts remain separate.
+
+
+## Planning-budget finding
+
+The bounded-driver local speech variant 2 completed 16 known model requests and
+then exhausted the planning/direct invocation limit before finishing its draft.
+It never called `plan_edit_stages`. Requests 52–67 are retained, with no new
+unknown outcome. Accounted total is US$7.9009105 across 67 requests. The earlier
+chart saved-output regrades (50–51) passed both turns under the explicit report
+field clarification, and original review reports remain in history.
+
+The next authoring-guide candidate states the existing 16-call invocation and
+64-call overall limits explicitly. Multi-source bilingual work combined with cuts
+or callouts should plan early, after one skill and exact-word lookup; caption
+batches and assembly use their own bounded invocations. It does not increase
+budgets, turn on parallel provider tools, retry calls or make planning mandatory
+for simple edits. The new `staged-speech-v1` cohort retains the same ledger and
+unknown blocks. This is a fresh materially changed guide, not recovery of a failed
+trial. A no-provider file-backed AgentService control separately passed native
+review and normal guarded Apply of the controlled repaired speech candidate.
+
+
+The next cohort's independent reviewer (`workflow-v4-source-references`) also
+receives SHA-verified original news/interview frames at source six seconds, in
+addition to the candidate samples. Walkthroughs retain their original screenshot
+references. This strengthens footage/asset comparison before the first autonomous
+speech result reaches review; it does not revise prior failures or alter the R36
+rubric. Reference ordering and hashes are recorded in the assessment.

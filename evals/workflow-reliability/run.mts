@@ -25,7 +25,7 @@ const unknown=(host:string,scenario:string,repetition:number)=>campaign.ledger.r
 const slots=fixture.workflows.flatMap((workflow:any)=>['open-source','commercial-web'].flatMap(host=>[1,2,3].filter(repetition=>!unknown(host,workflow.id,repetition)).slice(0,2).map(repetition=>({workflow:workflow.id,host,repetition}))));
 campaign.ledger.cohorts??=[];const priorCohort=campaign.ledger.cohorts.find((c:any)=>c.id===cohort);
 if(priorCohort)assert.deepEqual(priorCohort.sourceCommits,sources.map(s=>s.commit),'Cohort source changed; choose a new cohort without resetting the budget');
-else campaign.ledger.cohorts.push({id:cohort,sourceCommits:sources.map(s=>s.commit),fixtureFile:path.basename(fixtureFile),graderVersion:'workflow-v3',sourceInspection:'owned-fixture-pixels-v1',driverWaitMs:915000,slots,expected:12,reservePolicy:'Use two preplanned independent wording variants per host/workflow; original unknown journeys never retry. At most three distinct variants are available.'});
+else campaign.ledger.cohorts.push({id:cohort,sourceCommits:sources.map(s=>s.commit),fixtureFile:path.basename(fixtureFile),graderVersion:'workflow-v3',reviewerVersion:'workflow-v4-source-references',sourceInspection:'owned-fixture-pixels-v1',driverWaitMs:915000,slots,expected:12,reservePolicy:'Use two preplanned independent wording variants per host/workflow; original unknown journeys never retry. At most three distinct variants are available.'});
 const activeSlots=priorCohort?.slots??slots;
 await campaign.persist();
 const save=async(file:string,value:unknown)=>fs.writeFile(file,JSON.stringify(value,null,2)+'\n',{flag:'wx',mode:0o600});
