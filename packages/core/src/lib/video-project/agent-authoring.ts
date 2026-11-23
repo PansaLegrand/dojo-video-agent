@@ -139,7 +139,7 @@ export const nativeAuthoringSchema = z
   authoringGuide: z.literal("complete-v1").optional(),
     macroCatalog: z.enum([chartMacroCatalog, kineticMacroCatalog, radialMacroCatalog, walkthroughMacroCatalog, comparisonMacroCatalog, blueprintMacroCatalog]).optional(),
     version: z.literal(1),
-    requiredTextLayout: z.enum(["sampled-v1", "sampled-v2"]).optional(),
+    requiredTextLayout: z.enum(["sampled-v1", "sampled-v2", "sampled-v3"]).optional(),
   spatialCanvas: z.literal("scene-v1").optional(),
   endingVisibility: z.literal("final-frame-v1").optional(),
     scope: nativeAgentScopeSchema.optional(),

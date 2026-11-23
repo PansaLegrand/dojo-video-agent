@@ -251,7 +251,7 @@ export class AgentService {
           instruction: input.instruction,
           authoring: { version: 1, scope,
             ...(this.agentProfile === "local-editor-v14" && (this.stagedOptions.visualReview || p.document.creativeContext.brandKit) ? { visualReview: "sequence-v1" as const } : {}),
-            ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const, requiredTextLayout: "sampled-v2" as const, authoringGuide: "complete-v1" as const, spatialCanvas: "scene-v1" as const } : {}),
+            ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const, requiredTextLayout: "sampled-v3" as const, authoringGuide: "complete-v1" as const, spatialCanvas: "scene-v1" as const } : {}),
             ...(macroCatalog ? { macroCatalog } : {}),
           },
         },

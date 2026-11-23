@@ -159,7 +159,7 @@ export function requiredTextLayoutReview(
   requirements: CompletionRequirement[],
   canvas: Bounds,
   rootForItem: ReadonlyMap<string, string>,
-  policy: "sampled-v1" | "sampled-v2" = "sampled-v1",
+  policy: "sampled-v1" | "sampled-v2" | "sampled-v3" = "sampled-v1",
 ) {
   const items = new Set<string>(),
     exactItems = new Set<string>();
@@ -219,7 +219,7 @@ export function requiredTextLayoutReview(
       if (!items.size && !nodeTargets.size) return;
       const cover = lastCanvasCover(groups, canvas);
       const contentCover =
-        policy === "sampled-v2" ? opaqueContentCovers(groups) : undefined;
+        policy !== "sampled-v1" ? opaqueContentCovers(groups) : undefined;
       function visit(
         g: DisplayGroup,
         opacity: number,

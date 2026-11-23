@@ -1,3 +1,4 @@
+import { reviewVisualCompletion } from "./visual-completion";
 import {
   evaluateScene,
   layoutScene,
@@ -526,7 +527,7 @@ function layoutChecks(
   after: VideoProjectDocument,
   requirements: CompletionRequirement[],
   endingVisibility?: "final-frame-v1",
-  requiredTextLayout?: "sampled-v1" | "sampled-v2",
+  requiredTextLayout?: "sampled-v1" | "sampled-v2" | "sampled-v3",
 ) {
   const required = declaredItems(requirements);
   const changed = new Set(
@@ -560,7 +561,7 @@ function layoutChecks(
           const from = start + (child.from ?? 0);
           const to = Math.min(end, from + (child.duration ?? end - from));
           if (to <= from) continue;
-          if (child.type === "text" || (requiredTextLayout === "sampled-v2" && child.type === "img")) frames.add(from + Math.floor((to - from) / 2));
+          if (child.type === "text" || (requiredTextLayout !== "sampled-v1" && child.type === "img")) frames.add(from + Math.floor((to - from) / 2));
           addMidpoint(child, from, to);
         }
       };
@@ -763,7 +764,7 @@ export function checkNativeCompletionRequirements(
   beforeInput: VideoProjectDocument,
   afterInput: VideoProjectDocument,
   raw: unknown,
-  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1"; requiredTextLayout?: "sampled-v1" | "sampled-v2" } = {},
+  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1"; requiredTextLayout?: "sampled-v1" | "sampled-v2" | "sampled-v3" } = {},
 ): CompletionCheck[] {
   const before = parseVideoProjectDocument(beforeInput),
     after = parseVideoProjectDocument(afterInput),
@@ -812,6 +813,10 @@ export function checkNativeCompletionRequirements(
         2000,
       ),
     });
+  }
+  if (options.requiredTextLayout === "sampled-v3") {
+    try { checks.push(...reviewVisualCompletion(after, requirements)); }
+    catch (error) { checks.push({ id: "visual-coverage", passed: false, message: (error instanceof Error ? error.message : "Visual coverage failed").slice(0, 1900) }); }
   }
   if (options.spatialCanvas) {
     const conflict = spatialCanvasConflict(before, after, requirements);

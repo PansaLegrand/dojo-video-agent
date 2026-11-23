@@ -51,7 +51,7 @@ it('returns the covered-title diagnostic through MCP review without saving or ap
  expect((await f.store.read(f.project.id)).runs).toHaveLength(0);
  input.edit.commands.push({type:'set',target:{kind:'node',itemId:'title',nodeId:'title'},path:['style','zIndex'],value:50});
  const repaired:any=await f.service.review(input);expect(repaired.status).toBe('reviewed');
- expect((await f.store.read(f.project.id)).runs[0].request.authoring?.requiredTextLayout).toBe('sampled-v2');
+ expect((await f.store.read(f.project.id)).runs[0].request.authoring?.requiredTextLayout).toBe('sampled-v3');
  expect((await f.store.read(f.project.id)).documentHash).toBe(f.project.documentHash);
  expect(f.complete).not.toHaveBeenCalled();
 });
