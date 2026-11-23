@@ -252,7 +252,7 @@ export class AgentService {
           instruction: input.instruction,
           authoring: { version: 1, scope,
             ...(this.agentProfile === "local-editor-v14" && (this.stagedOptions.visualReview || p.document.creativeContext.brandKit) ? { visualReview: "sequence-v1" as const } : {}),
-            ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const, requiredTextLayout: "sampled-v3" as const, authoringGuide: "complete-v1" as const, spatialCanvas: "scene-v1" as const } : {}),
+            ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const, requiredTextLayout: "sampled-v3" as const, authoringGuide: "complete-v1" as const, propertyValues: "document-canonical-v1" as const, spatialCanvas: "scene-v1" as const } : {}),
             ...(macroCatalog ? { macroCatalog } : {}),
           },
         },
@@ -835,7 +835,7 @@ export class AgentService {
         comparison.beforeDocument,
         comparison.afterDocument,
         r.completion.requirements,
-        { preciseSpeechDiagnostics: ["local-editor-v13", "local-editor-v14"].includes(r.agentProfile ?? ""), validateSourceRequirements: sourceRequirementValidation(r.agentProfile, savedAgentKitVersion(r)), endingVisibility: r.request.authoring?.endingVisibility, requiredTextLayout: r.request.authoring?.requiredTextLayout, spatialCanvas: r.request.authoring?.spatialCanvas },
+        { preciseSpeechDiagnostics: ["local-editor-v13", "local-editor-v14"].includes(r.agentProfile ?? ""), validateSourceRequirements: sourceRequirementValidation(r.agentProfile, savedAgentKitVersion(r)), endingVisibility: r.request.authoring?.endingVisibility, requiredTextLayout: r.request.authoring?.requiredTextLayout, propertyValues: r.request.authoring?.propertyValues, spatialCanvas: r.request.authoring?.spatialCanvas },
       );
       if (checks.some((check) => !check.passed))
         throw new HttpError(
@@ -933,7 +933,7 @@ export class AgentService {
           comparison.beforeDocument,
           comparison.afterDocument,
           r.completion.requirements,
-          { preciseSpeechDiagnostics: ["local-editor-v13", "local-editor-v14"].includes(r.agentProfile ?? ""), validateSourceRequirements: sourceRequirementValidation(r.agentProfile, savedAgentKitVersion(r)), endingVisibility: r.request.authoring?.endingVisibility, requiredTextLayout: r.request.authoring?.requiredTextLayout, spatialCanvas: r.request.authoring?.spatialCanvas },
+          { preciseSpeechDiagnostics: ["local-editor-v13", "local-editor-v14"].includes(r.agentProfile ?? ""), validateSourceRequirements: sourceRequirementValidation(r.agentProfile, savedAgentKitVersion(r)), endingVisibility: r.request.authoring?.endingVisibility, requiredTextLayout: r.request.authoring?.requiredTextLayout, propertyValues: r.request.authoring?.propertyValues, spatialCanvas: r.request.authoring?.spatialCanvas },
         );
         if (checks.some((check) => !check.passed))
           throw new HttpError(

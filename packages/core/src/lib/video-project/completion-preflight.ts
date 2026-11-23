@@ -30,6 +30,7 @@ import {
 } from "./commands";
 import {
   canonicalSerialize,
+  normalizeVideoProjectJson,
   createVideoProjectDocument,
   parseVideoProjectDocument,
   hashVideoProjectDocument,
@@ -259,6 +260,7 @@ function assertRequirement(
   editedSequence = false,
   preciseSpeechDiagnostics = false,
   validateSourceRequirements = false,
+  canonicalPropertyValues = false,
 ) {
   const item = (id: string) => {
     const found = after.items.find((item) => item.id === id);
@@ -327,17 +329,13 @@ function assertRequirement(
         );
       return;
     }
-    if (
-      completionCanonical(
-        readVideoProjectPath(
-          after,
-          propertyPath(requirement.target, requirement.path),
-        ),
-      ) !== completionCanonical(requirement.equals)
-    )
-      throw new Error(
-        "The declared property does not equal its required value.",
-      );
+    const comparable = (input: unknown) => completionCanonical(canonicalPropertyValues ? normalizeVideoProjectJson(input) : input);
+    if (comparable(value) !== comparable(requirement.equals)) {
+      const detail = (input: unknown) => (input === undefined ? "absent" : comparable(input)).slice(0, 650);
+      throw new Error(canonicalPropertyValues
+        ? `Requirement "${requirement.id}" at ${JSON.stringify(requirement.target)} path ${requirement.path.join(".")}: expected ${detail(requirement.equals)}, received ${detail(value)}. Keep the frozen requirement and correct this property in the edit.`
+        : "The declared property does not equal its required value.");
+    }
     return;
   }
   if (requirement.kind === "caption_pair") {
@@ -765,7 +763,7 @@ export function checkNativeCompletionRequirements(
   beforeInput: VideoProjectDocument,
   afterInput: VideoProjectDocument,
   raw: unknown,
-  options: { preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1"; requiredTextLayout?: "sampled-v1" | "sampled-v2" | "sampled-v3" } = {},
+  options: { propertyValues?: "document-canonical-v1"; preciseSpeechDiagnostics?: boolean; validateSourceRequirements?: boolean; endingVisibility?: "final-frame-v1"; spatialCanvas?: "scene-v1"; requiredTextLayout?: "sampled-v1" | "sampled-v2" | "sampled-v3" } = {},
 ): CompletionCheck[] {
   const before = parseVideoProjectDocument(beforeInput),
     after = parseVideoProjectDocument(afterInput),
@@ -782,6 +780,7 @@ export function checkNativeCompletionRequirements(
         requirements.some((value) => value.kind === "asset_sequence"),
         options.preciseSpeechDiagnostics === true,
         options.validateSourceRequirements === true,
+        options.propertyValues === "document-canonical-v1",
       );
       return {
         id: requirement.id,
@@ -909,7 +908,7 @@ export async function reviewNativeCompletionEdit(
     base,
     executed.document,
     requirements,
-    { ...options, endingVisibility: request.authoring?.endingVisibility, spatialCanvas: request.authoring?.spatialCanvas, requiredTextLayout: request.authoring?.requiredTextLayout },
+    { ...options, endingVisibility: request.authoring?.endingVisibility, spatialCanvas: request.authoring?.spatialCanvas, requiredTextLayout: request.authoring?.requiredTextLayout, propertyValues: request.authoring?.propertyValues },
   );
   const receipt = checks.every((check) => check.passed)
     ? await createCompletionReceipt({
