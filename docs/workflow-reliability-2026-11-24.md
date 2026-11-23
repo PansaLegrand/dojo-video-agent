@@ -64,3 +64,31 @@ actual MP4s, frame sheets and review reports live in ignored private test-result
 Implementation/source validation and final outcomes are recorded in the commercial
 `docs/editor-reliability-portability-2026-11-23.md` handoff. Qualification is pending
 until the actual-model campaign and independent output checks finish.
+
+## Initial pilot retained; progress-policy candidate
+
+The initial local chart trial made five requests. Four returned known usage
+(US$0.397418 conservatively accounted); request five was interrupted by the
+host's original three-minute whole-invocation deadline and retains its full
+US$1.1436845 reservation. Total used/reserved is US$1.5411025. Its initial ledger
+is retained as `ledger-before-progress-v1.json`. No retry or dependent follow-up
+of that unknown journey is admitted.
+
+The paid draft exposed `lineHeight: 48` on a 42-pixel chart title. The native
+engine correctly rejected it, but its error omitted the node identity, and the
+feedback compactor missed the real nested completion-preflight envelope. The
+follow-up source adds node/frame/fit constraints with an explicit multiplier
+hint, publishes important unit notes, and compacts actual tool observations while
+retaining full stored checks. The failing draft is still a failure.
+
+New local-v14 runs freeze `deadlinePolicy: progress-v1`: three minutes without
+progress and a fifteen-minute active-work ceiling, with unchanged model/tool/token
+budgets and no retry. Existing runs retain the old deadline. Persisted model/tool
+progress refreshes only the inactivity window; stage transitions cannot extend
+the overall ceiling.
+
+The separately frozen `progress-v1` cohort retains the same campaign cap and
+original reports. Three wording variants are prepared per workflow. It selects
+two independent, unblocked variants per host/workflow; local chart uses variants
+2 and 3 because variant 1 has the original unknown outcome. This is not a retry
+of the uncertain request, and results are not pooled across candidate cohorts.

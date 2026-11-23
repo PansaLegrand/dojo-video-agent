@@ -8,7 +8,7 @@ const agent=process.cwd(),web=path.resolve('../dojo-video-web'),live=process.arg
 const option=(name:string,fallback:string)=>{const at=process.argv.indexOf(name);return at<0?fallback:process.argv[at+1]};
 const root=path.resolve(option('--output',live?'test-results/workflow-reliability-2026-11-24/live':'test-results/workflow-reliability-2026-11-24/reference')),cohort=option('--cohort','initial');
 if(!/^[a-z0-9-]{1,50}$/.test(cohort))throw Error('Invalid cohort');await fs.mkdir(root,{recursive:true,mode:0o700});
-const fixture=await workflowFixtures();const fixtureFile=path.join(root,'fixtures.json'),fixtureBytes=JSON.stringify(fixture,null,2)+'\n';
+const fixture=await workflowFixtures();const fixtureFile=path.join(root,cohort==='initial'?'fixtures.json':'fixtures-'+cohort+'.json'),fixtureBytes=JSON.stringify(fixture,null,2)+'\n';
 try{assert.equal(await fs.readFile(fixtureFile,'utf8'),fixtureBytes,'Frozen fixtures changed')}catch(error:any){if(error.code!=='ENOENT')throw error;await fs.writeFile(fixtureFile,fixtureBytes,{flag:'wx',mode:0o600})}
 const sources=[await captureCreativeSource(agent,'open-source'),await captureCreativeSource(web,'commercial-web')];if(live)assert(sources.every(s=>!s.dirty),'Commit the tested candidate before paid dispatch');
 const runtimePaths=['packages/video-project-runtime/dist/index.js','packages/video-project-runtime/dist/manifest.json','test-results/creative-skills/adapter.mjs'].map(file=>path.join(web,file));
@@ -19,19 +19,26 @@ const unchanged=async()=> (await Promise.all(sources.map(creativeSourceUnchanged
 const adapter=await import(pathToFileURL(path.join(web,'test-results/creative-skills/adapter.mjs')).href);await adapter.assertCreativeWebReady();
 const campaign=await openCampaign(root,[fixtureFile,sourceFile],live),signal=new AbortController();process.once('SIGINT',()=>signal.abort(Error('Qualification cancelled')));process.once('SIGTERM',()=>signal.abort(Error('Qualification cancelled')));
 campaign.ledger.taskAuthorization={approvedLocalDate:'2026-11-23',maximumUsd:30,maximumRequests:320,scope:'Three Dojo workflows in both hosts; no media generation or new ASR',pricingSource:'https://kie.ai/gpt-6-astra',conservativeRates:'US$3.50/M input including cache writes; US$14/M output'};
-campaign.ledger.acceptance={version:'workflow-v1',workflows:['speech','chart','walkthrough'],repetitions:2,hosts:['open-source','commercial-web'],requirements:'All requested edits and follow-ups, original/manual preservation, independent semantics/geometry, exact candidate export, full decode and normal-speed playback; independent visual/translation review remains explicit',originalR36Grader:'unchanged; reused rubric and baseline technical checks; portrait walkthrough adds a separately versioned check'};
+campaign.ledger.acceptance??={version:'workflow-v1',workflows:['speech','chart','walkthrough'],repetitions:2,hosts:['open-source','commercial-web'],requirements:'All requested edits and follow-ups, original/manual preservation, independent semantics/geometry, exact candidate export, full decode and normal-speed playback; independent visual/translation review remains explicit',originalR36Grader:'unchanged; reused rubric and baseline technical checks; portrait walkthrough adds a separately versioned check'};
+const unknown=(host:string,scenario:string,repetition:number)=>campaign.ledger.requests.some((r:any)=>r.phase==='unknown'&&r.host===host&&r.scenario===scenario&&r.repetition===repetition);
+const slots=fixture.workflows.flatMap((workflow:any)=>['open-source','commercial-web'].flatMap(host=>[1,2,3].filter(repetition=>!unknown(host,workflow.id,repetition)).slice(0,2).map(repetition=>({workflow:workflow.id,host,repetition}))));
+campaign.ledger.cohorts??=[];const priorCohort=campaign.ledger.cohorts.find((c:any)=>c.id===cohort);
+if(priorCohort)assert.deepEqual(priorCohort.sourceCommits,sources.map(s=>s.commit),'Cohort source changed; choose a new cohort without resetting the budget');
+else campaign.ledger.cohorts.push({id:cohort,sourceCommits:sources.map(s=>s.commit),fixtureFile:path.basename(fixtureFile),slots,expected:12,reservePolicy:'Use two preplanned independent wording variants per host/workflow; original unknown journeys never retry. At most three distinct variants are available.'});
+const activeSlots=priorCohort?.slots??slots;
 await campaign.persist();
 const save=async(file:string,value:unknown)=>fs.writeFile(file,JSON.stringify(value,null,2)+'\n',{flag:'wx',mode:0o600});
 try{
  if(!live){await save(path.join(root,`ready-${Date.now()}.json`),{ready:true,source:sources,fixtures:fixture.workflows.map((w:any)=>({id:w.id,turns:w.variants[0].length})),providerRequests:0});console.log(JSON.stringify({mode:'reference-preparation',ready:true,providerRequests:0,root}));}
- else workflowCases: for(let repetition=1;repetition<=2;repetition++)for(const workflow of fixture.workflows)for(const host of(repetition%2?['open-source','commercial-web']:['commercial-web','open-source'])){
+ else workflowCases: for(let repetition=1;repetition<=3;repetition++)for(const workflow of fixture.workflows)for(const host of(repetition%2?['open-source','commercial-web']:['commercial-web','open-source'])){
+  if(!activeSlots.some((s:any)=>s.workflow===workflow.id&&s.host===host&&s.repetition===repetition))continue;
   if(option('--case',workflow.id)!==workflow.id||option('--host',host)!==host||option('--repetition',String(repetition))!==String(repetition))continue;
   if(signal.signal.aborted)throw signal.signal.reason;
   const caseId=`${cohort}-${workflow.id}-${host}-${repetition}`;if(campaign.ledger.trials.some((t:any)=>t.caseId===caseId))continue;
   if(campaign.ledger.requests.some((r:any)=>r.phase==='unknown'&&r.host===host&&r.scenario===workflow.id&&r.repetition===repetition)){campaign.ledger.trials.push({caseId,status:'blocked-by-original-unknown',workflow:workflow.id,host,repetition});await campaign.persist();continue;}
   assert(await unchanged(),'Frozen candidate changed');
   const directory=path.join(root,caseId);await fs.mkdir(directory,{mode:0o700});
-  const trial:any={caseId,workflow:workflow.id,host,repetition,cohort,sourceCommits:sources.map(s=>s.commit),status:'running',startedAt:new Date().toISOString(),turns:[]};campaign.ledger.trials.push(trial);await campaign.persist();
+  const trial:any={caseId,workflow:workflow.id,host,repetition,cohort,sourceCommits:sources.map(s=>s.commit),fixtureFile:path.basename(fixtureFile),status:'running',startedAt:new Date().toISOString(),turns:[]};campaign.ledger.trials.push(trial);await campaign.persist();
   let local:any,document=structuredClone(workflow.document),history:any[]=[],manual:any;
   const guarded={get identity(){return campaign.model.identity},complete:async(...args:any[])=>{assert(await unchanged(),'Frozen candidate changed');return campaign.model.complete(...args)}};
   try{
@@ -52,7 +59,7 @@ try{
     if(!grade.passed||!entry.export)break;
    }
    trial.status=trial.turns.length===workflow.variants[repetition-1].length&&trial.turns.every((t:any)=>t.status==='exported-awaiting-independent-review')?'exported-awaiting-independent-review':'incomplete';
-  }catch(error:any){trial.status='failed';trial.error=String(error.message).slice(0,2000);console.log(JSON.stringify({caseId,status:trial.status,error:trial.error}));if(/budget exhausted|Three independent provider failures|Frozen candidate changed/.test(trial.error))throw error}
+  }catch(error:any){trial.status='failed';trial.error=String(error.message).slice(0,2000);const unfinished=trial.turns.at(-1);if(unfinished?.status==='running'){unfinished.status='failed';unfinished.error=trial.error;}console.log(JSON.stringify({caseId,status:trial.status,error:trial.error}));if(/budget exhausted|Three independent provider failures|Frozen candidate changed/.test(trial.error))throw error}
   finally{await local?.close();trial.finishedAt=new Date().toISOString();await campaign.persist()}
   if(process.argv.includes('--stop-on-failure')&&trial.status!=='exported-awaiting-independent-review')break workflowCases;
  }

@@ -48,7 +48,7 @@ stop the run: a lost response is not permission to repeat potentially paid work.
 The standalone loop defaults to eight model steps and 24 tool calls. The local
 application's staged profile instead uses bounded per-stage and total allowances;
 starting another phase or answering a question does not reset the original budget.
-The local host also enforces a three-minute deadline. Cancellation reaches the
+New local-v14 runs use a three-minute inactivity deadline and a fifteen-minute active-work ceiling, with the original call/token budgets. Older saved runs retain their previous deadline. Cancellation reaches the
 model's fetch request, and the host checks again before storing a completed proposal.
 
 Dependent editing uses the existing stage coordinator, not a general workflow
