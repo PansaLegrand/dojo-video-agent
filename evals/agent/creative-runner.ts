@@ -368,6 +368,7 @@ export async function createOpenSourceCreativeSession(options: {
   model: LanguageModel;
   skillsDirectory: string;
   useCurrentLocalCatalog?: boolean;
+  browser?: NonNullable<ConstructorParameters<typeof AgentService>[7]>["browser"];
   signal: AbortSignal;
 }) {
   const store = new ProjectStore(options.directory);
@@ -399,7 +400,7 @@ export async function createOpenSourceCreativeSession(options: {
     "review",
     undefined,
     "local-editor-v14",
-    catalog ? {newRunSkills:catalog.newRunSkills} : {},
+    { ...(catalog ? {newRunSkills:catalog.newRunSkills} : {}), ...(options.browser ? {browser:options.browser} : {}) },
   );
   async function settle(id: string): Promise<StoredRun> {
     const deadline = Date.now() + 210_000;

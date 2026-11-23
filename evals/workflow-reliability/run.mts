@@ -1,3 +1,4 @@
+import {fixtureSourceHost} from './source-host.mjs';
 import fs from 'node:fs/promises';import path from 'node:path';import {pathToFileURL} from 'node:url';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
 import {workflowFixtures,hash} from './fixtures.mjs';import {allNodes,gradeWorkflow} from './grade.mjs';
 import {openCampaign} from '../creative-r36/campaign-continuation';
@@ -24,7 +25,7 @@ const unknown=(host:string,scenario:string,repetition:number)=>campaign.ledger.r
 const slots=fixture.workflows.flatMap((workflow:any)=>['open-source','commercial-web'].flatMap(host=>[1,2,3].filter(repetition=>!unknown(host,workflow.id,repetition)).slice(0,2).map(repetition=>({workflow:workflow.id,host,repetition}))));
 campaign.ledger.cohorts??=[];const priorCohort=campaign.ledger.cohorts.find((c:any)=>c.id===cohort);
 if(priorCohort)assert.deepEqual(priorCohort.sourceCommits,sources.map(s=>s.commit),'Cohort source changed; choose a new cohort without resetting the budget');
-else campaign.ledger.cohorts.push({id:cohort,sourceCommits:sources.map(s=>s.commit),fixtureFile:path.basename(fixtureFile),slots,expected:12,reservePolicy:'Use two preplanned independent wording variants per host/workflow; original unknown journeys never retry. At most three distinct variants are available.'});
+else campaign.ledger.cohorts.push({id:cohort,sourceCommits:sources.map(s=>s.commit),fixtureFile:path.basename(fixtureFile),graderVersion:'workflow-v2',sourceInspection:'owned-fixture-pixels-v1',slots,expected:12,reservePolicy:'Use two preplanned independent wording variants per host/workflow; original unknown journeys never retry. At most three distinct variants are available.'});
 const activeSlots=priorCohort?.slots??slots;
 await campaign.persist();
 const save=async(file:string,value:unknown)=>fs.writeFile(file,JSON.stringify(value,null,2)+'\n',{flag:'wx',mode:0o600});
@@ -39,22 +40,25 @@ try{
   assert(await unchanged(),'Frozen candidate changed');
   const directory=path.join(root,caseId);await fs.mkdir(directory,{mode:0o700});
   const trial:any={caseId,workflow:workflow.id,host,repetition,cohort,sourceCommits:sources.map(s=>s.commit),fixtureFile:path.basename(fixtureFile),status:'running',startedAt:new Date().toISOString(),turns:[]};campaign.ledger.trials.push(trial);await campaign.persist();
+  const sourceHost=fixtureSourceHost(fixture.files,path.join(directory,'source-inspections'))!;
   let local:any,document=structuredClone(workflow.document),history:any[]=[],manual:any;
   const guarded={get identity(){return campaign.model.identity},complete:async(...args:any[])=>{assert(await unchanged(),'Frozen candidate changed');return campaign.model.complete(...args)}};
   try{
    campaign.setContext({host,scenario:workflow.id,repetition,turn:1});
-   if(host==='open-source')local=await createOpenSourceCreativeSession({scenario:{id:caseId,document},directory:path.join(directory,'store'),model:guarded,skillsDirectory:path.join(agent,'skills'),useCurrentLocalCatalog:true,signal:signal.signal});
+   if(host==='open-source')local=await createOpenSourceCreativeSession({scenario:{id:caseId,document},directory:path.join(directory,'store'),model:guarded,skillsDirectory:path.join(agent,'skills'),useCurrentLocalCatalog:true,browser:sourceHost,signal:signal.signal});
    for(const [index,instruction]of workflow.variants[repetition-1].entries()){
     const turn=index+1;campaign.setContext({host,scenario:workflow.id,repetition,turn});
     if(workflow.id==='chart'&&turn===2){const labels=allNodes(document).filter(({node}:any)=>(node.text??'').trim()==='W1');assert.equal(labels.length,1,'Manual edit needs one actual authored W1 label');manual={itemId:labels[0].item.id,nodeId:labels[0].node.id};const commands:any[]=[{type:'set',target:{kind:'node',...manual},path:['text'],value:'Week one'},{type:'set',target:{kind:'node',...manual},path:['style','color'],value:'#86DAD6'}];document=local?(await local.manualEdit(commands)).document:executeVideoProjectCommands(document,commands).document;await save(path.join(directory,'manual-edit.json'),{manual,commands,document});}
     const td=path.join(directory,'turn-'+turn);await fs.mkdir(td);const before=structuredClone(document),entry:any={turn,instruction,status:'running',requestStart:campaign.budget.requests.length};trial.turns.push(entry);await campaign.persist();await save(path.join(td,'before.json'),before);console.log(JSON.stringify({caseId,turn,status:'authoring',requests:campaign.budget.requests.length,accountedUsd:campaign.budget.accountedUsd}));
-    const result=local?await local.run(instruction,turn):await adapter.runCreativeWebTurn({document,instruction,history,model:guarded,signal:signal.signal,qualificationPolicy:'workflow-v1'});
+    assert(await unchanged(),'Frozen candidate changed');
+    const result=local?await local.run(instruction,turn):await adapter.runCreativeWebTurn({document,instruction,history,model:guarded,signal:signal.signal,qualificationPolicy:'workflow-v1',sourceInspection:sourceHost});
     await save(path.join(td,'result.json'),result);document=result.document;history=result.history;await save(path.join(td,'document.json'),document);await save(path.join(td,'scene.json'),result.scene);entry.status='authored';entry.requests=campaign.budget.requests.length-entry.requestStart;entry.outcome=result.result.outcome;entry.reviewed=result.result.reviewed;await campaign.persist();
     assert.equal(result.result.outcome,'edit','A requested edit did not finish');assert(result.result.reviewed,'Edit has no successful native review');
+    assert(await unchanged(),'Frozen candidate changed');
     const grade=gradeWorkflow({workflow:workflow.id,turn,before,after:document,initial:workflow.document,manual});await save(path.join(td,'grade.json'),grade);entry.grade=grade;entry.status=grade.passed?'semantics-passed':'semantic-failure';await campaign.persist();
     // Export saved paid candidates even when semantic grading fails. Never repair
     // them in the harness or relabel failure as autonomous success.
-    const render=path.join(td,'render');try{execFileSync(process.execPath,[path.join(web,'scripts/render-workflow-qualification.mjs'),path.join(td,'document.json'),fixtureFile,render,path.join(td,'scene.json')],{cwd:web,stdio:['ignore','pipe','pipe'],timeout:300000,maxBuffer:8*1024*1024});entry.export=JSON.parse(await fs.readFile(path.join(render,'report.json'),'utf8'));entry.status=grade.passed?'exported-awaiting-independent-review':'exported-semantic-failure';}catch(e:any){entry.renderError=String(e.message).slice(0,2000);entry.status='render-failure';}
+    const render=path.join(td,'render');assert(await unchanged(),'Frozen candidate changed');try{execFileSync(process.execPath,[path.join(web,'scripts/render-workflow-qualification.mjs'),path.join(td,'document.json'),fixtureFile,render,path.join(td,'scene.json')],{cwd:web,stdio:['ignore','pipe','pipe'],timeout:300000,maxBuffer:8*1024*1024});entry.export=JSON.parse(await fs.readFile(path.join(render,'report.json'),'utf8'));entry.status=grade.passed?'exported-awaiting-independent-review':'exported-semantic-failure';}catch(e:any){entry.renderError=String(e.message).slice(0,2000);entry.status='render-failure';}
     await campaign.persist();console.log(JSON.stringify({caseId,turn,status:entry.status,requests:campaign.budget.requests.length,accountedUsd:campaign.budget.accountedUsd}));
     if(!grade.passed||!entry.export)break;
    }

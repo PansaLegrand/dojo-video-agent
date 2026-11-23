@@ -35,7 +35,7 @@ This is 12 workflow chains / 24 model-directed turns. Outcomes require native
 review, unchanged original/manual content where requested, independent numerical
 and source-window checks, exact saved-candidate rendering, full FFmpeg decoding,
 automated normal-speed playback and a separate sampled visual/translation review.
-The original R36 grader/rubric remain unchanged. The new workflow-v1 oracle adds
+The original R36 grader/rubric remain unchanged. The new workflow-v2 oracle adds
 explicit portrait-walkthrough and source-window checks. A source-only/string-only
 check cannot substitute for rendered output. Sampled visual review does not certify
 continuous aesthetics/audio or human preference. The original R34/R36 comparison
@@ -92,3 +92,40 @@ original reports. Three wording variants are prepared per workflow. It selects
 two independent, unblocked variants per host/workflow; local chart uses variants
 2 and 3 because variant 1 has the original unknown outcome. This is not a retry
 of the uncertain request, and results are not pooled across candidate cohorts.
+
+
+## Second pilot retained; canonical property candidate
+
+The `progress-v1` local chart pilot completed six more known requests (11 total).
+It returned advice without applying the requested chart: a review requirement
+compared `1/3` with the document's canonical 15-significant-digit representation.
+Both draft and frozen requirement contained the same intended coordinate, but
+only the document was normalized. All six requests and the failed outcome are
+retained. Current accounted usage is US$2.144044: US$1.0003595 known and the
+unchanged US$1.1436845 unknown reservation from the initial pilot.
+
+The next candidate freezes `propertyValues: document-canonical-v1` in new runs.
+Both sides use the existing document normalizer; this adds no epsilon, type
+coercion or requirement rewriting. Review, Apply and recovery carry the flag.
+Absent flags preserve old behavior; commercial dispatch requires the new worker
+capability. Tests reject genuinely changed coordinates and number/string drift.
+Controlled revalidation of the saved draft passed native review and actual export
+(`canonical-paid-chart-diagnostic`, SHA-256
+`ba3edf2c84e7ab1822ecafa31771b875d9cdf031c8848426c2e045826c5f6b6c`).
+That diagnostic is a recovered draft, not an autonomous qualification pass.
+
+The separately frozen `canonical-v1` cohort continues the same budget and keeps
+both failed cohorts. It grants the existing source-inspection tools access only
+to hash-verified task-owned fixture files, with bounded JPEGs and exact source
+PTS. Trusted visual transport hydrates receipt-bound pixels; tool observations
+contain metadata only. This exercises actual model image input, without claiming
+production consent or candidate-preview/UI wake behavior. The no-provider control
+`node --import tsx evals/workflow-reliability/verify-source-host.mts` verifies image
+and video pixels, owned hashes, hydration and rejection of forged receipts.
+
+Before any walkthrough was dispatched, `workflow-v2` strengthens the new oracle
+to require real image/plane references rather than unused asset strings.
+Independent review derives all samples directly from the hash-verified MP4 and
+uses a chronological sheet, full-size frames at 20/40/60/80 percent, the last
+encoded frame, and original screen references. This grader change is explicit;
+R36 remains untouched and no failed paid output is reclassified.

@@ -46,7 +46,10 @@ export function gradeWorkflow(input:{workflow:string;turn:number;before:any;afte
   const screenIds=Object.entries(initial.assets).filter(([,asset]:any)=>['capture.png','organize.png','share.png'].includes(asset.name)).map(([id])=>id);
   const planeScreens=three.flatMap(({node})=>{const p=node.extension.params;if(p.camera?.kind!=='perspective')return[];return Object.values(p.objects??{}).filter((o:any)=>o.geometry?.kind==='plane').map((o:any)=>p.materials?.[o.materialId]?.mapAssetId).filter(Boolean)});
   check('true-perspective',screenIds.some(id=>planeScreens.includes(id)),{nodes:three.map(({node})=>node.id),planeScreens});
-  const used=JSON.stringify(after.items);for(const [id,asset]of Object.entries(initial.assets)as any[])if(['capture.png','organize.png','share.png'].includes(asset.name))check('screen:'+asset.name,used.includes(id),id);
+  for(const [id,asset]of Object.entries(initial.assets)as any[])if(['capture.png','organize.png','share.png'].includes(asset.name)){
+   const referenced=nodes.some(({node})=>node.type==='img'&&node.assetId===id)||three.some(({node})=>Object.values(node.extension.params.objects??{}).some((object:any)=>object.kind==='mesh'&&object.geometry?.kind==='plane'&&node.extension.params.materials?.[object.materialId]?.mapAssetId===id));
+   check('screen:'+asset.name,referenced,'Referenced by an actual image node or textured plane, not an unused material string');
+  }
   if(turn===2){const normalized=structuredClone(after);for(const {node}of allNodes(normalized))if(copy(node)==='Bring the right ideas together')node.text='Organize your next move';check('copy-only-followup',same(before,normalized),'Only second-stage text changes');}
   if(turn===3){const prior=allNodes(before).filter(({node})=>copy(node).trim());check('portrait-preserves-text-identity',prior.every(({node,item})=>nodes.some(row=>row.item.id===item.id&&row.node.id===node.id&&copy(row.node)===copy(node))),prior.map(({node})=>node.id));}
  }else{
@@ -67,5 +70,5 @@ export function gradeWorkflow(input:{workflow:string;turn:number;before:any;afte
   const captions=after.items.filter((i:any)=>i.caption);check('caption-languages',captions.some((i:any)=>/^en(?:-|$)/i.test(i.caption.language??''))&&captions.some((i:any)=>/^es(?:-|$)/i.test(i.caption.language??''))&&captions.every((i:any)=>i.caption.role==='original'?/^en(?:-|$)/i.test(i.caption.language??''):/^es(?:-|$)/i.test(i.caption.language??'')),captions.map((i:any)=>({language:i.caption.language,role:i.caption.role})));check('bilingual-pairs',captions.length>=4&&captions.every((i:any)=>i.caption.pairedItemId&&captions.some((p:any)=>p.id===i.caption.pairedItemId&&p.caption.pairedItemId===i.id)),captions.map((i:any)=>({id:i.id,language:i.caption.language,pair:i.caption.pairedItemId})));
   const callouts=nodes.filter(({node})=>copy(node).trim()==='Andrew Ng');check('phrase-callout',callouts.length>0&&Object.values(after.bindings).some((b:any)=>callouts.some(({item})=>item.id===b.itemId&&item.node.duration>=27)&&b.wordIds?.length>=2&&Object.values(initial.evidence).some((e:any)=>e.words.filter((w:any)=>b.wordIds.includes(w.id)).map((w:any)=>w.text).join(' ').toLowerCase()==='andrew ng')),callouts.map(({node})=>node.id));
  }
- return{version:'workflow-v1',passed:checks.every(c=>c.passed),checks,visualReviewRequired:true,semanticTranslationReviewRequired:workflow==='speech',rubric};
+ return{version:'workflow-v2',passed:checks.every(c=>c.passed),checks,visualReviewRequired:true,semanticTranslationReviewRequired:workflow==='speech',rubric};
 }
