@@ -682,38 +682,11 @@ export async function createLocalApi() {
             }
           }),
         );
-      if (["undo", "redo"].includes(parts[3]) && method === "POST") {
-        const v = z
-          .object({
-            operationId: z.string(),
-            baseRevision: z.number(),
-            baseHash: z.string(),
-          })
-          .parse(await input(req));
-        return json(
-          res,
-          await store.transaction(id, async (p) => {
-            const hash = canonicalSerialize({ action: parts[3], ...v }),
-              prior = p.receipts[v.operationId];
-            if (prior) {
-              if (prior.hash !== hash)
-                throw new HttpError("Operation ID reused.", 409);
-              return prior.snapshot;
-            }
-            if (v.baseRevision !== p.revision || v.baseHash !== p.documentHash)
-              throw new HttpError("Save before changing history.", 409);
-            const from = parts[3] === "undo" ? p.past : p.future,
-              to = parts[3] === "undo" ? p.future : p.past,
-              next = from.pop();
-            if (!next)
-              throw new HttpError("No history in this direction.", 409);
-            to.push(p.document);
-            await commitDocument(p, next, false);
-            const result = snapshot(p);
-            p.receipts[v.operationId] = { hash, snapshot: result };
-            return result;
-          }),
-        );
+      if (["undo", "redo"].includes(parts[3]) && method === "POST")
+        return json(res, await store.history(id, parts[3] as "undo" | "redo", await input(req)));
+      if (parts[3] === "external-media" && process.env.DOJO_MCP === "1") {
+        if (method === "GET") return json(res, await externalAgent.lifecycle.mediaRequests(id));
+        if (method === "POST" && parts[4]) return json(res, await externalAgent.lifecycle.finishMedia(id, identifier.parse(parts[4]), await input(req)));
       }
       if (parts[3] === "sources") {
         if (parts[4] === "register" && method === "POST") {

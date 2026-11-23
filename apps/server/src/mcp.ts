@@ -10,6 +10,13 @@ export function localMcpOrigin(raw:string){const url=new URL(raw);if(url.protoco
 const projectId=z.string().uuid(),args=z.record(z.string(),z.unknown()),basis={projectId,expectedRevision:z.number().int().nonnegative(),documentHash:z.string().regex(/^sha256:[a-f0-9]{64}$/)};
 const reader=z.object({projectId,args:args.default({})}).strict();
 const definitions = [
+ {name:'dojo_create_project',description:'Create one empty local project. Repeating operationId with identical inputs returns the same project. Does not import files or invoke a provider.',schema:z.object({name:z.string().min(1).max(100),operationId:z.string().min(1).max(191)}).strict(),read:false},
+ {name:'dojo_rename_project',description:'Rename the local project only when revision/hash and expectedName still match. Timeline contents are preserved.',schema:z.object({...basis,operationId:z.string().min(1).max(191),expectedName:z.string().max(100),name:z.string().min(1).max(100)}).strict(),read:false},
+ ...['dojo_history','dojo_list_sources'].map(name=>({name,description:name==='dojo_history'?'Read available Undo/Redo counts for the current revision.':'List registered source metadata without private URLs or filesystem paths. Browser availability remains separate.',schema:z.object({projectId}).strict(),read:true})),
+ ...['dojo_undo','dojo_redo'].map(name=>({name,description:'Perform one explicit '+name.slice(5)+' through the ordinary revision-guarded history. Never repeats or reverses a provider job.',schema:z.object({...basis,operationId:z.string().min(1).max(191)}).strict(),read:false})),
+ {name:'dojo_request_media_import',description:'Ask the user to choose local media in the open browser. This queues a visible file-picker handoff; it does not read arbitrary paths, upload media or start paid work. Read its receipt after the user acts.',schema:z.object({...basis,operationId:z.string().min(1).max(191),purpose:z.string().min(1).max(500)}).strict(),read:false},
+ {name:'dojo_read_media_import',description:'Read a queued media-import handoff and exact imported source IDs. Pending or cancelled does not mean files were imported.',schema:z.object({projectId,requestId:z.string().uuid()}).strict(),read:true},
+
  {name:'dojo_list_projects',description:'List projects owned by the running local editor. No cloud account or filesystem access.',schema:z.object({}).strict(),read:true},
  ...[
  ['inspect_project','Inspect the current owned project, snapshot, selection targets and saved Brand Kit. Pass args.itemIds for full selected nodes.'],

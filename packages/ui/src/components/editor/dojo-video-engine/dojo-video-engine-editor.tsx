@@ -1,5 +1,6 @@
 "use client";
 
+import { EditorPortableProject } from "./editor-portable-project";
 import { EditorMissingMedia } from "./editor-missing-media";
 import { buildEditorMediaInsertions } from "./editor-media-insertion";
 import { createEditorImportBatch, editorImportBatchKey, importEntryFinished, matchEditorImportFiles, restoreEditorImportBatch, runEditorImportBatch, type EditorImportBatch } from "./editor-import-batch";
@@ -1011,6 +1012,7 @@ export default function DojoVideoEngineEditor({
         </div>
         <div className="editor-header-actions">
           {renderProjectActions?.({ projectId, controller })}
+          <EditorPortableProject projectId={projectId} controller={controller} name={projectName} sources={sources} locale={locale} onImported={urls=>setSources(previous=>({...previous,...urls}))} />
           {workspace.document && <EditorBrandKit document={workspace.document} disabled={disabled} onSave={async (kit, expected) => {
             await controller.flush();
             const current = controller.getState().document;

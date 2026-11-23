@@ -1,3 +1,4 @@
+import { ExternalLifecycle } from "./external-lifecycle";
 import { NativeAgentDiagnosticError } from "../../../packages/core/src/lib/video-project/agent-diagnostics";
 import { randomUUID } from "node:crypto";
 import { z } from "zod/v3";
@@ -28,7 +29,8 @@ function assertBasis(project:Project,input:z.infer<typeof basis>){if(project.rev
 function externalRun(project:Project,id:string){const run=runOf(project,id);if(!run.externalAgent)throw new HttpError("This review belongs to another editing workflow.",409);return run}
 /** Local authority shared by the stdio bridge and existing browser. No model calls. */
 export class ExternalAgentService {
- constructor(private store:ProjectStore,private agent:AgentService,private browser:LocalBrowserRequests,private skills:Skill[]=builtInSkills()){}
+ readonly lifecycle: ExternalLifecycle;
+ constructor(private store:ProjectStore,private agent:AgentService,private browser:LocalBrowserRequests,private skills:Skill[]=builtInSkills()){this.lifecycle=new ExternalLifecycle(store)}
  async state(projectId:string){const project=await this.store.read(identifier.parse(projectId));return {enabled:true,stateKey:await completionHash({documentHash:project.documentHash,revision:project.revision,runs:project.runs.filter(run=>run.externalAgent).map(run=>({id:run.id,status:run.status,outputRequests:run.outputRequests,requests:Object.values(project.browserRequests?.[run.id]??{}).map(row=>({status:row.status,receipt:!!row.receipt,error:row.error}))}))})};}
  async list(){return {projects:await this.store.list(),coverage:"all-local-projects" as const}}
  async read(tool:typeof externalReadTools[number],raw:unknown,signal:AbortSignal){
@@ -81,6 +83,7 @@ export class ExternalAgentService {
  async readPreview(raw:unknown){const input=z.object({projectId:identifier,reviewId:identifier,requestId:z.string().min(1).max(191)}).strict().parse(raw);externalRun(await this.store.read(input.projectId),input.reviewId);return this.browser.receipt(input.projectId,input.reviewId,input.requestId)}
  async call(name:string,raw:unknown,signal:AbortSignal){
   signal.throwIfAborted();if(raw===undefined)throw new HttpError('Tool input is required.',400);if(Buffer.byteLength(JSON.stringify(raw))>256*1024)throw new HttpError('External tool input exceeds its allowance.',413);
+  if(this.lifecycle.handles(name))return this.lifecycle.call(name,raw);
   if(name==='dojo_list_projects'){z.object({}).strict().parse(raw);return this.list()}
   if(name==='dojo_prepare_blueprint_graphic'){
    const input=z.object({projectId:identifier,itemId:operation,trackId:operation,from:z.number().int().nonnegative(),duration:z.number().int().min(1).max(18000),params:z.record(z.unknown())}).strict().parse(raw);

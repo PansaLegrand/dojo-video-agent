@@ -343,3 +343,6 @@ export async function uploadLocalVideoSource(
     signal,
   });
 }
+
+/** Reuse ordinary browser media admission when opening a portable package. */
+export { probeEditorMedia as probeLocalMedia };

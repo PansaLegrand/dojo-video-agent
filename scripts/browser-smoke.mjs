@@ -1,3 +1,4 @@
+import { verifyPortableProject } from "./lib/portable-project-browser-proof.mjs";
 import { verifyExternalAgent } from "./lib/external-agent-browser-proof.mjs";
 import {
   graphicsReply,
@@ -328,6 +329,7 @@ checksBlock: try {
       body: '<html><body style="background:#000;color:#fff">Tutorial</body></html>',
     }),
   );
+  if (process.env.PORTABLE_ONLY === "1") { await verifyPortableProject({page,api,base,tmp,output,check,counts:()=>({modelCalls,asrCalls})});check("no browser exceptions",errors.length===0);break checksBlock; }
   if (process.env.MCP_ONLY === "1") { await verifyExternalAgent({page,api,base,output,check,counts:()=>({modelCalls,asrCalls})});check("no browser exceptions",errors.length===0);break checksBlock; }
   if (process.env.GRAPHICS_ONLY === "1") {
     await verifyGraphics({ page, api, base, tmp, output, check });
@@ -769,6 +771,7 @@ checksBlock: try {
   await savedCard.getByTitle("Delete").click();
   await until(async () => (await api("/api/projects")).length === 0);
   check("product delete action archives the local project", true);
+  await verifyPortableProject({page,api,base,tmp,output,check,counts:()=>({modelCalls,asrCalls})});
   await verifyExternalAgent({page,api,base,output,check,counts:()=>({modelCalls,asrCalls})});
   await verifyBasicWorkflow({
     page,

@@ -8,7 +8,7 @@ import {
   readdir,
 } from "node:fs/promises";
 import path from "node:path";
-import { randomUUID } from "node:crypto";
+import { randomUUID, createHash } from "node:crypto";
 import { z } from "zod/v3";
 import {
   createVideoProjectDocument,
@@ -64,6 +64,7 @@ export const commitInput = z
     baseRevision: z.number().int().nonnegative(),
     baseHash: z.string(),
     commands: videoProjectCommandsSchema,
+    requireExactBasis: z.literal(true).optional(),
     summary: z.string().max(2000).optional(),
     captionSegmentation: captionSegmentationReceiptSchema.optional(),
   })
@@ -114,6 +115,9 @@ export type Project = {
   id: string;
   name: string;
   description?: string;
+  externalCreationHash?: string;
+  externalOperations?: Record<string, { hash: string; result: unknown }>;
+  externalMediaImports?: Record<string, { id: string; purpose: string; status: "pending" | "completed" | "cancelled"; sourceIds: string[] }>;
   updatedAt?: string;
   revision: number;
   documentHash: string;
@@ -196,7 +200,7 @@ export class ProjectStore {
         }),
     );
   }
-  async create(name = "Untitled video") {
+  async create(name = "Untitled video", identity?: { id: string; hash: string }) {
     const document = createVideoProjectDocument({
       width: 1280,
       height: 720,
@@ -204,7 +208,8 @@ export class ProjectStore {
       durationInFrames: 180,
     });
     const p: Project = {
-      id: randomUUID(),
+      id: identity?.id ?? randomUUID(),
+      ...(identity ? { externalCreationHash: identity.hash } : {}),
       name,
       document,
       documentHash: await hashVideoProjectDocument(document),
@@ -219,6 +224,29 @@ export class ProjectStore {
     };
     await this.save(p);
     return p;
+  }
+  async createExternal(name: string, operationId: string) {
+    const hash = createHash("sha256").update(canonicalSerialize({name,operationId})).digest("hex");
+    const key = createHash("sha256").update("dojo-external-project:"+operationId).digest("hex");
+    const id = `${key.slice(0,8)}-${key.slice(8,12)}-4${key.slice(13,16)}-a${key.slice(17,20)}-${key.slice(20,32)}`;
+    return this.serialized(id, async () => {
+      try { const prior = await this.readSnapshot(id); if (prior.externalCreationHash !== hash) throw new HttpError("Creation operation belongs to different inputs.",409); return prior; }
+      catch(error) { if (!(error instanceof HttpError) || error.status !== 404) throw error; }
+      const archived = await readdir(path.join(this.directory,"trash")).catch((error: NodeJS.ErrnoException) => { if(error.code === "ENOENT") return []; throw error; });
+      if(archived.some(file=>file.startsWith(id+"-"))) throw new HttpError("The project created by this operation was archived. Use a new creation operation.",409);
+      return this.create(name,{id,hash});
+    });
+  }
+  async history(id: string, action: "undo" | "redo", raw: unknown) {
+    const input = z.object({operationId:z.string().min(1).max(191).refine(id=>!["__proto__","constructor","prototype"].includes(id)),baseRevision:z.number().int().nonnegative(),baseHash:z.string().regex(/^sha256:[a-f0-9]{64}$/)}).strict().parse(raw);
+    return this.transaction(id,async p=>{
+      const hash=canonicalSerialize({action,...input}),prior=Object.hasOwn(p.receipts,input.operationId)?p.receipts[input.operationId]:undefined;
+      if(prior){if(prior.hash!==hash)throw new HttpError("Operation ID reused.",409);return prior.snapshot;}
+      if(input.baseRevision!==p.revision||input.baseHash!==p.documentHash)throw new HttpError("Save before changing history.",409);
+      const from=action==="undo"?p.past:p.future,to=action==="undo"?p.future:p.past,next=from.pop();
+      if(!next)throw new HttpError("No history in this direction.",409);
+      to.push(p.document);await commitDocument(p,next,false);const result=snapshot(p);p.receipts[input.operationId]={hash,snapshot:result};return result;
+    });
   }
   async save(p: Project) {
     p.updatedAt = new Date().toISOString();
@@ -306,6 +334,7 @@ export class ProjectStore {
           );
         return prior.snapshot;
       }
+      if (input.requireExactBasis && (input.baseRevision !== p.revision || input.baseHash !== p.documentHash)) throw new HttpError("The project changed during import. Use a new empty project.",409,"REVISION_CONFLICT");
       const base = p.versions[String(input.baseRevision)];
       if (!base || (await hashVideoProjectDocument(base)) !== input.baseHash)
         throw new HttpError(

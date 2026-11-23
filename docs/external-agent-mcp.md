@@ -28,6 +28,24 @@ Open a local project and choose **Copy for Agent**. The control waits for pendin
 
 ## Available tools
 
+- `dojo_create_project`, `dojo_rename_project`, `dojo_history`, `dojo_undo`, `dojo_redo`
+- `dojo_list_sources`, `dojo_request_media_import`, `dojo_read_media_import`
+
+Creation uses an idempotent operation ID. Rename also checks the previous name;
+history changes require the exact revision/hash and never repeat provider jobs.
+An archived project cannot be recreated by replaying its creation operation.
+Media import is a durable browser handoff: the user chooses local files in the
+open editor, then the receipt returns their exact source IDs. It grants no
+filesystem-path access, cloud upload or generation permission. The registered
+source reader omits private URLs and reports browser availability as unknown.
+
+The editor's **Project package** action also exports/imports editable projects
+with media and registered font files. Import requires an empty project and one
+exact-basis transaction. Imported captions remain editable, while fresh speech
+cuts require fresh trusted evidence. See the source milestone in the readiness
+ledger; this is local source support, not a hosted MCP endpoint.
+
+
 - `dojo_list_projects`, `dojo_inspect_project`, `dojo_list_assets`
 - `dojo_read_caption_cues`, `dojo_read_caption_track`, `dojo_search_transcript`
 - `dojo_read_skill`, `dojo_inspect_graphics_schema`

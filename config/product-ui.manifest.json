@@ -1,7 +1,7 @@
 {
   "version": 1,
   "sourceRepository": "dojo-video-web",
-  "sourceCommit": "e999647f50bbba027506896c3d8366af211b263d",
+  "sourceCommit": "32fb3794556e347a4a9dab6d144bbbf1915583b7",
   "transforms": [
     "engine namespace/path rename",
     "local user import boundary",
@@ -418,6 +418,12 @@
       "outputHash": "62eb1a050c660ca64fd968a5cb2ea832998fc5e64713348b7e4bb5ffe856026c"
     },
     {
+      "source": "components/editor/motionforge/editor-portable-project.tsx",
+      "target": "packages/ui/src/components/editor/dojo-video-engine/editor-portable-project.tsx",
+      "sourceHash": "161fae360ef49ee6fdd67902b2ca0c6cb41cb77584569dba07d0ce7a3998d104",
+      "outputHash": "161fae360ef49ee6fdd67902b2ca0c6cb41cb77584569dba07d0ce7a3998d104"
+    },
+    {
       "source": "components/editor/motionforge/editor-presets.ts",
       "target": "packages/ui/src/components/editor/dojo-video-engine/editor-presets.ts",
       "sourceHash": "27c7101735b0a2793fc7e8ea531ab4cb8d62bf62996ed6a527925654c2977489",
@@ -588,8 +594,8 @@
     {
       "source": "components/editor/motionforge/motionforge-editor.tsx",
       "target": "packages/ui/src/components/editor/dojo-video-engine/dojo-video-engine-editor.tsx",
-      "sourceHash": "1151a8d2ba606c1a5ea829f831c6373c0e61f0ba64608f333ad64d91f806b17d",
-      "outputHash": "29eb532e3885b821b2ca792b93e67b41ebaeb20c1fb151417e5a3e7a00f7c34f"
+      "sourceHash": "baa71b90cff1987071cf3fd6704b01fab2cd5d87060d6b287e2b1f7c05c2bf65",
+      "outputHash": "091f1ad31479288cc0ba524d6f4158b4fa9f21a5e9888e94a0a03ce32c115b31"
     },
     {
       "source": "components/editor/motionforge/native-editor-copy-locales.ts",
