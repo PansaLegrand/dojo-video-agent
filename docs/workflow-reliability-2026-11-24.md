@@ -131,3 +131,59 @@ Independent review derives all samples directly from the hash-verified MP4 and
 uses a chronological sheet, full-size frames at 20/40/60/80 percent, the last
 encoded frame, and original screen references. This grader change is explicit;
 R36 remains untouched and no failed paid output is reclassified.
+
+
+## Canonical pilot outcomes and speech-scope candidate
+
+The canonical local chart chain completed both turns autonomously, passed native
+review and independent geometry/manual-preservation/slowdown checks, and exported
+and decoded both exact candidates. Independent visual requests 22–23 returned
+`passed: true` and 3/3 hierarchy, readability, composition and ending, but placed
+positive observations and sampling caveats in `issues`. The strict report adapter
+therefore withheld acceptance. Original raw replies and failed normalized reports
+remain intact. `workflow-v3-review-fields` clarifies only that report schema:
+concrete defects belong in `issues`, positive notes in `findings`, sampling caveats
+in `limitations`. `--regrade LABEL` stores a new paid saved-output assessment with
+its revision/rationale and keeps the previous assessment in history and its
+original file. The visual rubric and actual rendered output remain unchanged.
+
+The first canonical speech trial finished with a clarification, not an edit.
+Its full instruction said to preserve **all** original picture in one sentence
+and remove two named fillers in another. The old whole-removal detector joined
+those independent clauses and then rejected the overall preservation/callout
+context as ambiguous. New candidate runs freeze `speechRemovalScope: clause-v1`:
+the removal verb and all/every quantifier must occur in the same sentence before
+all-occurrence enforcement activates. Existing exception, negation, source and
+word-coverage guards still apply; old runs retain their original interpretation.
+Tests cover the actual compound request and retained English/Chinese/Spanish
+negative/qualified removals. The commercial capability gate is explicit.
+
+At this checkpoint: 34 requests, US$3.854998 used/reserved, including the original
+US$1.1436845 unknown reservation. No failed attempt was retried invisibly. The next
+`speech-scope-v1` cohort freezes these source changes and the explicit review-field
+clarification under the same overall cap; original cohorts remain distinct.
+
+
+### Fragment-aware speech checks
+
+Saved-draft replay exposed another independent issue: source cuts split clips and
+rebind callouts, but the old completion checklist still targeted the pre-cut clip.
+The next candidate freezes `speechCompletion: source-fragments-v1`. A host-only
+split observer follows exact command execution; completion verification replays
+the actual review/Apply commands and refuses a mismatched candidate. It does not
+infer lineage from IDs, names or matching media alone. A declared bilingual pair
+must cover every surviving speech fragment with correct host cues and reciprocal
+metadata. A declared callout follows its original genuine words to a proven
+fragment and requires the whole phrase plus the readable hold. Stale split
+captions fail with a bounded host cue manifest for repair. The original failed
+request remains failed; controlled hold/cue regeneration is diagnostic only.
+
+The independent speech oracle now accepts both ISO language identifiers `en`/`eng`
+and `es`/`spa` (`workflow-v3`); the native source captions correctly use `eng`.
+This correction was made before any autonomous speech output reached grading.
+It changes no geometry, source-preservation, translation-fidelity or visual rule.
+The same new oracle also checks original-word coverage and reciprocal bilingual
+placement on every surviving source fragment, rejecting missing or repeated
+uncut source captions. A synthetic counterexample test covers these checks.
+The controlled diagnostic passed the oracle and exact encoded media verification.
+Its source audio and immutable transcript are preserved, with no provider call.
