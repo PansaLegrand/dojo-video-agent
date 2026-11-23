@@ -1,6 +1,6 @@
 import release from "../../../../../config/engine-release.json";
 
-export const supportedReceiptEngines = ["1.2.3", "1.3.0", "1.3.1"] as const;
+export const supportedReceiptEngines = ["1.2.3", "1.3.0", "1.3.1", "1.3.2-rc.0"] as const;
 export type ReceiptEngineVersion = (typeof supportedReceiptEngines)[number];
 
 export function receiptEngineVersion(): ReceiptEngineVersion {
