@@ -25,7 +25,7 @@ import {
 } from "./commands";
 import { NATIVE_TRANSCRIPT_SEARCH_LIMITS } from "./agent-transcript-search";
 import { nativeClarificationSchema } from "./agent-authoring";
-import { editorCapabilityInputSchema } from "./capabilities";
+import { editorCapabilityInputSchema, editorCapabilityDescriptors } from "./capabilities";
 
 const id = z.string().min(1).max(191);
 export const nativeGraphicSchema = z
@@ -422,17 +422,23 @@ export function nativeAgentDescriptorGuide(): string {
 }
 
 /** Reference composite schemas so the existing bounded worker wire stays shallow. */
-function flattenSchemaDefinitions(root: JsonSchema): JsonSchema {
+function flattenSchemaDefinitions(root: JsonSchema, compact = false): JsonSchema {
+  const shared = new Map<string, string>();
   const definitions: Record<string, JsonSchema> = {};
   let serial = 0;
   const reference = (value: JsonSchema): JsonSchema => {
-    if (!value.properties && !value.anyOf && !value.items) return value;
-    const key = `NativeShape${serial++}`;
+    if (!value.properties && !value.anyOf && !value.items) return compact ? visit(value) : value;
+    const signature = compact ? JSON.stringify(value) : "";
+    const prior = compact && shared.get(signature);
+    if (prior) return { $ref: `#/definitions/${prior}` };
+    const key = `${compact ? "S" : "NativeShape"}${serial++}`;
+    if (compact) shared.set(signature, key);
     definitions[key] = visit(value);
     return { $ref: `#/definitions/${key}` };
   };
   const visit = (value: JsonSchema): JsonSchema => ({
     ...value,
+    ...(compact && typeof value.description === "string" && /^(Native object;|A native keyed record;|A JSON value matching)/.test(value.description) ? { description: undefined } : {}),
     ...(value.properties
       ? {
           properties: Object.fromEntries(
@@ -469,11 +475,12 @@ export function nativeAgentResponseSchema(
     clarification?: boolean;
     composition?: boolean;
     anchorHold?: boolean;
+    completeCapabilities?: boolean;
   } = {},
 ): JsonSchema {
   const mode = options.clarification === true;
   const composition = mode || options.composition === true,
-    cacheKey = `${mode}:${composition}:${options.anchorHold === true}`;
+    cacheKey = `${mode}:${composition}:${options.anchorHold === true}:${options.completeCapabilities === true}`;
   if (responseSchemas.has(cacheKey)) return responseSchemas.get(cacheKey)!;
   const descriptors = nativeAgentOperationDescriptors().filter(
     (operation) =>
@@ -514,6 +521,20 @@ export function nativeAgentResponseSchema(
             .holdMs;
       }
   }
+  if (options.completeCapabilities && definitions.applyCapability) {
+    definitions.applyCapability = structuredClone(definitions.applyCapability);
+    const action = shallowSchema(editorCapabilityInputSchema, -1);
+    // Each branch advertises the owning capability's exact parameter grammar.
+    action.anyOf = editorCapabilityDescriptors().map(capability => {
+      const parameters = structuredClone(capability.parameters) as JsonSchema;
+      if ("choices" in capability && capability.choices) {
+        const field = capability.id === "text.font" ? "family" : "preset";
+        (parameters.properties as Record<string, JsonSchema>)[field] = { type: "string", enum: [...capability.choices] };
+      }
+      return { properties: { capability: { const: capability.id }, parameters } };
+    });
+    (definitions.applyCapability.properties as Record<string, JsonSchema>).action = action;
+  }
   definitions.NativeTarget = shallowSchema(videoProjectTargetSchema);
   const envelope = shallowSchema(nativeAgentModelResultSchema);
   const properties = envelope.properties as Record<string, JsonSchema>;
@@ -551,9 +572,9 @@ export function nativeAgentResponseSchema(
     ...envelope,
     required: ["summary", "outcome", "commands"],
     definitions,
-  });
+  }, options.completeCapabilities === true);
   if (JSON.stringify(responseSchema).length > 24_000)
-    throw new Error("Native response schema exceeds its model input budget.");
+    throw new Error(`Native response schema exceeds its model input budget${options.completeCapabilities ? ` (${JSON.stringify(responseSchema).length})` : ""}.`);
   responseSchemas.set(cacheKey, responseSchema);
   return responseSchema;
 }

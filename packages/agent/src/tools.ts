@@ -1,3 +1,4 @@
+import { compactAuthoringFeedback } from "../../core/src/lib/video-project/authoring-feedback";
 import { selectAgentKit, sourceRequirementValidation } from "./runtime-build";
 import { graphicsFeatureGrammar } from "../../core/src/lib/video-project/graphics-feature-grammar";
 import { sourceAudioTrackPresence } from "../../core/src/lib/video-project/source-audio";
@@ -119,6 +120,7 @@ export function createVideoToolset(
       clarification: true,
       composition: true,
       anchorHold: usesCompletionPreflight(options.profile ?? "local-editor-v1"),
+      completeCapabilities: request.authoring?.authoringGuide === "complete-v1",
     }),
     ports: {
       ...(options.focusedGraphicsDiscovery ? { graphicsFeatureGrammar } : {}),
@@ -366,6 +368,12 @@ export function createVideoToolset(
           : undefined;
       return {
         ...tool,
+        ...(request.authoring?.authoringGuide === "complete-v1" && tool.name === "review_edit" ? {
+          execute: async (args: unknown, signal: AbortSignal) => {
+            const result = await tool.execute(args, signal);
+            return result.kind === "observation" ? { ...result, value: compactAuthoringFeedback(result.value) } : result;
+          },
+        } : {}),
         replaySafe:
           (replaySafeNativeToolNames as readonly string[]).includes(
             tool.name,

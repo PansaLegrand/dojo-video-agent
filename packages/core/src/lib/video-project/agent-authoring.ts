@@ -136,6 +136,7 @@ export const chartMacroCatalog = "engine-1.3.0" as const;
 export const nativeAuthoringSchema = z
   .object({
     visualReview: z.literal("sequence-v1").optional(),
+  authoringGuide: z.literal("complete-v1").optional(),
     macroCatalog: z.enum([chartMacroCatalog, kineticMacroCatalog, radialMacroCatalog, walkthroughMacroCatalog, comparisonMacroCatalog, blueprintMacroCatalog]).optional(),
     version: z.literal(1),
     requiredTextLayout: z.enum(["sampled-v1", "sampled-v2"]).optional(),
