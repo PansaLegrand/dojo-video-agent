@@ -309,10 +309,12 @@ async function hashSource(root: string, files: readonly string[]) {
 }
 export async function captureCreativeSource(
   root: string,
-  host: CreativeHost,
+  host: CreativeHost | "commercial-worker",
 ): Promise<CreativeSourceSnapshot> {
   const prefixes =
-    host === "open-source"
+    host === "commercial-worker"
+      ? ["src/shared/video-agent/", "test/", "vendor/"]
+      : host === "open-source"
       ? [
           "packages/",
           "apps/server/",

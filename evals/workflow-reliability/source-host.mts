@@ -33,7 +33,7 @@ export function fixtureSourceHost(files:any[],directory:string):NonNullable<Cons
     }
     const ref:EditorVisualInputRef={version:1,requestRef:{kind:'source-inspection',id,hash:scopeHash},receiptHash:hash(completionCanonical({scope,metadata})),frames:metadata};records.set(id,{ref,frames});await fs.writeFile(path.join(directory,scopeHash+'.json'),JSON.stringify({scope,ref},null,2));return{kind:'observation' as const,value:{visualInput:ref}};
    };
-   return createEditorHostTools<NativeAgentResult>({profile:'local-editor-v14',ports:{inspect_image:input=>inspect(input,false),sample_video_frames:input=>inspect(input,true)}}).map(tool=>({...tool,replaySafe:true,compactionSafe:true}));
+   return createEditorHostTools<NativeAgentResult>({profile:'local-editor-v14',ports:{inspect_image:input=>inspect(input,false),sample_video_frames:input=>inspect(input,true)}}).map(tool=>({...tool,replaySafe:true,compactionSafe:false}));
   },
   model(_projectId,_runId,model){return withLocalVisualInputs(model,async(ref,signal)=>{signal.throwIfAborted();const saved=records.get(ref.requestRef.id);if(!saved||completionCanonical(ref)!==completionCanonical(saved.ref))throw Error('Inspection receipt is not owned by this fixture host.');return saved.frames})},
   previewEvidence:async()=>{throw Error('This source-inspection fixture does not claim candidate-preview evidence.')},

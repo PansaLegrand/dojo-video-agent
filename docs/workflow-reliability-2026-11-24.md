@@ -256,3 +256,29 @@ reads. This preserves all budgets and review criteria; it changes no fixture,
 source pixels, original grader or previous result. The earlier corrected draft
 also passed a separate commercial SDK control with the same document hash as the
 file-backed local Review/Apply control; both controls made zero provider calls.
+
+
+## Commercial tool-policy parity
+
+The first commercial caption-placement trial stopped at request 105 when it asked
+for `words` on an evidence artifact that does not expose that view. This was an
+ordinary reader validation error. The qualification adapter had omitted the
+worker's replay-safety metadata, so the loop misclassified the throw as an unknown
+tool outcome. Production already marks `read_edit_artifact` safe. All 13 model
+requests (93–105) have known usage; no new provider unknown was introduced.
+Current total: 105 requests, US$10.227476 used/reserved.
+
+The adapter now takes the actual worker tool policy, and the driver fingerprints
+and freezes the worker checkout alongside web/agent source. Source-inspection
+compaction metadata also matches that policy. Failure diagnostics retain the
+owned plan, artifacts, checkpoints and exact tool errors, in addition to original
+paid request/reply files. The 13 saved replies were replayed without any provider
+request; both caption batches were reused and the original unsupported view
+became normal repair feedback at the next model step. This is a diagnostic replay,
+not an autonomous completion or replacement of the failed report.
+
+The worker's pure `prepare_text_overlay` helper is additionally replay-safe only
+for new complete-authoring requests, matching the local host. Legacy flags remain
+exact and cannot be upgraded during recovery. Tests exercise reader feedback,
+unsafe executor reconciliation, and refusal to replay an old unsafe checkpoint.
+The next frozen `worker-policy-v1` cohort retains the same cap and earlier reports.

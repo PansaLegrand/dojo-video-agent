@@ -5,18 +5,19 @@ import {openCampaign} from '../creative-r36/campaign-continuation';
 import {createOpenSourceCreativeSession,captureCreativeSource,creativeSourceUnchanged,atomicReport} from '../agent/creative-runner';
 import {executeVideoProjectCommands} from '../../packages/core/src/lib/video-project/commands';
 import {compileVideoProjectDocument} from '../../packages/core/src/lib/video-project/compilation';
-const agent=process.cwd(),web=path.resolve('../dojo-video-web'),live=process.argv.includes('--live');
+const agent=process.cwd(),web=path.resolve('../dojo-video-web'),worker=path.join(web,'dojo-ai-worker'),live=process.argv.includes('--live');
 const option=(name:string,fallback:string)=>{const at=process.argv.indexOf(name);return at<0?fallback:process.argv[at+1]};
 const root=path.resolve(option('--output',live?'test-results/workflow-reliability-2026-11-24/live':'test-results/workflow-reliability-2026-11-24/reference')),cohort=option('--cohort','initial');
 if(!/^[a-z0-9-]{1,50}$/.test(cohort))throw Error('Invalid cohort');await fs.mkdir(root,{recursive:true,mode:0o700});
 const fixture=await workflowFixtures();const fixtureFile=path.join(root,cohort==='initial'?'fixtures.json':'fixtures-'+cohort+'.json'),fixtureBytes=JSON.stringify(fixture,null,2)+'\n';
 try{assert.equal(await fs.readFile(fixtureFile,'utf8'),fixtureBytes,'Frozen fixtures changed')}catch(error:any){if(error.code!=='ENOENT')throw error;await fs.writeFile(fixtureFile,fixtureBytes,{flag:'wx',mode:0o600})}
-const sources=[await captureCreativeSource(agent,'open-source'),await captureCreativeSource(web,'commercial-web')];if(live)assert(sources.every(s=>!s.dirty),'Commit the tested candidate before paid dispatch');
+const sources=[await captureCreativeSource(agent,'open-source'),await captureCreativeSource(web,'commercial-web'),await captureCreativeSource(worker,'commercial-worker')];if(live)assert(sources.every(s=>!s.dirty),'Commit the tested candidate before paid dispatch');
 const runtimePaths=['packages/video-project-runtime/dist/index.js','packages/video-project-runtime/dist/manifest.json','test-results/creative-skills/adapter.mjs'].map(file=>path.join(web,file));
 const runtimeHashes=Object.fromEntries(await Promise.all(runtimePaths.map(async file=>[file,hash(await fs.readFile(file))])));
 const frozenSource={sources,runtimeHashes};
 const sourceFile=path.join(root,'source-'+hash(JSON.stringify(frozenSource)).slice(0,16)+'.json');try{await fs.writeFile(sourceFile,JSON.stringify(frozenSource,null,2),{flag:'wx',mode:0o600})}catch(e:any){if(e.code!=='EEXIST')throw e}
 const unchanged=async()=> (await Promise.all(sources.map(creativeSourceUnchanged))).every(Boolean)&&(await Promise.all(Object.entries(runtimeHashes).map(async([file,digest])=>hash(await fs.readFile(file))===digest))).every(Boolean);
+const workerToolPolicy=await import(pathToFileURL(path.join(worker,'src/shared/video-agent/shared-tool-policy.ts')).href);
 const adapter=await import(pathToFileURL(path.join(web,'test-results/creative-skills/adapter.mjs')).href);await adapter.assertCreativeWebReady();
 const campaign=await openCampaign(root,[fixtureFile,sourceFile],live),signal=new AbortController();process.once('SIGINT',()=>signal.abort(Error('Qualification cancelled')));process.once('SIGTERM',()=>signal.abort(Error('Qualification cancelled')));
 campaign.ledger.taskAuthorization={approvedLocalDate:'2026-11-23',maximumUsd:30,maximumRequests:320,scope:'Three Dojo workflows in both hosts; no media generation or new ASR',pricingSource:'https://kie.ai/gpt-6-astra',conservativeRates:'US$3.50/M input including cache writes; US$14/M output'};
@@ -51,7 +52,7 @@ try{
     if(workflow.id==='chart'&&turn===2){const labels=allNodes(document).filter(({node}:any)=>(node.text??'').trim()==='W1');assert.equal(labels.length,1,'Manual edit needs one actual authored W1 label');manual={itemId:labels[0].item.id,nodeId:labels[0].node.id};const commands:any[]=[{type:'set',target:{kind:'node',...manual},path:['text'],value:'Week one'},{type:'set',target:{kind:'node',...manual},path:['style','color'],value:'#86DAD6'}];document=local?(await local.manualEdit(commands)).document:executeVideoProjectCommands(document,commands).document;await save(path.join(directory,'manual-edit.json'),{manual,commands,document});}
     const td=path.join(directory,'turn-'+turn);await fs.mkdir(td);const before=structuredClone(document),entry:any={turn,instruction,status:'running',requestStart:campaign.budget.requests.length};trial.turns.push(entry);await campaign.persist();await save(path.join(td,'before.json'),before);console.log(JSON.stringify({caseId,turn,status:'authoring',requests:campaign.budget.requests.length,accountedUsd:campaign.budget.accountedUsd}));
     assert(await unchanged(),'Frozen candidate changed');
-    const result=local?await local.run(instruction,turn):await adapter.runCreativeWebTurn({document,instruction,history,model:guarded,signal:signal.signal,qualificationPolicy:'workflow-v1',sourceInspection:sourceHost});
+    const result=local?await local.run(instruction,turn):await adapter.runCreativeWebTurn({document,instruction,history,model:guarded,signal:signal.signal,qualificationPolicy:'workflow-v1',sourceInspection:sourceHost,toolPolicy:(name:string)=>workerToolPolicy.stagedToolPolicy(name,true),onFailure:(value:unknown)=>save(path.join(td,'failure-diagnostics.json'),value)});
     await save(path.join(td,'result.json'),result);document=result.document;history=result.history;await save(path.join(td,'document.json'),document);await save(path.join(td,'scene.json'),result.scene);entry.status='authored';entry.requests=campaign.budget.requests.length-entry.requestStart;entry.outcome=result.result.outcome;entry.reviewed=result.result.reviewed;await campaign.persist();
     assert.equal(result.result.outcome,'edit','A requested edit did not finish');assert(result.result.reviewed,'Edit has no successful native review');
     assert(await unchanged(),'Frozen candidate changed');
