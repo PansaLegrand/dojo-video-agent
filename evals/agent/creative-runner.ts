@@ -1,3 +1,4 @@
+import {waitForCreativeRun} from "./creative-deadline";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
@@ -368,6 +369,7 @@ export async function createOpenSourceCreativeSession(options: {
   model: LanguageModel;
   skillsDirectory: string;
   useCurrentLocalCatalog?: boolean;
+  settleTimeoutMs?: number;
   browser?: NonNullable<ConstructorParameters<typeof AgentService>[7]>["browser"];
   signal: AbortSignal;
 }) {
@@ -403,17 +405,9 @@ export async function createOpenSourceCreativeSession(options: {
     { ...(catalog ? {newRunSkills:catalog.newRunSkills} : {}), ...(options.browser ? {browser:options.browser} : {}) },
   );
   async function settle(id: string): Promise<StoredRun> {
-    const deadline = Date.now() + 210_000;
-    while (Date.now() < deadline) {
-      options.signal.throwIfAborted();
-      const state = await store.read(project.id),
-        run = state.runs.find((value) => value.id === id);
-      if (!run) throw new Error("Creative run disappeared.");
-      if (!["queued", "running"].includes(run.status)) return run;
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-    throw new Error("Creative agent turn exceeded its bounded deadline.");
+    return waitForCreativeRun(async()=> (await store.read(project.id)).runs.find(run=>run.id===id),options.signal,options.settleTimeoutMs);
   }
+
   return {
     projectId: project.id,
     async manualEdit(commands: import("../../packages/core/src/lib/video-project/commands").VideoProjectCommand[]) {

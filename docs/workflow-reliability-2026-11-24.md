@@ -187,3 +187,23 @@ placement on every surviving source fragment, rejecting missing or repeated
 uncut source captions. A synthetic counterexample test covers these checks.
 The controlled diagnostic passed the oracle and exact encoded media verification.
 Its source audio and immutable transcript are preserved, with no provider call.
+
+
+## Driver deadline retained failure
+
+The speech-scope trial inspected both source videos and attempted native repairs,
+but the evaluation driver's legacy 210-second wait expired while the service was
+still making progress. Request 49 was aborted and remains unknown with its full
+US$1.492897 reservation. This is a driver failure, not a completed model verdict.
+The original report is unchanged. Total at this checkpoint: 49 requests,
+US$6.4364335 used/reserved (US$3.799852 known plus requests 5 and 49 reserved).
+The affected local speech variant 1 is now blocked from retry/continuation.
+
+New workflow trials explicitly wait at most 915 seconds: the runtime's existing
+900-second active ceiling plus 15 seconds for terminal persistence. Legacy
+creative campaigns keep their 210-second default. This changes no model/tool/token
+allowance and adds no retry. Fake-time tests verify that a progressing 240-second
+run completes under the qualification wait while the legacy wait expires, and
+that cancellation and bounded waits still stop. The next `bounded-driver-v1`
+cohort uses variants 2 and 3 for local speech/chart, and 1 and 2 elsewhere, under
+the same US$30 / 320-request ledger. All earlier cohorts remain separate.

@@ -443,9 +443,13 @@ function assertRequirement(
       binding.sourceStartMs !== expected.sourceStartMs ||
       binding.sourceEndMs !== expected.sourceEndMs
     )
-      throw new Error(
-        "Highlight must bind the declared genuine contiguous source words without fabricated timing.",
-      );
+    {
+      const surviving = sourceFamilies?.splitRoots.has(requirement.sourceItemId)
+        ? sourceFamilies.bySource.get(requirement.sourceItemId)?.filter(source=>{const window=sourceWindow(source,after.format.fps);return expected.sourceStartMs>=window.startMs-1e-6&&expected.sourceEndMs<=window.endMs+1e-6;}) : undefined;
+      throw new Error(surviving?.length === 1
+        ? `Speech anchor ${requirement.bindingId} must follow the surviving phrase. Reapply anchorSpeech for itemId ${candidate.id}, sourceItemId ${surviving[0]!.id}, evidenceId ${requirement.evidenceId}, the same frozen wordIds and bounded holdMs for the required readable duration. Do not set graphic timing or change the frozen requirement.`
+        : "Highlight must bind the declared genuine contiguous source words without fabricated timing.");
+    }
     const source = item(actualSourceId);
     if (sourceFamilies?.splitRoots.has(requirement.sourceItemId)) {
       const window=sourceWindow(source,after.format.fps);

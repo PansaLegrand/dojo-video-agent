@@ -25,7 +25,7 @@ const unknown=(host:string,scenario:string,repetition:number)=>campaign.ledger.r
 const slots=fixture.workflows.flatMap((workflow:any)=>['open-source','commercial-web'].flatMap(host=>[1,2,3].filter(repetition=>!unknown(host,workflow.id,repetition)).slice(0,2).map(repetition=>({workflow:workflow.id,host,repetition}))));
 campaign.ledger.cohorts??=[];const priorCohort=campaign.ledger.cohorts.find((c:any)=>c.id===cohort);
 if(priorCohort)assert.deepEqual(priorCohort.sourceCommits,sources.map(s=>s.commit),'Cohort source changed; choose a new cohort without resetting the budget');
-else campaign.ledger.cohorts.push({id:cohort,sourceCommits:sources.map(s=>s.commit),fixtureFile:path.basename(fixtureFile),graderVersion:'workflow-v3',sourceInspection:'owned-fixture-pixels-v1',slots,expected:12,reservePolicy:'Use two preplanned independent wording variants per host/workflow; original unknown journeys never retry. At most three distinct variants are available.'});
+else campaign.ledger.cohorts.push({id:cohort,sourceCommits:sources.map(s=>s.commit),fixtureFile:path.basename(fixtureFile),graderVersion:'workflow-v3',sourceInspection:'owned-fixture-pixels-v1',driverWaitMs:915000,slots,expected:12,reservePolicy:'Use two preplanned independent wording variants per host/workflow; original unknown journeys never retry. At most three distinct variants are available.'});
 const activeSlots=priorCohort?.slots??slots;
 await campaign.persist();
 const save=async(file:string,value:unknown)=>fs.writeFile(file,JSON.stringify(value,null,2)+'\n',{flag:'wx',mode:0o600});
@@ -45,7 +45,7 @@ try{
   const guarded={get identity(){return campaign.model.identity},complete:async(...args:any[])=>{assert(await unchanged(),'Frozen candidate changed');return campaign.model.complete(...args)}};
   try{
    campaign.setContext({host,scenario:workflow.id,repetition,turn:1});
-   if(host==='open-source')local=await createOpenSourceCreativeSession({scenario:{id:caseId,document},directory:path.join(directory,'store'),model:guarded,skillsDirectory:path.join(agent,'skills'),useCurrentLocalCatalog:true,browser:sourceHost,signal:signal.signal});
+   if(host==='open-source')local=await createOpenSourceCreativeSession({scenario:{id:caseId,document},directory:path.join(directory,'store'),model:guarded,skillsDirectory:path.join(agent,'skills'),useCurrentLocalCatalog:true,settleTimeoutMs:915_000,browser:sourceHost,signal:signal.signal});
    for(const [index,instruction]of workflow.variants[repetition-1].entries()){
     const turn=index+1;campaign.setContext({host,scenario:workflow.id,repetition,turn});
     if(workflow.id==='chart'&&turn===2){const labels=allNodes(document).filter(({node}:any)=>(node.text??'').trim()==='W1');assert.equal(labels.length,1,'Manual edit needs one actual authored W1 label');manual={itemId:labels[0].item.id,nodeId:labels[0].node.id};const commands:any[]=[{type:'set',target:{kind:'node',...manual},path:['text'],value:'Week one'},{type:'set',target:{kind:'node',...manual},path:['style','color'],value:'#86DAD6'}];document=local?(await local.manualEdit(commands)).document:executeVideoProjectCommands(document,commands).document;await save(path.join(directory,'manual-edit.json'),{manual,commands,document});}
