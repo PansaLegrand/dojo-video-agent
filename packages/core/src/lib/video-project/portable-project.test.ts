@@ -173,4 +173,85 @@ describe("portable editable project", () => {
   });
 });
 
-it("requires self-contained non-executable Lottie payloads",async()=>{for(const data of [{assets:[{p:"missing-image.png"}]},{layers:[{ks:{x:"execute()"}}]}]){const d=createVideoProjectDocument();d.assets.animation={id:"animation",name:"Animation",source:"local",type:"lottie"};d.sources.animation={assetId:"animation",revision:"local"};await expect(createPortableProject({document:d,name:"Lottie",readAsset:async()=>new Blob([JSON.stringify(data)])})).rejects.toThrow(/Lottie/)}});
+it("requires self-contained non-executable Lottie payloads", async () => {
+  for (const data of [
+    { assets: [{ p: "missing-image.png" }] },
+    { layers: [{ ks: { x: "execute()" } }] },
+  ]) {
+    const d = createVideoProjectDocument();
+    d.assets.animation = {
+      id: "animation",
+      name: "Animation",
+      source: "local",
+      type: "lottie",
+    };
+    d.sources.animation = { assetId: "animation", revision: "local" };
+    await expect(
+      createPortableProject({
+        document: d,
+        name: "Lottie",
+        readAsset: async () => new Blob([JSON.stringify(data)]),
+      }),
+    ).rejects.toThrow(/Lottie/);
+  }
+});
+
+it("round-trips a textured perspective plane with content IDs while retaining internal material IDs", async () => {
+  const d = fixture();
+  const three = {
+    camera: {
+      kind: "perspective",
+      position: { x: 0, y: 0, z: 5 },
+      target: { x: 0, y: 0, z: 0 },
+    },
+    materials: { logo: { color: "white", unlit: true, mapAssetId: "logo" } },
+    objects: {
+      card: {
+        kind: "mesh",
+        materialId: "logo",
+        geometry: { kind: "plane", width: 4, height: 2.25 },
+      },
+    },
+  };
+  d.items = [
+    {
+      id: "three",
+      name: "Screen",
+      trackId: "visual",
+      node: {
+        id: "three",
+        type: "extension",
+        from: 0,
+        duration: 90,
+        style: { width: 640, height: 360 },
+        extension: {
+          name: "dojo.three-scene",
+          version: "1.0.0",
+          params: three,
+        },
+      },
+    },
+  ];
+  const packaged = await readPortableProject(
+    await createPortableProject({
+      document: d,
+      name: "3D package",
+      readAsset: async () => bytes,
+    }),
+  );
+  const restored = packaged.manifest.document,
+    id = Object.keys(restored.assets)[0]!;
+  const params = restored.items[0]!.node.extension!.params as typeof three;
+  expect(id).toMatch(/^local:[a-f0-9]{64}$/);
+  expect(params.materials.logo.mapAssetId).toBe(id);
+  expect(params.objects.card.materialId).toBe("logo");
+  const blank = createVideoProjectDocument();
+  expect(
+    canonicalSerialize(
+      executeVideoProjectCommands(
+        blank,
+        portableProjectCommands(blank, restored),
+      ).document,
+    ),
+  ).toBe(canonicalSerialize(restored));
+});

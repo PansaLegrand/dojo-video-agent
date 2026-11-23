@@ -1,0 +1,352 @@
+{
+  "format": "dojo-video-engine.release-licenses",
+  "version": 1,
+  "releaseVersion": "1.3.2-rc.0",
+  "gitCommit": "bfe2af6c01e0d2830f760dcbd93081b8e6282c6f",
+  "lockfileSha256": "965669a72ef4e8bad4ea10141f62102bed6a4fa2a6d02cca44d7b56aa962aa08",
+  "source": "frozen pnpm production graph verified by exact-tarball install",
+  "packages": [
+    {
+      "name": "@dojo-video-engine/agent-tools",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/authoring",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/cli",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/commands",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/core",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/create",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/export",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/extensions",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/inspection",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/interchange",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/layout",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/player",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/presets",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/renderer-canvas2d",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/runtime",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/schema",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@dojo-video-engine/three",
+      "version": "1.3.2-rc.0",
+      "license": "MIT",
+      "publicRoot": true
+    },
+    {
+      "name": "@esbuild/aix-ppc64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/android-arm",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/android-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/android-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/darwin-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/darwin-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/freebsd-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/freebsd-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/linux-arm",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/linux-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/linux-ia32",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/linux-loong64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/linux-mips64el",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/linux-ppc64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/linux-riscv64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/linux-s390x",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/linux-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/netbsd-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/netbsd-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/openbsd-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/openbsd-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/openharmony-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/sunos-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/win32-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/win32-ia32",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@esbuild/win32-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@types/dom-mediacapture-transform",
+      "version": "0.1.11",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "@types/dom-webcodecs",
+      "version": "0.1.13",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "bidi-js",
+      "version": "1.0.3",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "esbuild",
+      "version": "0.28.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "fsevents",
+      "version": "2.3.3",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "mediabunny",
+      "version": "1.50.3",
+      "license": "MPL-2.0",
+      "publicRoot": false
+    },
+    {
+      "name": "require-from-string",
+      "version": "2.0.2",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "saxes",
+      "version": "6.0.0",
+      "license": "ISC",
+      "publicRoot": false
+    },
+    {
+      "name": "svg-path-properties",
+      "version": "1.3.0",
+      "license": "ISC",
+      "publicRoot": false
+    },
+    {
+      "name": "three",
+      "version": "0.187.0",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "tsx",
+      "version": "4.23.12",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "xmlchars",
+      "version": "2.2.0",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "zod",
+      "version": "4.6.7",
+      "license": "MIT",
+      "publicRoot": false
+    },
+    {
+      "name": "zod-to-json-schema",
+      "version": "3.25.2",
+      "license": "ISC",
+      "publicRoot": false
+    }
+  ]
+}

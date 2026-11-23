@@ -268,3 +268,16 @@ one paid generation; read its flags and preserve failed reports before using it.
 ## README demo galleries
 
 Keep the marked `dojo-demo-gallery` sections in the agent and engine READMEs aligned when adding or changing public demos. Mirror the approved showcase media with matching hashes, include every individual film in the expandable gallery, and adapt editing/source links to the owning repository. Preserve each demo's authored or recovered provenance; an attractive export does not establish autonomous model qualification.
+
+
+## Current local texture-compatibility candidate (2026-11-24)
+
+The four-task editor follow-up uses verified local engine **1.3.2-rc.0** tarballs
+from engine source `bfe2af6`, because 1.3.1 rejected the editor's namespaced image
+IDs in 3D material textures. This is an unpublished candidate, not a registry
+release or a production deployment. `config/engine-release.json`, the npm lockfile
+and `vendor/engine-candidates/` bind the exact retained bytes; the accepted 1.3.1
+registry record remains in `config/engine-release-1.3.1.json`. No renderer source
+fork or TypeScript source alias is used. Scene v1 and extension v1 remain unchanged.
+Agent kit/loop defaults and the 0.2.12 development-selection rules remain as above;
+this engine compatibility fix does not establish overall model qualification.

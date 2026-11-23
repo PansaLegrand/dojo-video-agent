@@ -282,3 +282,27 @@ for new complete-authoring requests, matching the local host. Legacy flags remai
 exact and cannot be upgraded during recovery. Tests exercise reader feedback,
 unsafe executor reconciliation, and refusal to replay an old unsafe checkpoint.
 The next frozen `worker-policy-v1` cohort retains the same cap and earlier reports.
+
+
+## Imported-image texture failure and engine candidate
+
+The first walkthrough trial (106–112, local variant 1) returned a clarification:
+engine 1.3.1 rejected `local:<sha256>` in Three.js `mapAssetId`. The original paid
+parameters and failed report are retained; a flat overlay is not accepted as the
+requested textured 3D plane. Total remains 112 requests / US$10.7631405 accounted.
+
+Upstream engine source `bfe2af6` supplies the unpublished **1.3.2-rc.0** candidate.
+It uses the canonical Scene asset-ID contract for texture references, preserving
+internal object/material ID constraints and declared-image ownership checks.
+Full release and clean-machine gates pass. The exact bundle passed the isolated
+OSS check/build and 85 browser checks after explicit receipt-version adoption.
+The first failed consumer report is retained as `*-before-receipt-adoption.json`.
+Local pins, manifest hashes and npm locks identify exact tarballs; published
+1.3.1 evidence remains separate. The source candidate is not published/deployed.
+
+The saved texture parameters render and export under the corrected engine, and
+portable-package tests preserve the image binding through content-ID remapping.
+The next `engine-textures-v1` cohort uses the same approved ledger, current worker
+policy and source-aware caption guide. All previous failures/unknown reservations
+remain retained. Native visibility also rejects opaque filled rectangles and
+rounded-pill occlusion, with paired actual-pixel browser checks.

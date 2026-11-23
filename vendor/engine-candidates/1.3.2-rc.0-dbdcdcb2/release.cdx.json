@@ -1,0 +1,1803 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-11-24T06:05:26+08:00",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "dojo-video-engine-release-bundler",
+          "version": "1"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "name": "dojo-video-engine-release-set",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:generic/dojo-video-engine-release-set@1.3.2-rc.0",
+      "properties": [
+        {
+          "name": "dojo-video-engine:gitCommit",
+          "value": "bfe2af6c01e0d2830f760dcbd93081b8e6282c6f"
+        },
+        {
+          "name": "dojo-video-engine:pnpmLockSha256",
+          "value": "965669a72ef4e8bad4ea10141f62102bed6a4fa2a6d02cca44d7b56aa962aa08"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "agent-tools",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/agent-tools@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/agent-tools@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "138382d6e45d16a849dc3f88487cbff14fa1e5378367919437573b8896e82826"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "authoring",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/authoring@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/authoring@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "87e623aa847d872ace53f9e0d7d8d84bbe274537cd4458345c0587bf34fb2d47"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "cli",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/cli@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/cli@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "92cc68e258d60cb31aa81003fb1529a782272c0899bc8f1fe03b1fdde32ffc77"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "commands",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/commands@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/commands@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2deb86320d948e0af885465f6111465ce8acf2d237f79966163b588bc603e137"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "core",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6d050d84ff04abda75a9406e37bd340a9f848a396e6c5c25ef92b78eb7e5efd0"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "create",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/create@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/create@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4c1127413e9acdf1efea2be67e832702dda6e575c37859da092a5f746133a0af"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "export",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/export@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/export@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c88d35926ccea3b4e5d86db9ec42c90793e5cc16b42bcf0f27aa55840c4a3bb3"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "extensions",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/extensions@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/extensions@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "09b460740cee43ac7ff4748c95cffd7c5d5c657b8191b2b19c285f4372e50e70"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "inspection",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/inspection@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/inspection@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ecbabefb8770b4bcdd4a69623ea1ce7accd1525e86cc6c5822392b7a7090ed43"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "interchange",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/interchange@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/interchange@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "afc27094f90ce3bcedbea31bc11f9bfaef279acd7225739558414ab2c1e96b6e"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "layout",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/layout@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/layout@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ebe51db1bb10b0e0bf7945b2d05c952eb6c3453b68dba33a93961750116d6c89"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "player",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/player@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/player@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "71d4975063ee84edb45c34c213819fa6e65afc34bb68f678adac183379f953ac"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "presets",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/presets@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/presets@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3df00978847c9912b92dd3d3c388e6c148a9f4b653612de379a170a21f84324d"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "renderer-canvas2d",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/renderer-canvas2d@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/renderer-canvas2d@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a07a2227e27bd8683cb960d94355a715d8e21461385ec5d283dc359b4b327e59"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "runtime",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/runtime@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/runtime@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "16b6cf425473ad9619a21da17d363d7474e3c4a7a929943cdb7d5e3c79761709"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "schema",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c43c818e3aa1eac7d4b262e87a3f242d201eacabe2a9543a2f837884255b8ca0"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "dojo-video-engine",
+      "name": "three",
+      "version": "1.3.2-rc.0",
+      "bom-ref": "pkg:npm/%40dojo-video-engine/three@1.3.2-rc.0",
+      "purl": "pkg:npm/%40dojo-video-engine/three@1.3.2-rc.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9b7498978376dc9036e8201d4c6d79cc9c6f8545eb94ffe26bc3aa66c2ac839a"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "true"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "aix-ppc64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "android-arm",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/android-arm@0.28.2",
+      "purl": "pkg:npm/%40esbuild/android-arm@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "android-arm64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/android-arm64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/android-arm64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "android-x64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/android-x64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/android-x64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "darwin-arm64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "darwin-x64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/darwin-x64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/darwin-x64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "freebsd-arm64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "freebsd-x64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "linux-arm",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/linux-arm@0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-arm@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "linux-arm64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/linux-arm64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-arm64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "linux-ia32",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/linux-ia32@0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-ia32@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "linux-loong64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/linux-loong64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-loong64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "linux-mips64el",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "linux-ppc64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "linux-riscv64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "linux-s390x",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/linux-s390x@0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-s390x@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "linux-x64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/linux-x64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-x64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "netbsd-arm64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "netbsd-x64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "openbsd-arm64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "openbsd-x64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "openharmony-arm64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "sunos-x64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/sunos-x64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/sunos-x64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "win32-arm64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/win32-arm64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/win32-arm64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "win32-ia32",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/win32-ia32@0.28.2",
+      "purl": "pkg:npm/%40esbuild/win32-ia32@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "esbuild",
+      "name": "win32-x64",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/%40esbuild/win32-x64@0.28.2",
+      "purl": "pkg:npm/%40esbuild/win32-x64@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "types",
+      "name": "dom-mediacapture-transform",
+      "version": "0.1.11",
+      "bom-ref": "pkg:npm/%40types/dom-mediacapture-transform@0.1.11",
+      "purl": "pkg:npm/%40types/dom-mediacapture-transform@0.1.11",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "types",
+      "name": "dom-webcodecs",
+      "version": "0.1.13",
+      "bom-ref": "pkg:npm/%40types/dom-webcodecs@0.1.13",
+      "purl": "pkg:npm/%40types/dom-webcodecs@0.1.13",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "bidi-js",
+      "version": "1.0.3",
+      "bom-ref": "pkg:npm/bidi-js@1.0.3",
+      "purl": "pkg:npm/bidi-js@1.0.3",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "esbuild",
+      "version": "0.28.2",
+      "bom-ref": "pkg:npm/esbuild@0.28.2",
+      "purl": "pkg:npm/esbuild@0.28.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fsevents",
+      "version": "2.3.3",
+      "bom-ref": "pkg:npm/fsevents@2.3.3",
+      "purl": "pkg:npm/fsevents@2.3.3",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mediabunny",
+      "version": "1.50.3",
+      "bom-ref": "pkg:npm/mediabunny@1.50.3",
+      "purl": "pkg:npm/mediabunny@1.50.3",
+      "licenses": [
+        {
+          "expression": "MPL-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "require-from-string",
+      "version": "2.0.2",
+      "bom-ref": "pkg:npm/require-from-string@2.0.2",
+      "purl": "pkg:npm/require-from-string@2.0.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "saxes",
+      "version": "6.0.0",
+      "bom-ref": "pkg:npm/saxes@6.0.0",
+      "purl": "pkg:npm/saxes@6.0.0",
+      "licenses": [
+        {
+          "expression": "ISC"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "svg-path-properties",
+      "version": "1.3.0",
+      "bom-ref": "pkg:npm/svg-path-properties@1.3.0",
+      "purl": "pkg:npm/svg-path-properties@1.3.0",
+      "licenses": [
+        {
+          "expression": "ISC"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "three",
+      "version": "0.187.0",
+      "bom-ref": "pkg:npm/three@0.187.0",
+      "purl": "pkg:npm/three@0.187.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tsx",
+      "version": "4.23.12",
+      "bom-ref": "pkg:npm/tsx@4.23.12",
+      "purl": "pkg:npm/tsx@4.23.12",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "xmlchars",
+      "version": "2.2.0",
+      "bom-ref": "pkg:npm/xmlchars@2.2.0",
+      "purl": "pkg:npm/xmlchars@2.2.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "zod",
+      "version": "4.6.7",
+      "bom-ref": "pkg:npm/zod@4.6.7",
+      "purl": "pkg:npm/zod@4.6.7",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "zod-to-json-schema",
+      "version": "3.25.2",
+      "bom-ref": "pkg:npm/zod-to-json-schema@3.25.2",
+      "purl": "pkg:npm/zod-to-json-schema@3.25.2",
+      "licenses": [
+        {
+          "expression": "ISC"
+        }
+      ],
+      "properties": [
+        {
+          "name": "dojo-video-engine:publicReleaseRoot",
+          "value": "false"
+        },
+        {
+          "name": "dojo-video-engine:currentPlatformCompatible",
+          "value": "true"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:generic/dojo-video-engine-release-set@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/agent-tools@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/authoring@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/cli@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/commands@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/create@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/export@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/extensions@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/inspection@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/interchange@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/layout@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/player@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/presets@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/renderer-canvas2d@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/runtime@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/three@1.3.2-rc.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/agent-tools@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/commands@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/export@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/extensions@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/inspection@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/presets@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/renderer-canvas2d@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/zod-to-json-schema@3.25.2",
+        "pkg:npm/zod@4.6.7"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/authoring@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/presets@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/cli@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/agent-tools@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/inspection@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/tsx@4.23.12"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/commands@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/presets@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/zod-to-json-schema@3.25.2",
+        "pkg:npm/zod@4.6.7"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/bidi-js@1.0.3"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/create@1.3.2-rc.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/export@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/renderer-canvas2d@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/mediabunny@1.50.3"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/extensions@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/zod-to-json-schema@3.25.2",
+        "pkg:npm/zod@4.6.7"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/inspection@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/interchange@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/saxes@6.0.0",
+        "pkg:npm/zod-to-json-schema@3.25.2",
+        "pkg:npm/zod@4.6.7"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/layout@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/zod-to-json-schema@3.25.2",
+        "pkg:npm/zod@4.6.7"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/player@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/export@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/renderer-canvas2d@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/presets@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/zod@4.6.7"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/renderer-canvas2d@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/extensions@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/runtime@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/mediabunny@1.50.3",
+        "pkg:npm/svg-path-properties@1.3.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/runtime@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/zod-to-json-schema@3.25.2",
+        "pkg:npm/zod@4.6.7"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40dojo-video-engine/three@1.3.2-rc.0",
+      "dependsOn": [
+        "pkg:npm/%40dojo-video-engine/core@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/extensions@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/renderer-canvas2d@1.3.2-rc.0",
+        "pkg:npm/%40dojo-video-engine/schema@1.3.2-rc.0",
+        "pkg:npm/three@0.187.0",
+        "pkg:npm/zod@4.6.7"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/android-arm@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/android-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/android-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/darwin-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-arm@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-ia32@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-loong64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-s390x@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/sunos-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/win32-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/win32-ia32@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/win32-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40types/dom-mediacapture-transform@0.1.11",
+      "dependsOn": [
+        "pkg:npm/%40types/dom-webcodecs@0.1.13"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40types/dom-webcodecs@0.1.13",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/bidi-js@1.0.3",
+      "dependsOn": [
+        "pkg:npm/require-from-string@2.0.2"
+      ]
+    },
+    {
+      "ref": "pkg:npm/esbuild@0.28.2",
+      "dependsOn": [
+        "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
+        "pkg:npm/%40esbuild/android-arm64@0.28.2",
+        "pkg:npm/%40esbuild/android-arm@0.28.2",
+        "pkg:npm/%40esbuild/android-x64@0.28.2",
+        "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
+        "pkg:npm/%40esbuild/darwin-x64@0.28.2",
+        "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
+        "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
+        "pkg:npm/%40esbuild/linux-arm64@0.28.2",
+        "pkg:npm/%40esbuild/linux-arm@0.28.2",
+        "pkg:npm/%40esbuild/linux-ia32@0.28.2",
+        "pkg:npm/%40esbuild/linux-loong64@0.28.2",
+        "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
+        "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
+        "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
+        "pkg:npm/%40esbuild/linux-s390x@0.28.2",
+        "pkg:npm/%40esbuild/linux-x64@0.28.2",
+        "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
+        "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
+        "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
+        "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
+        "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
+        "pkg:npm/%40esbuild/sunos-x64@0.28.2",
+        "pkg:npm/%40esbuild/win32-arm64@0.28.2",
+        "pkg:npm/%40esbuild/win32-ia32@0.28.2",
+        "pkg:npm/%40esbuild/win32-x64@0.28.2"
+      ]
+    },
+    {
+      "ref": "pkg:npm/fsevents@2.3.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/mediabunny@1.50.3",
+      "dependsOn": [
+        "pkg:npm/%40types/dom-mediacapture-transform@0.1.11",
+        "pkg:npm/%40types/dom-webcodecs@0.1.13"
+      ]
+    },
+    {
+      "ref": "pkg:npm/require-from-string@2.0.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/saxes@6.0.0",
+      "dependsOn": [
+        "pkg:npm/xmlchars@2.2.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/svg-path-properties@1.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/three@0.187.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/tsx@4.23.12",
+      "dependsOn": [
+        "pkg:npm/esbuild@0.28.2",
+        "pkg:npm/fsevents@2.3.3"
+      ]
+    },
+    {
+      "ref": "pkg:npm/xmlchars@2.2.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/zod@4.6.7",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/zod-to-json-schema@3.25.2",
+      "dependsOn": []
+    }
+  ]
+}
