@@ -204,4 +204,43 @@ describe("event-sampled visual completion", () => {
   });
 });
 
-it("allows declared caption backdrops over source footage while retaining picture coverage",()=>{const d=fixture([{id:"source",type:"video",assetId:"logo",style:box(0,0,640,360)},card("caption-backdrop",0,270,640,90)]);d.assets.logo={...d.assets.logo,type:"video",durationSeconds:4};expect(reviewVisualCompletion(d,requirements)[0].passed).toBe(true)});
+it("allows declared caption backdrops over source footage while retaining picture coverage", () => {
+  const d = fixture([
+    {
+      id: "source",
+      type: "video",
+      assetId: "logo",
+      style: box(0, 0, 640, 360),
+    },
+    card("caption-backdrop", 0, 270, 640, 90),
+  ]);
+  d.assets.logo = { ...d.assets.logo, type: "video", durationSeconds: 4 };
+  expect(reviewVisualCompletion(d, requirements)[0].passed).toBe(true);
+});
+
+it("counts opaque filled rectangles as covers, not only div backgrounds", () => {
+  const cover: SceneNodeInput = {
+    id: "shape-cover",
+    type: "shape",
+    shape: { kind: "rect" },
+    style: { ...box(40, 30, 100, 90), fill: "#111111", zIndex: 40 },
+  };
+  expect(
+    reviewVisualCompletion(fixture([title, cover]), requirements)[0]?.passed,
+  ).toBe(false);
+  cover.style!.fill = "rgba(0,0,0,0.5)";
+  expect(
+    reviewVisualCompletion(fixture([title, cover]), requirements)[0]?.passed,
+  ).toBe(true);
+});
+it("retains the opaque center of rounded pills instead of collapsing coverage to zero", () => {
+  const cover = card("pill", 60, 160, 260, 80);
+  cover.style!.borderRadius = 40;
+  const image = { ...logo, style: box(100, 180, 180, 40) };
+  expect(
+    reviewVisualCompletion(fixture([image, cover]), requirements)[0],
+  ).toMatchObject({
+    passed: false,
+    message: expect.stringMatching(/logo.*unobscured/),
+  });
+});

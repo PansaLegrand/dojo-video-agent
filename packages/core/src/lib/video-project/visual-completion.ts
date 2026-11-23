@@ -77,14 +77,33 @@ function innerRect(
 ): Rect | undefined {
   const m = g.worldTransform;
   if (geometry?.kind !== "rounded-rect" || m.b || m.c || !m.a || !m.d) return;
-  const inset = Math.max(...Object.values(geometry.radii));
+  const radius = Math.max(...Object.values(geometry.radii));
   const r = geometry.rect;
-  return transformLayoutRect(m, {
-    x: r.x + inset,
-    y: r.y + inset,
-    width: Math.max(0, r.width - 2 * inset),
-    height: Math.max(0, r.height - 2 * inset),
-  });
+  // Each candidate lies entirely inside every rounded corner. Pick the largest
+  // proven opaque rectangle; insetting by a full radius on both axes would
+  // incorrectly erase a pill's opaque center.
+  const diagonalInset = radius * (1 - Math.SQRT1_2);
+  const inside = [
+    {
+      x: r.x + radius,
+      y: r.y,
+      width: Math.max(0, r.width - 2 * radius),
+      height: r.height,
+    },
+    {
+      x: r.x,
+      y: r.y + radius,
+      width: r.width,
+      height: Math.max(0, r.height - 2 * radius),
+    },
+    {
+      x: r.x + diagonalInset,
+      y: r.y + diagonalInset,
+      width: Math.max(0, r.width - 2 * diagonalInset),
+      height: Math.max(0, r.height - 2 * diagonalInset),
+    },
+  ].sort((a, b) => area(b) - area(a))[0]!;
+  return transformLayoutRect(m, inside);
 }
 function paintedRects(g: DisplayGroup): Rect[] {
   const c = g.content;
@@ -184,7 +203,7 @@ function targetNodes(
           to,
           text,
           minimumFrames: Math.ceil((ms * document.format.fps) / 1000),
-            minimumVisibleFraction: node.type === "video" ? 0.5 : 0.85,
+          minimumVisibleFraction: node.type === "video" ? 0.5 : 0.85,
         });
       }
       node.children?.forEach((child) => visit(child, from, to, target));
@@ -320,6 +339,22 @@ export function reviewVisualCompletion(
           ? innerRect(g, g.overflowClip)
           : undefined,
         nextClips = overflow ? [...ownClips, overflow] : ownClips;
+      const shape = g.content;
+      if (
+        safe &&
+        (!g.overflowClip || !!overflow) &&
+        shape?.kind === "shape" &&
+        shape.geometry.kind === "rounded-rect" &&
+        shape.fill?.kind === "color" &&
+        parseColor(shape.fill.source)?.a === 1
+      ) {
+        let r = innerRect(g, shape.geometry);
+        if (r) {
+          for (const clip of nextClips) r = intersect(r, clip);
+          if (area(r) > 0)
+            covers.push({ id: g.nodeId, order: g.paintOrder, rect: r });
+        }
+      }
       found.set(g.nodeId, {
         group: g,
         opacity: alpha,
@@ -366,7 +401,9 @@ export function reviewVisualCompletion(
         const fraction =
           total > 0 ? Math.max(0, (visible - covered) / total) : 0;
         good =
-          !sample.unknown && sample.opacity * ink > 0.15 && fraction >= target.minimumVisibleFraction;
+          !sample.unknown &&
+          sample.opacity * ink > 0.15 &&
+          fraction >= target.minimumVisibleFraction;
         reason = sample.unknown
           ? "Complex mask/filter requires separate rendered inspection"
           : sample.opacity * ink <= 0.15
