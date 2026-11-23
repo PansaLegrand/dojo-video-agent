@@ -203,3 +203,5 @@ describe("event-sampled visual completion", () => {
     expect(reviewVisualCompletion(d, speech)[0].passed).toBe(false);
   });
 });
+
+it("allows declared caption backdrops over source footage while retaining picture coverage",()=>{const d=fixture([{id:"source",type:"video",assetId:"logo",style:box(0,0,640,360)},card("caption-backdrop",0,270,640,90)]);d.assets.logo={...d.assets.logo,type:"video",durationSeconds:4};expect(reviewVisualCompletion(d,requirements)[0].passed).toBe(true)});

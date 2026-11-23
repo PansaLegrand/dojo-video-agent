@@ -22,6 +22,7 @@ type Target = {
   to: number;
   text: string;
   minimumFrames: number;
+  minimumVisibleFraction: number;
 };
 export const VISUAL_COMPLETION_LIMITS = Object.freeze({
   samples: 192,
@@ -182,6 +183,7 @@ function targetNodes(
           to,
           text,
           minimumFrames: Math.ceil((ms * document.format.fps) / 1000),
+            minimumVisibleFraction: node.type === "video" ? 0.5 : 0.85,
         });
       }
       node.children?.forEach((child) => visit(child, from, to, target));
@@ -365,7 +367,7 @@ export function reviewVisualCompletion(
         const fraction =
           total > 0 ? Math.max(0, (visible - covered) / total) : 0;
         good =
-          !sample.unknown && sample.opacity * ink > 0.15 && fraction >= 0.85;
+          !sample.unknown && sample.opacity * ink > 0.15 && fraction >= target.minimumVisibleFraction;
         reason = sample.unknown
           ? "Complex mask/filter requires separate rendered inspection"
           : sample.opacity * ink <= 0.15
@@ -406,7 +408,7 @@ export function reviewVisualCompletion(
     {
       id: "visual-completion",
       passed: true,
-      message: `Assessed ${targets.length} required visuals at ${sorted.length} event/interval frames (${sorted.join(",")}). At least 85% unobscured bounds and sampled reading holds passed; intervening motion and audio remain ungraded.`,
+      message: `Assessed ${targets.length} required visuals at ${sorted.length} event/interval frames (${sorted.join(",")}). Unobscured bounds (85% for text/images, 50% for source video with overlays) and sampled reading holds passed; intervening motion and audio remain ungraded.`,
     },
   ];
 }
