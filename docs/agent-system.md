@@ -1,8 +1,13 @@
 # Editor agent ownership and extensions
 
-The active creative-skill development candidate is kit **0.2.10**, retaining local
-v14/commercial v15 and all previous archives. The accepted release remains 0.2.9.
-See [candidate scope and evidence](creative-skill-packs-2026-11-17.md).
+The stable source default is kit **0.2.10**, retaining local v14/commercial v15
+and all previous archives. Brand Kits or `DOJO_VISUAL_REVIEW=1` select candidate
+**0.2.12**; existing 0.2.11 runs keep their archive. Engine is **1.3.1**.
+The controlled R33 repair passed, while the unassisted R34 sequence and paired
+R36 comparison remain incomplete. See [current qualification](creative-qualification-r36-2026-11-22.md).
+New local-v14 and external MCP reviews freeze `requiredTextLayout: sampled-v2`;
+saved v1 or absent policies retain their previous checks. This is local source
+behavior, not evidence of commercial deployment or default promotion.
 
 The shared model/tool loop is `packages/agent-loop` **0.2.0**. Portable editor definitions
 live in `packages/agent-kit`, with tool metadata and schemas, trusted Markdown skill
@@ -12,9 +17,8 @@ There are no engine, database, provider SDK or credit dependencies in either kit
 ## Local source and accepted baseline
 
 The local API starts new runs with `local-editor-v14`. Its commercial counterpart
-is `commercial-editing-v15`. The engine dependency is **1.2.3**. New local
-runs use the 0.2.10 source candidate; 0.2.9 remains the accepted release
-under the same behavior profiles.
+is `commercial-editing-v15`. The engine dependency is **1.3.1**. New unbranded local
+runs use stable 0.2.10; the candidate selection above preserves the same profiles.
 New runs persist `agentKitVersion`; old local-v14 records
 without it resolve to original public 0.2.8. Original archives and completed
 qualification evidence remain intact.
@@ -160,7 +164,7 @@ invalid declarations rejected before persistence and exact archived 0.2.7 bytes.
 All 66 actual browser checks passed against the built application, with report
 `test-results/browser-028-63af724/report.json`. Fifteen commercial session tests
 passed against the installed 0.2.8 kit. These are historical build-specific
-results; current 0.2.9 CI and evaluation evidence is recorded above.
+results; historical 0.2.9 CI and evaluation evidence is recorded above.
 Live language and creative quality retain their separate acceptance records.
 
 ## Host ports and retained compatibility
@@ -331,7 +335,7 @@ remaining content, along with the frozen legacy requirement contract.
 Kit0.1.4 profiles prioritize supplied facts and requested-source discovery. Older
 0.1.3 built-in skill text is retained as a frozen snapshot. The new profiles can
 omit model snapshotHash arguments; the factory binds the immutable host hash and
-rejects a supplied mismatch. New local runs default to sixteen model steps while
+rejects a supplied mismatch. That historical profile defaults to sixteen model steps while
 accepted older runs keep their original model/tool/output bindings.
 
 Kit0.1.5 preserves those earlier contracts and gives its new profiles editing-only

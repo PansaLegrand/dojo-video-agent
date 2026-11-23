@@ -2,6 +2,21 @@
 
 Started on 2026-11-01. Last updated on 2026-11-19. The harness plan remains the acceptance contract.
 
+## R28 · required content visibility (2026-11-23)
+
+Source `368c18f` adds saved `sampled-v2` visibility policy for new local-v14
+and external MCP reviews. A fully covered required title/image is rejected with
+its covering node and sampled frame; v1/absent policies retain their checks.
+Sixteen new kernel regressions passed, including repair, saved receipt replay,
+nested/rounded cards, clipping, translucency and intentional reveals. The full
+check passed 1,215 tests, types and production build; the added external-review
+case and MCP suite passed 11 cases. Actual Chromium rendered both compiled host
+fixtures: hidden content produced zero pixels; the repaired fixture produced
+18,000 green logo pixels and 888 white title pixels. No provider calls or engine
+changes. Partial coverage, complex effects and unsampled motion remain outside
+this conservative check. Commercial adoption requires its matching worker
+capability; R34/R36 qualification and stable default promotion remain open.
+
 ## R28 · required titles and paint order (2026-11-19)
 
 New local-v14 runs freeze a sampled text layout policy. Review identifies

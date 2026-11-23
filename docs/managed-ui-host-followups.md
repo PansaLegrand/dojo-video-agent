@@ -5,9 +5,9 @@ sync includes scoped media/progress, paired-caption merge/split with provenance,
 source audition, generated-media cards and browser output-request components.
 The managed files are copied mechanically; local HTTP authority stays in this host.
 
-New local runs use `local-editor-v14`, kit **0.2.9**, loop **0.2.0** and engine
-**1.2.3**. LH-R07 and LH-R20 were introduced with local v10 and remain registered
-in the new profile. The current kit source is `0872090`. Original public 0.2.8
+New local runs use `local-editor-v14`, kit **0.2.10**, loop **0.2.0** and engine
+**1.3.1**. LH-R07 and LH-R20 were introduced with local v10 and remain registered
+in the new profile. Brand Kits or `DOJO_VISUAL_REVIEW=1` select candidate 0.2.12; see the current [agent map](agent-system.md). Original public 0.2.8
 source `63af724` remains retained for older local-v14 runs without a build field.
 
 The local editor supports media import, manual editing, preview, captions from
@@ -79,7 +79,7 @@ regressions remain part of the full harness gate. Browser reports record the
 sampled frames, model request counts, encoding/upload counts and restart results
 under ignored `test-results/local-*-browser-*` directories.
 
-The current 0.2.9 gate passed 1,028 tests, full TypeScript, integrity checks and
+The historical 0.2.9 gate passed 1,028 tests, full TypeScript, integrity checks and
 the build, plus 66 actual browser checks with scripted provider HTTP. Harness
 [PR 14](https://github.com/PansaLegrand/dojo-video-agent/pull/14) merged as
 `d779b13bba5b8126b074af0255bd6194af6c2fa6` with all eight public CI checks passed,
