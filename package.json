@@ -14,7 +14,7 @@
     "dev": "node scripts/run-next.mjs dev",
     "start": "node scripts/run-next.mjs start",
     "build": "next build",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && npm run typecheck:workflow-qualification",
     "test": "vitest run",
     "check": "npm run check:oss-boundary && npm run check:agent-kit && npm run check:ui-sync && npm run typecheck && npm test && npm run build",
     "test:browser": "npm run build && node scripts/browser-smoke.mjs",
@@ -37,7 +37,8 @@
     "eval:speech:semantics": "tsx scripts/evaluate-speech-semantics.ts",
     "check:agent-kit": "npm run check:skills --workspace @dojo-video/agent-kit && npm run build --workspace @dojo-video/agent-kit",
     "check:oss-boundary": "node scripts/check-oss-boundary.mjs",
-    "mcp": "tsx apps/server/src/mcp.ts"
+    "mcp": "tsx apps/server/src/mcp.ts",
+    "typecheck:workflow-qualification": "tsc --noEmit --project tsconfig.workflow-qualification.json"
   },
   "dependencies": {
     "@dojo-video-engine/agent-tools": "1.3.1",

@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "noEmit": true, "allowImportingTsExtensions": true },
+  "include": ["evals/workflow-reliability/**/*.mts"],
+  "exclude": ["node_modules", ".next", "test-results"]
+}

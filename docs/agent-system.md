@@ -5,8 +5,8 @@ and all previous archives. Brand Kits or `DOJO_VISUAL_REVIEW=1` select candidate
 **0.2.12**; existing 0.2.11 runs keep their archive. Engine is **1.3.1**.
 The controlled R33 repair passed, while the unassisted R34 sequence and paired
 R36 comparison remain incomplete. See [current qualification](creative-qualification-r36-2026-11-22.md).
-New local-v14 and external MCP reviews freeze `requiredTextLayout: sampled-v2`;
-saved v1 or absent policies retain their previous checks. This is local source
+New local-v14 and external MCP reviews freeze `requiredTextLayout: sampled-v3` / `authoringGuide: complete-v1`;
+saved v2/v1 or absent policies retain their previous checks. This is local source
 behavior, not evidence of commercial deployment or default promotion.
 
 The shared model/tool loop is `packages/agent-loop` **0.2.0**. Portable editor definitions

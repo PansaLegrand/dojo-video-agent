@@ -11,7 +11,7 @@ import {
   commitDocument,
   type StoredRun,
 } from "../../apps/server/src/store";
-import { loadLocalSkills } from "../../apps/server/src/skill-loader";
+import { loadLocalSkills, localSkillCatalog } from "../../apps/server/src/skill-loader";
 import {
   canonicalSerialize,
   type VideoProjectDocument,
@@ -20,6 +20,10 @@ import { compileVideoProjectDocument } from "../../packages/core/src/lib/video-p
 import { EvaluationBudget, EvaluationAdmissionError } from "./request-budget";
 import { redactEvidence } from "./evidence";
 import type { CreativeScenario } from "./creative-scenarios";
+
+function evaluationScene(document: VideoProjectDocument) {
+  return compileVideoProjectDocument(document, Object.fromEntries(Object.values(document.assets).filter(asset=>asset.source!=="static").map(asset=>[asset.id,`asset:${asset.id}`]))).scene;
+}
 
 export type CreativeHost = "open-source" | "commercial-web";
 export type CreativeHistory = Array<{
@@ -312,6 +316,7 @@ export async function captureCreativeSource(
           "packages/",
           "apps/server/",
           "skills/",
+          "guides/",
           "evals/",
           "config/",
           "scripts/evaluate-creative.ts",
@@ -358,15 +363,17 @@ export async function creativeSourceUnchanged(
 }
 
 export async function createOpenSourceCreativeSession(options: {
-  scenario: CreativeScenario;
+  scenario: Pick<CreativeScenario, "id" | "document">;
   directory: string;
   model: LanguageModel;
   skillsDirectory: string;
+  useCurrentLocalCatalog?: boolean;
   signal: AbortSignal;
 }) {
   const store = new ProjectStore(options.directory);
   await store.init();
-  const skills = await loadLocalSkills(options.skillsDirectory);
+  const catalog = options.useCurrentLocalCatalog ? await localSkillCatalog(path.dirname(options.skillsDirectory)) : undefined;
+  const skills = catalog?.skills ?? await loadLocalSkills(options.skillsDirectory);
   const project = await store.create(
     `Creative evaluation: ${options.scenario.id}`,
   );
@@ -392,6 +399,7 @@ export async function createOpenSourceCreativeSession(options: {
     "review",
     undefined,
     "local-editor-v14",
+    catalog ? {newRunSkills:catalog.newRunSkills} : {},
   );
   async function settle(id: string): Promise<StoredRun> {
     const deadline = Date.now() + 210_000;
@@ -407,6 +415,10 @@ export async function createOpenSourceCreativeSession(options: {
   }
   return {
     projectId: project.id,
+    async manualEdit(commands: import("../../packages/core/src/lib/video-project/commands").VideoProjectCommand[]) {
+      const before=await store.read(project.id);
+      return store.commit(project.id,{operationId:`manual-${before.revision}`,baseRevision:before.revision,baseHash:before.documentHash,commands});
+    },
     async run(instruction: string, turn: number): Promise<CreativeTurnResult> {
       const before = await store.read(project.id);
       const input = {
@@ -446,7 +458,7 @@ export async function createOpenSourceCreativeSession(options: {
             reviewed: false,
           },
           document: before.document,
-          scene: compileVideoProjectDocument(before.document).scene,
+          scene: evaluationScene(before.document),
           history: structuredClone(history),
           events: run.events,
         };
@@ -460,7 +472,7 @@ export async function createOpenSourceCreativeSession(options: {
         return {
           result: { outcome: "advice", summary, reviewed: false },
           document: before.document,
-          scene: compileVideoProjectDocument(before.document).scene,
+          scene: evaluationScene(before.document),
           history: structuredClone(history),
           events: run.events,
         };
@@ -508,7 +520,7 @@ export async function createOpenSourceCreativeSession(options: {
           native: run.proposal,
         },
         document: loaded.document,
-        scene: compileVideoProjectDocument(loaded.document).scene,
+        scene: evaluationScene(loaded.document),
         history: structuredClone(history),
         events: {
           sequence: run.events,

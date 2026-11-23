@@ -17,8 +17,8 @@ provider credentials and external-job policy remain separate. Synchronization is
 explicit and tested; the repositories do not share one interchangeable server.
 
 The local application selects `local-editor-v14`, using the portable agent kit
-**0.2.9** and the host-independent loop **0.2.0**. Engine packages are
-**1.2.3**. These are separate versioned boundaries: a tool-contract change does not
+**0.2.10** (0.2.12 for Brand Kits/visual-review candidates) and the host-independent loop **0.2.0**. Engine packages are
+**1.3.1**. These are separate versioned boundaries: a tool-contract change does not
 require a renderer or loop rewrite. Older runs retain their bound profiles,
 archived tool/skill contracts and checkpoint semantics rather than upgrading in place.
 See [the profile catalog](../packages/agent-kit/src/catalog.ts) and

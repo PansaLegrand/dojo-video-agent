@@ -26,8 +26,8 @@ Read `inspect_project`, then `propose_edit`. The first returns observations. The
 second compiles a candidate through the real video command kernel and ends the
 turn with a proposal. It does not update the saved project.
 
-The local application currently selects `local-editor-v9` with agent kit 0.2.3;
-the loop package stays at 0.2.0 and the engine stays at 1.2.3. Its tool menu follows
+The local application currently selects `local-editor-v14` with stable kit 0.2.10 (0.2.12 for branded/visual-review candidates);
+the loop package stays at 0.2.0 and the engine is 1.3.1. Its tool menu follows
 the host-owned phase: planning can declare a plan, caption batches can save their
 translations, and assembly can review/propose the complete edit but cannot replan.
 The same phase menu is restored with its checkpoint. See
