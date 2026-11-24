@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { compactSupersededReviews } from "./repair-context";
+import { compactSchemaReads, compactSupersededReviews } from "./repair-context";
 
 const hash = "sha256:" + "a".repeat(64);
 const review = (id: string, status = "failed", extra: Record<string, unknown> = {}) => [
@@ -10,6 +10,23 @@ const review = (id: string, status = "failed", extra: Record<string, unknown> = 
       requirements: [{ id: "kept", kind: "property", equals: 3 }], status, checks: [{ id: "layout", passed: status === "passed" }], ...extra } }) },
 ];
 const initial = [{ role: "system", content: "immutable instructions" }, { role: "user", content: "requested edit" }];
+const discovery = (value: unknown) => [
+  { role: "assistant", providerOutput: [{ encrypted_content: "opaque schema reasoning" }], tool_calls: [{ id: "schema", function: { name: "inspect_graphics_schema" } }] },
+  { role: "tool", tool_call_id: "schema", content: JSON.stringify(value) },
+];
+it.each([{version:1,kind:"native",node:{}},{version:1,kind:"macro",parameters:{}},{version:1,kind:"macro",macros:[]},{three:{},extension:{}}])("drops a successful old schema pair while preserving current reviews: %j", value => {
+  const messages = [...initial, ...discovery(value), ...review("old"), ...review("latest")];
+  const saved = structuredClone(messages);
+  expect(compactSchemaReads(messages, m => m.length > 6)).toEqual([...initial, ...messages.slice(4)]);
+  expect(messages).toEqual(saved);
+  expect(compactSchemaReads(messages, () => false)).toBe(messages);
+  const recent = [...initial, ...review("old"), ...discovery(value), ...review("latest")];
+  expect(compactSchemaReads(recent, () => true)).toEqual(recent);
+});
+it.each([{error:"unknown schema"},{version:1,kind:"native",node:{},pinned:true},{version:1,kind:"native",node:{},issues:[]},{version:1,kind:"native",node:{},status:"failed"},{version:1,kind:"unknown",node:{}},{version:1,kind:"native",node:{},receipt:{}}])("retains schema errors, protected and unfamiliar formats: %j", value => {
+  const messages = [...initial, ...discovery(value), ...review("old"), ...review("latest")];
+  expect(compactSchemaReads(messages, () => true)).toEqual(messages);
+});
 it("omits only a superseded failed review pair and preserves the latest complete draft, feedback and caller checkpoint", () => {
   const messages = [...initial, ...review("old"), ...review("latest", "passed", { receipt: { receiptHash: hash } })];
   const saved = structuredClone(messages);

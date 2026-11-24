@@ -1,5 +1,5 @@
 import type { SkillReferenceModel } from "../../agent-kit/src/skill-references";
-import { compactSupersededReviews } from "../../core/src/lib/video-project/repair-context";
+import { compactSchemaReads, compactSupersededReviews } from "../../core/src/lib/video-project/repair-context";
 
 type ModelInput = Parameters<SkillReferenceModel["complete"]>;
 const textLimit = 192 * 1024;
@@ -29,13 +29,15 @@ function checkRequest(args: ModelInput) {
   if (textBytes > textLimit) throw Error(`Creative request exceeds the ${textLimit}-byte text and tool limit (${textBytes} bytes). Read fewer items or a smaller range.`);
 }
 
-export function boundCreativeRequest(model: SkillReferenceModel, repairContext?: "bounded-v1"): SkillReferenceModel {
+export function boundCreativeRequest(model: SkillReferenceModel, repairContext?: "bounded-v1" | "bounded-v2"): SkillReferenceModel {
   const prepareInput = (args: ModelInput): ModelInput => {
     const [messages, tools, signal, ...rest] = args;
-    const compacted = repairContext === "bounded-v1" ? compactSupersededReviews(messages, candidate => {
+    const exceeds = (candidate: typeof messages) => {
       const size = requestSize([candidate, tools, signal, ...rest]);
       return size.bytes > totalLimit || size.textBytes > textLimit;
-    }) : messages;
+    };
+    let compacted = repairContext === "bounded-v1" || repairContext === "bounded-v2" ? compactSupersededReviews(messages, exceeds) : messages;
+    if (repairContext === "bounded-v2") compacted = compactSchemaReads(compacted, exceeds);
     const input: ModelInput = [compacted, tools, signal, ...rest];
     checkRequest(input);
     return input;

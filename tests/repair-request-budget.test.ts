@@ -3,6 +3,18 @@ import { boundCreativeRequest } from "../packages/agent/src/request-budget";
 
 const signal = new AbortController().signal;
 const transport = () => ({ prepare: vi.fn(async () => {}), complete: vi.fn(async () => ({ text: "done", calls: [] })) });
+it("compacts static discovery only under bounded-v2 and keeps bounded-v1 behavior exact", async () => {
+  const messages = [{ role: "system" as const, content: "x".repeat(175000) },
+    { role: "assistant" as const, content: null, tool_calls: [{ id: "schema", type: "function" as const, function: { name: "inspect_graphics_schema", arguments: "{}" } }] },
+    { role: "tool" as const, tool_call_id: "schema", content: JSON.stringify({ version: 1, kind: "native", node: { description: "x".repeat(25000) } }) },
+    ...["first", "latest"].flatMap(id => [{ role: "assistant" as const, content: null, tool_calls: [{ id, type: "function" as const, function: { name: "review_edit", arguments: "{}" } }] }, { role: "tool" as const, content: "{}", tool_call_id: id }]),
+  ];
+  const before = structuredClone(messages), seen: unknown[] = [];
+  await expect(boundCreativeRequest(transport(), "bounded-v1").prepare!(messages, [], signal)).rejects.toThrow(/text and tool limit/);
+  const model = boundCreativeRequest({ complete: async m => { seen.push(m); return { text: "done", calls: [] }; } }, "bounded-v2");
+  await model.prepare!(messages, [], signal); await model.complete(messages, [], signal);
+  expect(seen).toEqual([[messages[0], ...messages.slice(3)]]); expect(messages).toEqual(before);
+});
 it("checks preparation even when the underlying transport has no prepare hook", async () => {
   const complete = vi.fn(async () => ({ text: "", calls: [] }));
   await expect(boundCreativeRequest({ complete }).prepare!([{ role: "user", content: "x".repeat(200000) }], [], signal)).rejects.toThrow(/text and tool limit/);

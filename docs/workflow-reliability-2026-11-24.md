@@ -356,3 +356,42 @@ in the agent repository. This is transport regression evidence, not a replacemen
 for the original failed actual-model report. The guide also tells follow-ups to
 set/clear requested fields on existing IDs instead of resending unchanged scenes.
 The pinned loop, original call/output budgets and independent graders are unchanged.
+
+
+## Completed frozen matrix and schema-context correction
+
+The `bounded-repair-v1` cohort attempted all 12 preplanned chains (14 of the 24
+planned turns were reached). **Zero chains qualified.** One local walkthrough
+completed all three native/semantic edits and decoded exports; independent review
+rejected obscured brand/screen content, including a backing mesh intersecting a
+rotated screenshot. The other failures were malformed commands/invocation budget,
+a no-progress provider timeout, three text-context capacity failures, HTTP
+400/524 responses, unresolved chart overlaps and incomplete speech assembly.
+Original paid outputs, failures and unknown reservations remain unchanged.
+
+At closure the single campaign ledger contains **404 requests and
+US$45.730699 used/reserved** against the amended US$50 / 420 total allowance.
+This is not a reliability pass or default-promotion decision. The earlier
+canonical-property cohort's one qualified chart chain stays tied to its older
+source; it is not pooled into this matrix. No source, package, model or rubric
+changed during the frozen cohort. Source heads were web `65d46beb`, agent
+`ebe1762`, worker `ec21555`, with SDK archive `0d47702c`.
+
+The capacity failures identified a further bounded correction. New runs freeze
+`repairContext: bounded-v2` and require `native-bounded-schema-context-v1`.
+In addition to superseded failed reviews, successful static schema-discovery
+pairs may leave only model-facing context when the limit would be exceeded.
+Only recognized native/macro/Three.js schema responses are eligible. Errors,
+pinned or unfamiliar observations, source reads, preparations, receipts, current
+drafts and the two most recent tool groups remain protected. Complete pairs,
+including opaque provider replay records, leave together; persisted checkpoints
+stay exact. Existing bounded-v1 requests retain their original behavior.
+
+Offline replay of the three actual failed checkpoints, with zero provider calls,
+now fits within 196,608 bytes: commercial walkthrough 197,111 → 179,579; local
+chart 199,324 → 190,907; local walkthrough 201,162 → 180,307. Each drops one old
+successful schema pair. The originals still fail under bounded-v1. Reports live
+in the agent's `test-results/workflow-reliability-2026-11-24/live/diagnostics/schema-context-v2/`.
+These transport-only replays do not establish autonomous model acceptance of the
+corrected candidate. Internal 3D occlusion, sustained model repair/assembly and
+provider reliability remain explicit qualification gaps.

@@ -580,7 +580,7 @@ it.each([false,true])("persists the selected kit build and candidate policy acro
   expect(done.runs[0].request.authoring?.propertyValues).toBe(visualReview ? "document-canonical-v1" : undefined);
   expect(done.runs[0].request.authoring?.speechRemovalScope).toBe(visualReview ? "clause-v1" : undefined);
   expect(done.runs[0].request.authoring?.speechCompletion).toBe(visualReview ? "source-fragments-v1" : undefined);
-  expect(done.runs[0].request.authoring?.repairContext).toBe(visualReview ? "bounded-v1" : undefined);
+  expect(done.runs[0].request.authoring?.repairContext).toBe(visualReview ? "bounded-v2" : undefined);
   expect(done.runs[0].request.authoring?.threeAssetIds).toBe(visualReview ? "scene-v1" : undefined);
   expect(done.runs[0].skillSnapshot).toEqual([guide]);
   expect(done.runs[0].focusedGraphicsDiscovery).toBe(true);

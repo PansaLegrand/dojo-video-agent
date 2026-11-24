@@ -218,7 +218,7 @@ export async function runAgent(input: {
     );
     checkpoint!.load = async () => saved;
   }
-  const transport = request.authoring?.repairContext === "bounded-v1" ? boundCreativeRequest(model, request.authoring.repairContext) : model;
+  const transport = (request.authoring?.repairContext === "bounded-v1" || request.authoring?.repairContext === "bounded-v2") ? boundCreativeRequest(model, request.authoring.repairContext) : model;
   const completed = await runToolLoop({
     model: ["0.2.10", "0.2.11", "0.2.12"].includes(kit.AGENT_KIT_VERSION) ? withSkillReferenceImages(transport, toolset.skills) : transport,
     messages,
