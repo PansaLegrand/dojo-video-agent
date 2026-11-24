@@ -306,3 +306,16 @@ The next `engine-textures-v1` cohort uses the same approved ledger, current work
 policy and source-aware caption guide. All previous failures/unknown reservations
 remain retained. Native visibility also rejects opaque filled rectangles and
 rounded-pill occlusion, with paired actual-pixel browser checks.
+
+
+## Walkthrough planning allowance
+
+With corrected texture packages, local walkthrough variant 1 prepared all three
+screens successfully but used the direct invocation for all preparation. It
+reached 16 known calls (113–128) before finalizing; the draft also needed repairs
+for a nested helper command and unsupported `boxShadow: "none"`. This remains a
+failed attempt. Accounted total: 128 requests and US$12.4361125 used/reserved.
+The next guide extends early planning to multi-scene screenshot/3D work using
+`captionPairs:[]`, and explains direct helper-command reuse and shadow removal.
+It changes no budget or acceptance rule. The next frozen cohort is
+`composite-planning-v1`; original reports and unknown blocks stay unchanged.
