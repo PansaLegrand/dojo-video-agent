@@ -1,3 +1,4 @@
+import { boundCreativeRequest } from "./request-budget";
 import { selectAgentKit } from "./runtime-build";
 import { withSkillReferenceImages } from "../../agent-kit/src/skill-references";
 import {
@@ -217,8 +218,9 @@ export async function runAgent(input: {
     );
     checkpoint!.load = async () => saved;
   }
+  const transport = request.authoring?.repairContext === "bounded-v1" ? boundCreativeRequest(model, request.authoring.repairContext) : model;
   const completed = await runToolLoop({
-    model: ["0.2.10", "0.2.11", "0.2.12"].includes(kit.AGENT_KIT_VERSION) ? withSkillReferenceImages(model, toolset.skills) : model,
+    model: ["0.2.10", "0.2.11", "0.2.12"].includes(kit.AGENT_KIT_VERSION) ? withSkillReferenceImages(transport, toolset.skills) : transport,
     messages,
     tools,
     signal,

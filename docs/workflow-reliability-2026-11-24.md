@@ -319,3 +319,37 @@ The next guide extends early planning to multi-scene screenshot/3D work using
 `captionPairs:[]`, and explains direct helper-command reuse and shadow removal.
 It changes no budget or acceptance rule. The next frozen cohort is
 `composite-planning-v1`; original reports and unknown blocks stay unchanged.
+
+
+## Bounded repair context and follow-up guidance
+
+The `composite-planning-v1` cohort retains three further failures. The initial
+local walkthrough passed native checks, independent semantics, decoded export and
+source-aware visual review, but its copy-only follow-up produced a truncated
+provider tool argument (`__proxy_error`, output exceeded the requested limit).
+The commercial speech run ended with an unknown transport outcome at request
+192. The commercial chart had a successful native review but stopped before
+request 198 because accumulated review drafts exceeded the 192 KiB text/tool
+limit. None is a completed qualified workflow chain. At this point the ledger
+records 197 requests and US$23.3609495 used/reserved under the original US$30 /
+320-request authorization, including every earlier unknown reservation.
+
+New requests freeze `repairContext: bounded-v1`. Immediately before transport,
+only a complete, failed, effect-free `review_edit` pair superseded by a later
+complete review of the identical snapshot, requirement hash and full requirement
+list can be omitted when needed to fit the existing request limits. The latest
+review, successful receipts, preview repairs, other tool groups, instructions and
+persisted checkpoints remain unchanged. Opaque provider records leave with their
+whole pair; they are never rewritten. Unknown/malformed or mismatched reviews
+stay protected, and an oversized protected request still fails before dispatch.
+Both hosts share the algorithm; commercial dispatch requires the corresponding
+worker capability. Saved requests without the flag retain their old behavior.
+
+Offline replay of the actual failed chart checkpoint reduced 198,566 text/tool
+bytes to 160,930 (limit 196,608), preserving the latest successful review and the
+entire stored checkpoint. No provider request was made. Its report is retained
+under `test-results/workflow-reliability-2026-11-24/live/diagnostics/chart-repair-context-v1/`
+in the agent repository. This is transport regression evidence, not a replacement
+for the original failed actual-model report. The guide also tells follow-ups to
+set/clear requested fields on existing IDs instead of resending unchanged scenes.
+The pinned loop, original call/output budgets and independent graders are unchanged.

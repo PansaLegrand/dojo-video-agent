@@ -137,6 +137,7 @@ export const nativeAuthoringSchema = z
   .object({
     visualReview: z.literal("sequence-v1").optional(),
   authoringGuide: z.literal("complete-v1").optional(),
+  repairContext: z.literal("bounded-v1").optional(),
   threeAssetIds: z.literal("scene-v1").optional(),
   propertyValues: z.literal("document-canonical-v1").optional(),
   speechRemovalScope: z.literal("clause-v1").optional(),

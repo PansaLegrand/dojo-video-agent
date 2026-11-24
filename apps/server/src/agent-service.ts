@@ -253,7 +253,7 @@ export class AgentService {
           instruction: input.instruction,
           authoring: { version: 1, scope,
             ...(this.agentProfile === "local-editor-v14" && (this.stagedOptions.visualReview || p.document.creativeContext.brandKit) ? { visualReview: "sequence-v1" as const } : {}),
-            ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const, requiredTextLayout: candidateAuthoring ? "sampled-v3" as const : "sampled-v2" as const, ...(candidateAuthoring ? { authoringGuide: "complete-v1" as const, threeAssetIds: "scene-v1" as const, propertyValues: "document-canonical-v1" as const, speechRemovalScope: "clause-v1" as const, speechCompletion: "source-fragments-v1" as const } : {}), spatialCanvas: "scene-v1" as const } : {}),
+            ...(this.agentProfile === "local-editor-v14" ? { endingVisibility: "final-frame-v1" as const, requiredTextLayout: candidateAuthoring ? "sampled-v3" as const : "sampled-v2" as const, ...(candidateAuthoring ? { authoringGuide: "complete-v1" as const, repairContext: "bounded-v1" as const, threeAssetIds: "scene-v1" as const, propertyValues: "document-canonical-v1" as const, speechRemovalScope: "clause-v1" as const, speechCompletion: "source-fragments-v1" as const } : {}), spatialCanvas: "scene-v1" as const } : {}),
             ...(macroCatalog ? { macroCatalog } : {}),
           },
         },
