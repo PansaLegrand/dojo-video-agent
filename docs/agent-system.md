@@ -390,3 +390,14 @@ The release candidate also passed **1,028 tests**, full TypeScript/integrity and
 production build checks, and **66 actual browser checks** with scripted provider
 HTTP. See [the dated ledger](readiness-progress.md#november-14-candidate-stabilization-and-repeated-live-evaluation-029)
 for original-versus-regraded outcomes, token/byte distinctions and remaining scope.
+
+
+## November 24 repair-context candidate
+
+New opt-in candidate runs also freeze `repairContext: bounded-v1`. Only an older
+failed review of the same frozen snapshot/requirements may leave model-facing
+context after a complete later review. Stored checkpoints and the latest review
+stay exact, and the existing byte limits still fail closed. The
+[qualification record](workflow-reliability-2026-11-24.md) retains every earlier
+failure and the explicit US$50 / 420-request total authorization amendment.
+The candidate is not generally promoted or deployed by these source changes.
