@@ -43,7 +43,8 @@ export function boundCreativeRequest(model: SkillReferenceModel, repairContext?:
   return {
     identity: model.identity,
     async prepare(...args) {
-      await model.prepare?.(...prepareInput(args));
+      const input = prepareInput(args);
+      await model.prepare?.(...input);
     },
     async complete(...args) {
       return model.complete(...prepareInput(args));

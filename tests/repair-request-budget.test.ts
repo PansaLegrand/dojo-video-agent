@@ -3,6 +3,11 @@ import { boundCreativeRequest } from "../packages/agent/src/request-budget";
 
 const signal = new AbortController().signal;
 const transport = () => ({ prepare: vi.fn(async () => {}), complete: vi.fn(async () => ({ text: "done", calls: [] })) });
+it("checks preparation even when the underlying transport has no prepare hook", async () => {
+  const complete = vi.fn(async () => ({ text: "", calls: [] }));
+  await expect(boundCreativeRequest({ complete }).prepare!([{ role: "user", content: "x".repeat(200000) }], [], signal)).rejects.toThrow(/text and tool limit/);
+  expect(complete).not.toHaveBeenCalled();
+});
 it("fits an oversized repair conversation only under the frozen opt-in, identically for prepare and complete", async () => {
   const hash = "sha256:" + "a".repeat(64);
   const pair = (id: string, status: string) => [
