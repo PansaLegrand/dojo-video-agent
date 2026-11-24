@@ -395,3 +395,71 @@ in the agent's `test-results/workflow-reliability-2026-11-24/live/diagnostics/sc
 These transport-only replays do not establish autonomous model acceptance of the
 corrected candidate. Internal 3D occlusion, sustained model repair/assembly and
 provider reliability remain explicit qualification gaps.
+
+
+## Final source and qualification checkpoint — November 24
+
+Tasks 2–4 are implemented and locally verified. Task 1's repeated qualification
+was executed but **did not meet acceptance**; reliable autonomous completion and
+general candidate promotion remain open.
+
+After the frozen 0/12 matrix, two targeted trials exercised `bounded-v2` without
+changing its source or rubric. The local chart stopped at provider transport
+`terminated` (request 408, unknown, no retry). The independent commercial chart
+completed native review, application and decoded export in four calls, but its
+polyline used the same x coordinate for every point. Independent geometry checks
+correctly rejected it; the manual-follow-up turn therefore did not run. This
+shows a valid editing/export path, not a qualified chart workflow. No manual
+repair or saved-output reconstruction was relabelled as autonomous success.
+
+**Final campaign accounting: 412 requests, US$47.239829 used/reserved.** Known
+usage is US$40.023312; US$7.216517 remains reserved for requests 5, 49, 192, 215,
+293, 294, 321 and 408. No request is pending. The US$50 / 420 ceilings were not
+exceeded. The final targeted cohort is `schema-context-v2-targeted`; all original
+ledgers, authoring outputs, failure reports and reviews remain retained.
+
+Latest verified source: web implementation `e21b5f66` / archive retention
+`ea7597c2`, OSS `f31c331`, worker `8092563`; engine code `bfe2af6` and its release
+record `848e7de`. The worker consumes
+`dojoclip-video-project-runtime-0.2.12-candidate-cf441f18.tgz`, SHA-256
+`cf441f183cdfe2000671a991593a5fa0ebe743e85dc118b3ec5a9bd6aeea0695`.
+Its manifest checks 81 source hashes and the unchanged engine release bundle.
+
+Final behavioral/source gates:
+
+- Web `npm run check -- -- --maxWorkers=2 --minWorkers=1`: 6,002 passed, 475
+  explicitly skipped integration tests. The earlier concurrent-run teardown
+  timeout remains logged; the complete bounded rerun passed.
+- OSS `npm run check`: 1,306 passed and production build passed. The earlier
+  loaded-run stage timeout remains logged; its focused and complete reruns passed.
+- Worker `npm run build`: types, provider adapters, protocol, recovery, native
+  authoring and shared/staged suites passed; infrastructure-gated tests remain
+  explicitly skipped. This is not production DB/Redis or provider acceptance.
+- Seven cross-repository provenance checks passed, including 44 superseded
+  candidate archives and two retained qualified archives. The latter retain their
+  historical uncommitted-source disclosure.
+- Engine release/clean-machine gates and 85 isolated consumer browser checks
+  passed for the retained 1.3.2-rc.0 package bytes. Fresh portable-package import,
+  media/font restoration, reload/Undo/Redo, corrupt-package rejection and decoded
+  export passed. Local MCP preview/export/consent/lifecycle browser checks passed.
+  Required-visibility tests include actual rectangle/pill occlusion pixels in both
+  consumers. These browser checks are separate from actual-model qualification.
+
+Remaining qualification blockers are actual-model repair/stage completion,
+correct bar/line relationships, preserved screen/brand content including internal
+3D occlusion, and provider transport/rejection reliability. The bounded visual
+checks do not certify all 3D occlusion or continuous aesthetics/audio. The new
+context policy has three exact saved-checkpoint regressions and the two targeted
+actual-model outcomes above; it has no full passing matrix.
+
+All changes are local commits on main. No push, deployment, registry publication,
+new media generation or new ASR was performed. The unrelated engine README edit
+was preserved. Published engine 1.3.1 and accepted kit archives remain retained;
+the source checkout's engine 1.3.2-rc.0 is an unpublished candidate.
+
+The final isolated web production build also passed:
+`NEXT_DIST_DIR=.next-four-editor-final npm run build`, including prebuild checks,
+Prisma client generation, Next compilation/type checking, 1,030 static pages and
+postbuild function-trace checks. Only its temporary generated type references
+were removed afterward. Existing Next runtime re-export/Browserslist warnings
+remain warnings; there was no deployment.

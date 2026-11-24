@@ -401,3 +401,10 @@ stay exact, and the existing byte limits still fail closed. The
 [qualification record](workflow-reliability-2026-11-24.md) retains every earlier
 failure and the explicit US$50 / 420-request total authorization amendment.
 The candidate is not generally promoted or deployed by these source changes.
+
+
+The final frozen matrix attempted 12 chains and qualified none. Two subsequent
+`bounded-v2` context-fix trials also remained unqualified. The source features and
+local/browser gates are complete, while the actual-model acceptance remains open.
+Final campaign accounting is 412 requests / US$47.239829 used or reserved; see the
+[retained results](workflow-reliability-2026-11-24.md#final-source-and-qualification-checkpoint--november-24).
