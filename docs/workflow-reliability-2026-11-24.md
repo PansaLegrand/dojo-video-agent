@@ -1,6 +1,9 @@
 # Three-workflow reliability qualification
 
-The user authorized a fresh US$30 / 320 Kie request allowance on November 23.
+The user initially authorized US$30 / 320 Kie requests on November 23, then
+explicitly raised the same campaign to **US$50 / 420 total** on November 24.
+The amendment preserves the original authorization, admissions, actual spending
+and unknown reservations; it does not create a fresh allowance.
 No earlier campaign balance, failed request or unknown reservation is reset.
 The selected model is GPT-6 Astra through the Kie Responses endpoint. Accounting
 uses US$3.50/M input and US$14/M output, conservatively including cache-write input

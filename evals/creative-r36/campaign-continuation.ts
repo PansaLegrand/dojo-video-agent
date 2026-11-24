@@ -10,10 +10,29 @@ import {assertKieEvaluationEndpoint} from '../agent/reliability';
 export const authorization = {maximumUsd:30,maximumRequests:320,rates:{inputUsdPerMillion:3.5,outputUsdPerMillion:14},model:'gpt-6-astra',endpoint:'https://api.kie.ai/codex/v1/responses'} as const;
 export const hash = (bytes: string|Buffer) => createHash('sha256').update(bytes).digest('hex');
 export const caseKey=(c:any)=>JSON.stringify([c.host,c.scenario,c.repetition]);
+export type CampaignAmendment = { id: string; maximumUsd: number; maximumRequests: number; approvedLocalDate: string; authorization: string };
+/** The caller supplies explicit task authorization. A ledger cannot grant itself
+ * a larger allowance. Original authorization and every reservation are retained. */
+export function applyCampaignAmendment(ledger: any, amendment?: CampaignAmendment) {
+ assert.deepEqual(ledger.authorization, authorization);
+ const history = ledger.authorizationAmendments ?? [];
+ assert(Array.isArray(history) && history.length <= 1, 'Unsupported authorization history');
+ if (!amendment) { assert.equal(history.length, 0, 'This campaign requires its explicit amended authorization'); return authorization; }
+ assert(/^[a-z0-9-]{1,80}$/.test(amendment.id));
+ assert(amendment.maximumUsd >= authorization.maximumUsd && amendment.maximumUsd <= 100);
+ assert(Number.isSafeInteger(amendment.maximumRequests) && amendment.maximumRequests >= authorization.maximumRequests && amendment.maximumRequests <= 1000);
+ if (history.length) {
+  const {beforeRequest: _before, ...saved} = history[0]; assert.deepEqual(saved, amendment, 'Authorization amendment changed');
+ } else {
+  assert(!ledger.admissions.some((r:any)=>r.status==='pending'), 'Settle the in-flight request before amending authorization');
+  ledger.authorizationAmendments = [{...amendment, beforeRequest: ledger.admissions.length + 1}];
+ }
+ return amendment;
+}
 /** An unknown LLM reply never authorizes replay. Its full reservation remains charged;
  * the user's explicit failed/unknown allowance permits OTHER preplanned journeys. */
 export class IndependentTrialBudget extends EvaluationBudget {
- constructor(private records:any[],private context:()=>any){super(320,30,authorization.rates)}
+ constructor(private records:any[],private context:()=>any, ceiling: {maximumRequests:number;maximumUsd:number}=authorization){super(ceiling.maximumRequests,ceiling.maximumUsd,authorization.rates)}
  override admit(inputBytes:number,maximumOutputTokens:number){
   if(this.requests.some(r=>r.status==='pending'))throw new EvaluationAdmissionError('An in-flight request must settle before another dispatch.');
   const unknown=this.requests.filter(r=>r.status==='unknown');
@@ -24,7 +43,7 @@ export class IndependentTrialBudget extends EvaluationBudget {
   const request={ordinal:this.requests.length+1,status:'pending' as const,reservedUsd,actualUsd:null};this.requests.push(request);return request;
  }
 }
-export async function openCampaign(directory:string, frozenFiles:string[], live:boolean) {
+export async function openCampaign(directory:string, frozenFiles:string[], live:boolean, amendment?: CampaignAmendment) {
  await fs.mkdir(directory,{recursive:true,mode:0o700});
  const lock=path.join(directory,'campaign.lock');
  const handle=await fs.open(lock,'wx',0o600);await handle.writeFile(JSON.stringify({pid:process.pid,createdAt:new Date().toISOString()}));
@@ -37,8 +56,9 @@ export async function openCampaign(directory:string, frozenFiles:string[], live:
    assert.equal(ledger.dryRun,!live)}
   catch(error:any){if(error.code!=='ENOENT')throw error;ledger={version:1,authorization,dryRun:!live,frozen,createdAt:new Date().toISOString(),requests:[],admissions:[],trials:[]};}
   let context:any={host:'setup',scenario:'setup',repetition:1,turn:1};
-  const budget=new IndependentTrialBudget(ledger.requests,()=>context);
-  assert(Array.isArray(ledger.admissions)&&ledger.admissions.length<=320);
+  const ceiling = applyCampaignAmendment(ledger, amendment);
+  const budget=new IndependentTrialBudget(ledger.requests,()=>context,ceiling);
+  assert(Array.isArray(ledger.admissions)&&ledger.admissions.length<=ceiling.maximumRequests);
   for(const [i,r] of ledger.admissions.entries()){assert.equal(r.ordinal,i+1);assert(['completed','pending','unknown'].includes(r.status));assert(Number.isFinite(r.reservedUsd)&&r.reservedUsd>=0);assert(r.actualUsd===null||(Number.isFinite(r.actualUsd)&&r.actualUsd>=0));budget.requests.push(r)}
   ledger.policyDecisions??=[];if(!ledger.policyDecisions.some((d:any)=>d.id==='independent-reserved-v1'))ledger.policyDecisions.push({id:'independent-reserved-v1',at:new Date().toISOString(),beforeRequest:budget.requests.length+1,authorization:'User approved US$30 / 320 requests including failed/unknown reservations.',effect:'Unknown reservations stay charged and affected journeys cannot retry. Other preplanned journeys may proceed. Three consecutive unknown provider outcomes stop the campaign.'});
   const persist=async()=>{ledger.admissions=budget.requests;ledger.accountedUsd=budget.accountedUsd;ledger.updatedAt=new Date().toISOString();await atomicReport(file,ledger)};

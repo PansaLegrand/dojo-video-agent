@@ -1,3 +1,4 @@
+import {workflowAuthorization} from "./authorization";
 import {fixtureSourceHost} from './source-host.mjs';
 import fs from 'node:fs/promises';import path from 'node:path';import {pathToFileURL} from 'node:url';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
 import {workflowFixtures,hash} from './fixtures.mjs';import {allNodes,gradeWorkflow} from './grade.mjs';
@@ -19,8 +20,8 @@ const sourceFile=path.join(root,'source-'+hash(JSON.stringify(frozenSource)).sli
 const unchanged=async()=> (await Promise.all(sources.map(creativeSourceUnchanged))).every(Boolean)&&(await Promise.all(Object.entries(runtimeHashes).map(async([file,digest])=>hash(await fs.readFile(file))===digest))).every(Boolean);
 const workerToolPolicy=await import(pathToFileURL(path.join(worker,'src/shared/video-agent/shared-tool-policy.ts')).href);
 const adapter=await import(pathToFileURL(path.join(web,'test-results/creative-skills/adapter.mjs')).href);await adapter.assertCreativeWebReady();
-const campaign=await openCampaign(root,[fixtureFile,sourceFile],live),signal=new AbortController();process.once('SIGINT',()=>signal.abort(Error('Qualification cancelled')));process.once('SIGTERM',()=>signal.abort(Error('Qualification cancelled')));
-campaign.ledger.taskAuthorization={approvedLocalDate:'2026-11-23',maximumUsd:30,maximumRequests:320,scope:'Three Dojo workflows in both hosts; no media generation or new ASR',pricingSource:'https://kie.ai/gpt-6-astra',conservativeRates:'US$3.50/M input including cache writes; US$14/M output'};
+const campaign=await openCampaign(root,[fixtureFile,sourceFile],live,workflowAuthorization),signal=new AbortController();process.once('SIGINT',()=>signal.abort(Error('Qualification cancelled')));process.once('SIGTERM',()=>signal.abort(Error('Qualification cancelled')));
+campaign.ledger.taskAuthorization??={approvedLocalDate:'2026-11-23',maximumUsd:30,maximumRequests:320,scope:'Three Dojo workflows in both hosts; no media generation or new ASR',pricingSource:'https://kie.ai/gpt-6-astra',conservativeRates:'US$3.50/M input including cache writes; US$14/M output'};
 campaign.ledger.acceptance??={version:'workflow-v1',workflows:['speech','chart','walkthrough'],repetitions:2,hosts:['open-source','commercial-web'],requirements:'All requested edits and follow-ups, original/manual preservation, independent semantics/geometry, exact candidate export, full decode and normal-speed playback; independent visual/translation review remains explicit',originalR36Grader:'unchanged; reused rubric and baseline technical checks; portrait walkthrough adds a separately versioned check'};
 const unknown=(host:string,scenario:string,repetition:number)=>campaign.ledger.requests.some((r:any)=>r.phase==='unknown'&&r.host===host&&r.scenario===scenario&&r.repetition===repetition);
 const slots=fixture.workflows.flatMap((workflow:any)=>['open-source','commercial-web'].flatMap(host=>[1,2,3].filter(repetition=>!unknown(host,workflow.id,repetition)).slice(0,2).map(repetition=>({workflow:workflow.id,host,repetition}))));
